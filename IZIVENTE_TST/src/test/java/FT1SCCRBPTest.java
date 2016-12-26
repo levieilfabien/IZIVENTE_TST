@@ -3,6 +3,7 @@ package test.java;
 import java.io.File;
 
 import org.junit.Test;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
@@ -16,11 +17,11 @@ import moteurs.GenericDriver;
 import outils.SeleniumOutils;
 
 /**
- * Scénario 1 des tests automatisés pour IZIVENTE - 11/2016
- * Editique FACELIA (BP)
+ * Scénario 2 des test automatisé pour la mise en gestion de dossier
+ * FACELIA (BP CR)
  * @author levieilfa bardouma
  */
-public class TNRSC01 extends SC00Test {
+public class FT1SCCRBPTest extends SC00Test {
 
 	/**
  * Id de sérialisation.
@@ -69,6 +70,7 @@ public void accesIzivente() throws SeleniumException {
 			scenario1.getTests().add(CT03SaisieDossier(scenario1, outil));
 			scenario1.getTests().add(CT04Participants(scenario1, outil));
 			scenario1.getTests().add(CT05FinalisationInstruction(scenario1, outil));
+			scenario1.getTests().add(CT06MiseGestion(scenario1, outil));
 			
 		} catch (SeleniumException ex) {
 			// Finalisation en erreur du cas de test.
@@ -238,8 +240,8 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario1, Sel
 	//Assurance de l'emprunteur
 	outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
 	outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
-	outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR);
-	outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
+	outil.attendreChargementElement(Cibles.RADIO_SELECTION_SANS_ASS_FAC);
+	outil.cliquer(Cibles.RADIO_SELECTION_SANS_ASS_FAC);
 	CT04.validerObjectif(outil.getDriver(), "ASSURANCEROLE", true);
 	//Step 3 : Valider la liste des participants
 	outil.attendreChargementElement(Cibles.BOUTON_VALIDER_LISTE_PARTICIPANT);
@@ -286,6 +288,9 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
 	outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
 	CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
+	//Step optionnel : récupération du numéro FFI pour la mise en gestion
+	String numeroFFI = outil.obtenirValeur(Cibles.ELEMENT_SPAN_NUMERO_FFI);
+	scenario1.setNumeroFFI(numeroFFI);
 	//Step 4 : Imprimer la liasse de document
 	outil.attendreChargementElement(Cibles.BOUTON_IMPRIMER_LIASSE);
 	outil.cliquer(Cibles.BOUTON_IMPRIMER_LIASSE);
@@ -296,8 +301,72 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	outil.attendreChargementElement(Cibles.ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE);
 	outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT_FIN);
 	CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
-	CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
 	CT05.validerObjectif(outil.getDriver(), CT05.getNomCasEssai() + CT05.getTime(),true);
 	return CT05;
 	}
+public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario1, SeleniumOutils outil) throws SeleniumException {
+	//Paramétrage du CT06
+	CasEssaiIziventeBean CT06 = new CasEssaiIziventeBean();
+	CT06.setAlm(true);
+	CT06.setNomCasEssai("CT06 -" + getTime());
+	CT06.setDescriptif("CT06 - Mise en gestion");
+	CT06.setNomTestPlan("CT06 - Mise en gestion");
+	//Information issues du scénario.
+	CT06.setIdUniqueTestLab(scenario1.getIdUniqueTestLab());
+	CT06.setCheminTestLab(scenario1.getCheminTestLab());
+	CT06.setNomTestLab(scenario1.getNomTestLab());
+	CT06.setRepertoireTelechargement(scenario1.getRepertoireTelechargement());
+	//Gestion des steps
+	CT06.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT06.getNomCasEssai() + CT06.getTime()));
+	CT06.ajouterStep("Relancement d'Izivente et retour sur le dossier", "RETOUR", "Affichage de la page d'accueil d'Izivente avec injection du jeton");
+	CT06.ajouterStep("Ouverture et du dossier et recherche du numéro FFI", "RECHERCHE", "Affichage des données dossier et client");
+	CT06.ajouterStep("Passage à l'octroi et premières vérification", "OCTROI", "Dossier accepté pour l'octroi ");
+	CT06.ajouterStep("Finalisation de l'octroi et dernières confirmations avant mise en gestion", "FINALISATION", "Affichage des données dossiers et client avec état FORC");
+	CT06.ajouterStep("Vérification des données dossier et client", "MISENFORCE", "Dossier à l'état FORC");
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////// RETOUR SUR L'IHM ////////////////////////////////////////////////
+	//Step 1 : Rechargement de l'URL d'Izivente et réinjection du jeton
+	outil.chargerUrl(Constantes.URL_BP_FUTURE_REROUTAGE); 
+	outil.attendreChargementPage(Constantes.TITRE_PAGE_IZIVENTE);
+	String chaineCible = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><fluxreroutage><ListPart><PersPhys><IdntClntDistr>" + scenario1.getIdClient() + "</IdntClntDistr><CdRole>E</CdRole></PersPhys></ListPart><ListCtx><Ctx><Cd>CD_ETAB</Cd><Val>038</Val></Ctx><Ctx><Cd>CD_AGENCE_OP</Cd><Val>00022</Val></Ctx><Ctx><Cd>CD_AGENCE_DOM</Cd><Val>00022</Val></Ctx><Ctx><Cd>CD_AGENT_OP</Cd><Val>0092139</Val></Ctx><Ctx><Cd>CD_FCN_AGENT_OP</Cd><Val>381508</Val></Ctx><Ctx><Cd>CD_CANAL_DISTR</Cd><Val>AGEN</Val></Ctx><Ctx><Cd>CD_UNIV_PRD</Cd><Val>TRESORERIE</Val></Ctx><Ctx><Cd>CD_OFFRE</Cd><Val></Val></Ctx><Ctx><Cd>CD_BIN</Cd><Val></Val></Ctx><Ctx><Cd>CPTE_SUPP_CARTE</Cd><Val></Val></Ctx><Ctx><Cd>CPTE_SUPP_COMPO</Cd><Val></Val></Ctx><Ctx><Cd>NIV_DLG</Cd><Val>9</Val></Ctx><Ctx><Cd>CODE_TX</Cd><Val>izv</Val></Ctx><Ctx><Cd>MODE_VENTE</Cd><Val></Val></Ctx><Ctx><Cd>MODE_EDITIQUE</Cd><Val>DISTRIBUTEUR</Val></Ctx><Ctx><Cd>VENTE_COUPLEE</Cd><Val>O</Val></Ctx><Ctx><Cd>PROFIL</Cd><Val>izv.octroi</Val></Ctx></ListCtx><ProtocoleTech><header><version>2</version><messageId></messageId><timestamp>22/05/2012</timestamp><language>FR</language><country>FR</country><otherElements><name>name1</name><value>value1</value></otherElements><otherElements><name>name2</name><value>value2</value></otherElements></header><context><company>BP</company><application>EQX</application><channel>Intranet</channel><bank>038</bank><agency></agency><goal></goal><userId></userId></context><actors><company>NFI</company><application>v45</application><versionAppli>1.0</versionAppli><channel>INTRANET</channel><bank>All</bank><agency>All</agency><goal></goal><userId>12345678</userId></actors></ProtocoleTech></fluxreroutage>";
+	outil.cliquerSiPossible(Cibles.BOUTON_POPUP_FACE_A_FACE);
+	outil.viderEtSaisir(chaineCible, Cibles.SAISIE_JETON);
+	outil.cliquer(Cibles.VALIDER_SAISIE_JETON);
+	outil.attendreChargementPage(Constantes.TITRE_PAGE_IZIVENTE);
+	CT06.validerObjectif(outil.getDriver(), "RETOUR", true);
+	//Step 2 : Ouverture du dossier et recherche du numéro FFI
+	outil.cliquer(Cibles.BOUTON_MENU_REPRISE_DOSSIER);
+	outil.attendrePresenceTexte("Liste des dossiers");
+	for (WebElement coche : outil.obtenirElements(Cibles.COCHES_LISTE_DOSSIER)) {
+		coche.click();
+		outil.attendre(1);
+		if (outil.testerPresenceTexte(scenario1.getNumeroFFI(), true)) {
+			break;
+		}
+	}
+	CT06.validerObjectif(outil.getDriver(), "RECHERCHE", true);
+	// Step 3 : Passage à l'octroi
+	outil.cliquer(Cibles.BOUTON_MISE_EN_FORCE_CR);
+	outil.attendrePresenceTexte("Demande de confirmation");
+	outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
+	outil.attendrePresenceTexte("Complétude et justificatifs");
+	outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_VERIFIE);
+	outil.attendreEtCliquer(Cibles.BOUTON_SUIVANT);
+	outil.attendreChargementElement(Cibles.LIBELLE_ACCEPTATION);
+	outil.cliquer(Cibles.LIBELLE_ACCEPTATION);
+	outil.attendreEtCliquer(Cibles.BOUTON_FINALISATION_OCTROI_CR);
+	CT06.validerObjectif(outil.getDriver(), "OCTROI", true);
+	//Step 4 : Finalisation de l'octroi
+	outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_CONFIRMATION_OCTROI, true, true);
+	outil.cliquer(Cibles.BOUTON_POPUP_OUI_CONFIRMATION_OCTROI);
+	outil.attendreChargementElement(Cibles.BOUTON_POPUP_TERMINER_CONFIRMATION_OCTROI, true, true);
+	outil.cliquer(Cibles.BOUTON_POPUP_TERMINER_CONFIRMATION_OCTROI);
+	CT06.validerObjectif(outil.getDriver(), "FINALISATION", true);
+	//Step 5 : Vérification du passage à l'état FORC
+	outil.attendrePresenceTexte("Liste des dossiers");
+	outil.attendrePresenceTexte("FORC");
+	CT06.validerObjectif(outil.getDriver(), "MISEENFORCE", true);
+	return CT06;
+}
 }

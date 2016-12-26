@@ -32,7 +32,7 @@ public class Cibles {
 	public static final CibleBean BOUTON_MENU_OUVERTURE_DOSSIER = new CibleBean(Clefs.TEXTE_COMPLET, "Ouverture d'un dossier");
 	
 	/**
-	 * Bouton situé dans le premier menu permettant de choisir l'option "Ouverture d'un dossier" pour un full crédit.
+	 * Bouton situé dans le premier menu permettant de choisir l'option "Ouverture d'un dossier" pour un full crédit CREODIS
 	 */
 	public static final CibleBean BOUTON_MENU_OUVERTURE_DOSSIER_FC = new CibleBean(Clefs.CRITERES_ITERATIF, "*", "id=homeForm:izv_cp_fc_instr", CibleBean.RECHERCHE, CibleBean.CRITERE_TEXTE + "=Ouverture d'un dossier");
 	/**
@@ -48,6 +48,11 @@ public class Cibles {
 	 * Bouton situé dans l'écran principal permettant de choisir l'option de création d'un nouveau dossier.
 	 */
 	public static final CibleBean BOUTON_MENU_NOUVEAU_DOSSIER = new CibleBean(Clefs.VALEUR, "Nouveau dossier");
+	
+	/**
+	 * Bouton situé dans l'écran principal permettant la reprise d'un dossier en cours
+	 */
+	public static final CibleBean BOUTON_MENU_REPRISE_DOSSIER = new CibleBean(Clefs.TEXTE_COMPLET, "Reprise d'un dossier en cours");
 	
 	/**
 	 * Element du menu pour l'accès aux dossiers amortissables (PP).
@@ -162,6 +167,11 @@ public class Cibles {
 	 */
 	public static final CibleBean RADIO_SELECTION_ASS_1_CR = new CibleBean("form_assurance:tableAssurance:1:radio_selection:0");
 	
+	/**
+	 * Radio bouton pour la sélection "Sans assurance" pour un dossier FACELIA
+	 */
+	public static final CibleBean RADIO_SELECTION_SANS_ASS_FAC = new CibleBean("form_ongletSyntheseParticipant:j_id1648:j_id1659:0");
+
 	/**
 	 * Entete pour le tableau d'assurance CE.
 	 */
@@ -364,7 +374,7 @@ public class Cibles {
 	/**
 	 * Bouton pour la finalisation de la saisie du dossier pour un CR
 	 */
-	public static final CibleBean BOUTON_FINALISATION_OCTROI_CR = new CibleBean("decisionCR:finish");
+	public static final CibleBean BOUTON_FINALISATION_OCTROI_CR = new CibleBean(Clefs.VALEUR, "Terminer");
 	
 	/**
 	 * Bouton dans la liste des dossier pour la mise en force d'un CR.
