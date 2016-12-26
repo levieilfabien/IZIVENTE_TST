@@ -1,4 +1,4 @@
-package test.java;
+	package test.java;
 
 import java.io.File;
 
@@ -22,7 +22,7 @@ import outils.SeleniumOutils;
  * Editique Travaux échelonné (CE PP)
  * @author levieilfa bardouma
  */
-public class FT2SCPPCETest extends SC00Test {
+public class FT4SCPPCETest extends SC00Test {
 
 /**
  * Id de sérialisation par défaut.

@@ -218,6 +218,11 @@ public class Cibles {
 	public static final CibleBean ELEMENT_SPAN_NUMERO_FFI = new CibleBean("numero_dossierField:numero_dossier");
 	
 	/**
+	 * Element contenant le numéro FFI à récupérer pour une IZICARTE
+	 */
+	public static final CibleBean ELEMENT_SPAN_NUMEOR_FFI_IZICARTE = new CibleBean("contentView:j_id153:numeroDossier");
+	
+	/**
 	 * Element indiquant l'état d'avancement final du chargement de la signature electronique.
 	 */
 	public static final CibleBean ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE = new CibleBean("divProgressBarTermine");
