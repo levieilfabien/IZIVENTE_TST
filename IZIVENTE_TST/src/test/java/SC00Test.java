@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -115,9 +116,9 @@ public class SC00Test extends CasEssaiBean {
 			if (filePersonnePhy.exists()) {
 				filePersonnePhy.delete();
 			}
-			if (fileCreance != null && fileCreance.exists()) {
-				fileCreance.delete();
-			}
+//			if (fileCreance != null && fileCreance.exists()) {
+//				fileCreance.delete();
+//			}
 			if (filePersonnePhyCjt != null && filePersonnePhyCjt.exists()) {
 				filePersonnePhyCjt.delete();
 			}
@@ -131,10 +132,10 @@ public class SC00Test extends CasEssaiBean {
 			filePersonnePhy.setWritable(true);
 			filePersonnePhy.createNewFile();
 			// Cas particulier de la creance existante uniquement pour CE
-			if (fileCreance != null) {
-				fileCreance.setWritable(true);
-				fileCreance.createNewFile();
-			}
+//			if (fileCreance != null) {
+//				fileCreance.setWritable(true);
+//				fileCreance.createNewFile();
+//			}
 			// Car particulier du conjoint facultatif
 			if (filePersonnePhyCjt != null) {
 				filePersonnePhyCjt.setWritable(true);
@@ -153,11 +154,11 @@ public class SC00Test extends CasEssaiBean {
 			writer = new PrintWriter(filePersonnePhy, "UTF-8");
 			writer.append(XMLOutils.toXml(new ListePersonnePhysique(new PersonnePhysiqueTiers(foyer, false))));
 			writer.close();
-			if (fileCreance != null) {
-				writer = new PrintWriter(fileCreance, "UTF-8");
-				writer.append(XMLOutils.toXml(new Creance(idClient, cas)));
-				writer.close();
-			}
+//			if (fileCreance != null) {
+//				writer = new PrintWriter(fileCreance, "UTF-8");
+//				writer.append(XMLOutils.toXml(new Creance(idClient, cas)));
+//				writer.close();
+//			}
 			if (filePersonnePhyCjt != null) {
 				writer = new PrintWriter(filePersonnePhyCjt, "UTF-8");
 				writer.append(XMLOutils.toXml(new ListePersonnePhysique(new PersonnePhysiqueTiers(foyer, true))));
@@ -407,6 +408,20 @@ public class SC00Test extends CasEssaiBean {
 		
 		return retour;
 	}
-	
+	public String fichierDonneesClient(String distributeur, String numFFI, String idClient, String numIUN, String flag) throws SeleniumException {
+		File fichierDonneesClient = new File ("C:\\Users\\bardouma\\Documents\\DonneesClient.txt");
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(fichierDonneesClient, distributeur);
+			writer.append(distributeur + "	" + numFFI + "	" + idClient + "	" + numIUN + "	" + flag);
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String retour ="Mise à jour du fichier DonneesClient.txt";
+		
+		return retour;
+	}
 
 }
