@@ -1,6 +1,8 @@
 package test.java;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
@@ -63,17 +65,16 @@ public void accesIzivente() throws SeleniumException {
 			scenario1.getTests().add(CT04Participants(scenario1, outil));
 			scenario1.getTests().add(CT05FinalisationInstruction(scenario1, outil));
 			scenario1.getTests().add(CT06MiseGestion(scenario1, outil));
-			
+			ecritureFichierDonnees("BP", scenario1.getNumeroFFI(), scenario1.getIdClient(), "0000000123123", scenario1.getFlag());
 		} catch (SeleniumException ex) {
 			// Finalisation en erreur du cas de test.
 			finaliserTestEnErreur(outil, scenario1, ex, scenario1.getNomCasEssai() + scenario1.getDateCreation().getTime());
 			throw ex;
+
 		}
 		// Finalisation normale du cas de test.
 		finaliserTest(outil, scenario1, scenario1.getNomCasEssai() + scenario1.getDateCreation().getTime());
 	}
-
-
 
 /**
  * Partie du scenario1 regroupant la saisie, l'instruction et la validation d'un dossier CR FACELIA dans IZIVENTE.
@@ -161,6 +162,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario1, Se
 	// SAISIE DU DOSSIER
 	/////////////////////////////////////////////////////////////////////////////////////////////////////		
 	//Step 1 : Sélectionner l'offre désirée dans le menu déroulant selon le scénario
+	scenario1.setFlag(1);
 	outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT_CR, true, true);
 	outil.selectionner("FACELIA", Cibles.SELECTEUR_OFFRE_CREDIT_CR, false);
 	outil.attendre(2);
@@ -241,7 +243,7 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
 	CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
 	//Step optionnel : récupération du numéro FFI pour la mise en gestion
-	String numeroFFI = outil.obtenirValeur(Cibles.ELEMENT_SPAN_NUMERO_FFI);
+	String numeroFFI = outil.obtenirValeur(Cibles.ELEMENT_SPAN_NUMERO_FFI_CR);
 	scenario1.setNumeroFFI(numeroFFI);
 	//Step 4 : Imprimer la liasse de document
 	outil.attendreChargementElement(Cibles.BOUTON_IMPRIMER_LIASSE);
@@ -252,6 +254,7 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	outil.attendrePresenceTexte("Passage vers le choix du mode de signature");
 	outil.attendreChargementElement(Cibles.ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE);
 	outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT_FIN);
+	scenario1.setFlag(2);
 	CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
 	CT05.validerObjectif(outil.getDriver(), CT05.getNomCasEssai() + CT05.getTime(),true);
 	return CT05;
@@ -309,9 +312,8 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario1, Sele
 	CT06.validerObjectif(outil.getDriver(), "FINALISATION", true);
 	//Step 5 : Vérification du passage à l'état FORC et renseignement du fichier texte
 	outil.attendrePresenceTexte("Liste des dossiers");
-//	String retour = fichierDonneesClient("BP", scenario1.getNumeroFFI(), scenario1.getIdClient(), "0000000", "1");
-//	System.out.println(retour);
 	CT06.validerObjectif(outil.getDriver(), "MISEENFORCE", true);
+	scenario1.setFlag(3);
 	return CT06;
 }
 

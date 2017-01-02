@@ -24,6 +24,8 @@ public class CasEssaiIziventeBean extends CasEssaiBean {
 	 */
 	private String idClient = "";
 	
+	private int flag=0;
+	
 	public CasEssaiIziventeBean() {
 		super();
 	}
@@ -42,6 +44,14 @@ public class CasEssaiIziventeBean extends CasEssaiBean {
 
 	public void setIdClient(String idClient) {
 		this.idClient = idClient;
+	}
+	
+	public int getFlag() {
+		return flag;
+	}
+
+	public void setFlag(int flag) {
+		this.flag = flag;
 	}
 }
 

@@ -218,6 +218,11 @@ public class Cibles {
 	public static final CibleBean ELEMENT_SPAN_NUMERO_FFI = new CibleBean("numero_dossierField:numero_dossier");
 	
 	/**
+	 * Element contenant le numéro FFI à récupérer pour un FACELIA
+	 */
+	public static final CibleBean ELEMENT_SPAN_NUMERO_FFI_CR = new CibleBean("edition:numero_dossierField:numero_dossier");
+		
+	/**
 	 * Element contenant le numéro FFI à récupérer pour une IZICARTE
 	 */
 	public static final CibleBean ELEMENT_SPAN_NUMEOR_FFI_IZICARTE = new CibleBean("contentView:j_id153:numeroDossier");

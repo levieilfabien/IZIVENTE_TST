@@ -408,20 +408,26 @@ public class SC00Test extends CasEssaiBean {
 		
 		return retour;
 	}
-	public String fichierDonneesClient(String distributeur, String numFFI, String idClient, String numIUN, String flag) throws SeleniumException {
-		File fichierDonneesClient = new File ("C:\\Users\\bardouma\\Documents\\DonneesClient.txt");
+	public void ecritureFichierDonnees(String distributeur, String numFFI, String idClient, String numIUN, int flag) throws SeleniumException {
+		String distrib = distributeur;
+		String FFI = numFFI;
+		String idClnt = idClient;
+		String IUN = numIUN;
+		int flg = flag;
+		File fichierDonneesClient = new File ("C:\\Users\\bardouma\\Documents\\DonneesClientDossier.txt");
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter(fichierDonneesClient, distributeur);
-			writer.append(distributeur + "	" + numFFI + "	" + idClient + "	" + numIUN + "	" + flag);
+			writer = new PrintWriter(fichierDonneesClient);
+			writer.append(distrib + ";" + FFI + ";" + idClnt + ";" + IUN + ";" + flg);
 			writer.close();
-		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String retour ="Mise à jour du fichier DonneesClient.txt";
-		
-		return retour;
+			
+			System.out.println("Mise à jour du fichier DonneesClientDossier.txt");
 	}
+	
+	
 
 }
