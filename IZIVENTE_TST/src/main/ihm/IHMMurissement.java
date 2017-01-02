@@ -5,10 +5,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -27,7 +29,7 @@ public class IHMMurissement {
 	/**
 	 * Champ pour la saisie d'une date
 	 */
-	public JTextField saisieDate = new JTextField("21/12/16");
+	public JTextField saisieDate = new JTextField("dd/MM/yy");
 	
 	/**
 	 * Combobox pour le choix du distributeur.
@@ -35,9 +37,29 @@ public class IHMMurissement {
 	public JComboBox distributeur = new JComboBox(new Object[] {"CE", "BP"});
 	
 	/**
-	 * Combobox pour le retour.
+	 * Champ pour le retour.
 	 */
-	public JTextField retour = new JTextField("Néant");
+	public JTextField retour = new JTextField("<Pas encore murit>");
+	
+	/**
+	 * Champ pour le date de signature.
+	 */
+	public JTextField consultSignature = new JTextField("dd/MM/yy");
+	
+	/**
+	 * Champ pour le date de l'évènement.
+	 */
+	public JTextField consultEvenement = new JTextField("dd/MM/yy");
+	
+	/**
+	 * Champ pour le date de financement.
+	 */
+	public JTextField consultFinancement = new JTextField("dd/MM/yy");
+	
+	/**
+	 * Champ pour le date de retractation.
+	 */
+	public JTextField consultRetract = new JTextField("dd/MM/yy");
 	
 	/**
 	 * Combobox pour le choix du mode.
@@ -60,7 +82,23 @@ public class IHMMurissement {
 		ihm.siocID.setPreferredSize(new Dimension(60, 20));
 		ihm.siocID.setToolTipText("SIOCID de la simulation à murir");
 		ihm.saisieDate.setPreferredSize(new Dimension(60, 20));
-		ihm.saisieDate.setToolTipText("Date au format JJ/MM/AA, à laisse vider si date du jour-15");
+		ihm.saisieDate.setToolTipText("Date au format JJ/MM/AA, à laisse vide si date du jour-15");
+		ihm.consultSignature.setPreferredSize(new Dimension(200, 20));
+		ihm.consultSignature.setToolTipText("Date de signature en consultation");
+		ihm.consultSignature.setEditable(false);
+		ihm.consultSignature.setAlignmentY(JComponent.LEFT_ALIGNMENT);
+		ihm.consultEvenement.setPreferredSize(new Dimension(200, 20));
+		ihm.consultEvenement.setToolTipText("Date de l'évènement en consultation");
+		ihm.consultEvenement.setEditable(false);
+		ihm.consultEvenement.setAlignmentY(JComponent.LEFT_ALIGNMENT);
+		ihm.consultFinancement.setPreferredSize(new Dimension(200, 20));
+		ihm.consultFinancement.setToolTipText("Date de financement en consultation");
+		ihm.consultFinancement.setEditable(false);
+		ihm.consultFinancement.setAlignmentY(JComponent.LEFT_ALIGNMENT);
+		ihm.consultRetract.setPreferredSize(new Dimension(200, 20));
+		ihm.consultRetract.setToolTipText("Date de retractation en consultation");
+		ihm.consultRetract.setEditable(false);
+		ihm.consultRetract.setAlignmentY(JComponent.LEFT_ALIGNMENT);
 		ihm.retour.setPreferredSize(new Dimension(200, 20));
 		
 		// Ajout dans une IHM
@@ -68,7 +106,11 @@ public class IHMMurissement {
 		saisie.add(ihm.saisieDate);
 		saisie.add(ihm.distributeur);
 		saisie.add(ihm.mode);
-		sortie.add(ihm.retour);
+		sortie.add(ihm.consultSignature);
+		sortie.add(ihm.consultEvenement);
+		sortie.add(ihm.consultFinancement);
+		sortie.add(ihm.consultRetract);
+		bouton.add(ihm.retour);
 		
 		// Bouton
 		JButton generer = new JButton(new AbstractAction() {
@@ -99,8 +141,37 @@ public class IHMMurissement {
 				}
 			}
 		});
-		
 		generer.setText("Murissement");
+		
+		// Bouton
+		JButton consulter = new JButton(new AbstractAction() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JButton source = (JButton) e.getSource();
+				boolean lancement = true;
+				// On vérifie la validité des variables.
+				if ("".equals(ihm.siocID.getText())) {
+					ihm.siocID.setBackground(Color.RED);
+					lancement = false;
+				} else {
+					ihm.siocID.setBackground(Color.GREEN);
+				}
+			
+				if(lancement) {
+					List<String> dates = IZIVENTEOutils.consultation(ihm.siocID.getText(), ihm.distributeur.getSelectedIndex()==0?Constantes.CAS_CE:Constantes.CAS_BP);
+
+						ihm.retour.setText("Extraction effectuée");
+						ihm.consultSignature.setText(dates.get(0));
+						ihm.consultEvenement.setText(dates.get(1));
+						ihm.consultFinancement.setText(dates.get(2));
+						ihm.consultRetract.setText(dates.get(3));
+
+				}
+			}
+		});
+		consulter.setText("Consulter");
+		bouton.add(consulter);
 		bouton.add(generer);
 		
 		// Mise en place
