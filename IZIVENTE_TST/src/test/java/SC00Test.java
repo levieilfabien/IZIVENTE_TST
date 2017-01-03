@@ -417,18 +417,17 @@ public class SC00Test extends CasEssaiBean {
 	 * @param flag le flag du dossier indiquant son état d'avancée 
 	 * @throws SeleniumException
 	 */
-	public void ecritureFichierDonnees(String distributeur, String numFFI, String idClient, String numIUN, String numCltDist, int flag) throws SeleniumException {
+	public void ecritureFichierDonnees(String distributeur, String numFFI, String numCltDist, String numIUN, int flag) throws SeleniumException {
 		String distrib = distributeur;
 		String FFI = numFFI;
-		String idClnt = idClient;
+		String idClnt = numCltDist;
 		String IUN = numIUN;
-		String cltDist = numCltDist;
 		int flg = flag;
 		File fichierDonneesClient = new File ("R:\\SIAL\\ETU\\FSP\\SQ\\Prive\\40 - Tests SIAL CCO\\50 - Versions\\T&R 2016\\Automatisation - Fusion\\04 - Exécution\\FFI\\DonneesClientDossier"+idClnt+".txt");
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(fichierDonneesClient);
-			writer.append(distrib + ";" + FFI + ";" + idClnt + ";" + IUN + ";" + cltDist +";" + flg);
+			writer.append(distrib + ";" + FFI + ";" + idClnt + ";" + IUN + ";"+ flg);
 			writer.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
