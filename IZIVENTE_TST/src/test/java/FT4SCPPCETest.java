@@ -73,7 +73,7 @@ public void accesIzivente() throws SeleniumException {
 		scenario4.getTests().add(CT04Participants(scenario4, outil));
 		scenario4.getTests().add(CT05FinalisationInstruction(scenario4, outil));
 		scenario4.getTests().add(CT06MiseGestion(scenario4, outil));
-		ecritureFichierDonnees("CE", scenario4.getNumeroFFI(), scenario4.getIdClient(), null, scenario4.getFlag());
+		ecritureFichierDonnees("CE", scenario4.getNumeroFFI(), scenario4.getIdClient(), null, "PP", scenario4.getFlag());
 	} catch (SeleniumException ex) {
 		// Finalisation en erreur du cas de test.
 		finaliserTestEnErreur(outil, scenario4, ex, scenario4.getNomCasEssai() + scenario4.getDateCreation().getTime());

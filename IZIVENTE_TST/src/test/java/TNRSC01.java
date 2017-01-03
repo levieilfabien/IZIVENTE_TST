@@ -238,8 +238,8 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario1, Sel
 	//Assurance de l'emprunteur
 	outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
 	outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
-	outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR);
-	outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
+	outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_FACELIA);
+	outil.cliquer(Cibles.RADIO_AVEC_ASS_FACELIA);
 	CT04.validerObjectif(outil.getDriver(), "ASSURANCEROLE", true);
 	//Step 3 : Valider la liste des participants
 	outil.attendreChargementElement(Cibles.BOUTON_VALIDER_LISTE_PARTICIPANT);

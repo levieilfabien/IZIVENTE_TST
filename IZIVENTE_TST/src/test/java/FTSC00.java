@@ -340,8 +340,8 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario, Sele
 	case Constantes.FACELIA :
 		outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
 		outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
-		outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR);
-		outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
+		outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_FACELIA);
+		outil.cliquer(Cibles.RADIO_AVEC_ASS_FACELIA);
 	break;
 	case Constantes.CREODIS :
 		outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASS_1_CR);

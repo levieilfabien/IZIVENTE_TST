@@ -416,9 +416,18 @@ public class Cibles {
 	public static final CibleBean RADIO_AVEC_ASS_CR = new CibleBean(Clefs.TEXTE_PARTIEL, "Avec assurance");
 	
 	/**
-	 * Choix "Sans assurance" pour un participant à une IZICARTE
+	 * Choix "Avec assurance" pour un participant à un FACELIA.
 	 */
-	public static final CibleBean RADIO_SANS_ASS_CR = new CibleBean("form_ongletSyntheseParticipant:j_id1687:j_id1698:0");
+	public static final CibleBean RADIO_AVEC_ASS_FACELIA = new CibleBean("form_ongletSyntheseParticipant:j_id1648:j_id1659:1");
+	/**
+	 * Choix "Sans assurance" pour un participant à un CR
+	 */
+	public static final CibleBean RADIO_SANS_ASS_CR = new CibleBean(Clefs.TEXTE_PARTIEL, "Sans assurance");
+	
+	/**
+	 * Choix "Sans assurance" pour un participant à un FACELIA
+	 */
+	public static final CibleBean RADIO_SANS_ASS_FACELIA = new CibleBean("form_ongletSyntheseParticipant:j_id1648:j_id1659:0");
 	
 	/**
 	 * Champs de saisie (en lecture seule) indiquant le CMA pour le CR couplé en cours de saisie.

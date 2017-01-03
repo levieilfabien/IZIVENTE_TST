@@ -1,8 +1,11 @@
 package test.java;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.StandardOpenOption;
@@ -25,6 +28,8 @@ import main.ihm.PersonnePhysiqueTiers;
 
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
+
+import com.itextpdf.text.pdf.codec.Base64.InputStream;
 
 import outils.ALMOutils;
 import outils.SeleniumOutils;
@@ -420,38 +425,34 @@ public class SC00Test extends CasEssaiBean {
 	 * @param flag le flag du dossier indiquant son état d'avancée 
 	 * @throws SeleniumException
 	 */
-	public void ecritureFichierDonnees(String distributeur, String numFFI, String numCltDist, String numIUN, int flag) throws SeleniumException {
+	public void ecritureFichierDonnees(String distributeur, String numFFI, String numCltDist, String numIUN, String typeDossier, int flag) throws SeleniumException {
 		String distrib = distributeur;
 		String FFI = numFFI;
 		String idClnt = numCltDist;
 		String IUN = numIUN;
+		String typeDos = typeDossier;
 		int flg = flag;
-		String chaine = (distrib +";"+ FFI + ";" + idClnt + ";" + IUN + ";"+ flg+"\r\n");
+		String chaine = (distrib +";"+ FFI + ";" + idClnt + ";" + IUN + ";"+ typeDos +";"+ flg +"\r\n");
 		try {
-
-		Files.write(Paths.get("R:\\SIAL\\ETU\\FSP\\SQ\\Prive\\40 - Tests SIAL CCO\\50 - Versions\\T&R 2016\\Automatisation - Fusion\\04 - Exécution\\FFI\\DonneesClientDossier.txt"),chaine.getBytes(),StandardOpenOption.APPEND);
+		Files.write(Paths.get("src/test/DonneesClientDossier.txt"),chaine.getBytes(),StandardOpenOption.APPEND);
 		}
-		 catch (IOException e1) {
+		catch (IOException e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} 
-		
-		/*File fichierDonneesClient = new File ("R:\\SIAL\\ETU\\FSP\\SQ\\Prive\\40 - Tests SIAL CCO\\50 - Versions\\T&R 2016\\Automatisation - Fusion\\04 - Exécution\\FFI\\DonneesClientDossier.txt");
-		if (fichierDonneesClient.exists()){
-		PrintWriter writer;
-		try {
-			writer = new PrintWriter(fichierDonneesClient);
-			writer.append(distrib + ";" + FFI + ";" + idClnt + ";" + IUN + ";"+ flg+"\r\n");
-			writer.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				e1.printStackTrace();} 
 		}
-			
-			System.out.println("Mise à jour du fichier texte DonneesClientDossier.txt");
+	public String[] lectureFichierDonnees() throws IOException {
+		String contenu = "";
+		String pathfichierDonnees = "src/test/DonneesClientDossier.txt";
+		FileInputStream flux = new FileInputStream(pathfichierDonnees); 
+		InputStreamReader lecture = new InputStreamReader(flux);
+		BufferedReader buff = new BufferedReader(lecture);
+		String ligne;
+		while ((ligne=buff.readLine())!=null){
+			contenu = contenu.concat(ligne);
+		}
+		buff.close(); 
+		String[] tableauDonneesClient = contenu.split(";");
+		return tableauDonneesClient;
 	}
-		else{}}
-	*/
-	}
-
+		//ligne = "A;B;C" => String[] toto =  ligne.split(";") => String[3] {A, B, C} =>if (numFFI.equals(toto[1] )) 
 }
