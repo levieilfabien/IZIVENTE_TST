@@ -5,9 +5,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.StandardOpenOption;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import main.bean.ModificateurBouchon;
 import main.constantes.Cibles;
@@ -423,20 +426,32 @@ public class SC00Test extends CasEssaiBean {
 		String idClnt = numCltDist;
 		String IUN = numIUN;
 		int flg = flag;
-		File fichierDonneesClient = new File ("R:\\SIAL\\ETU\\FSP\\SQ\\Prive\\40 - Tests SIAL CCO\\50 - Versions\\T&R 2016\\Automatisation - Fusion\\04 - Exécution\\FFI\\DonneesClientDossier"+idClnt+".txt");
+		String chaine = (distrib +";"+ FFI + ";" + idClnt + ";" + IUN + ";"+ flg+"\r\n");
+		try {
+
+		Files.write(Paths.get("R:\\SIAL\\ETU\\FSP\\SQ\\Prive\\40 - Tests SIAL CCO\\50 - Versions\\T&R 2016\\Automatisation - Fusion\\04 - Exécution\\FFI\\DonneesClientDossier.txt"),chaine.getBytes(),StandardOpenOption.APPEND);
+		}
+		 catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} 
+		
+		/*File fichierDonneesClient = new File ("R:\\SIAL\\ETU\\FSP\\SQ\\Prive\\40 - Tests SIAL CCO\\50 - Versions\\T&R 2016\\Automatisation - Fusion\\04 - Exécution\\FFI\\DonneesClientDossier.txt");
+		if (fichierDonneesClient.exists()){
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(fichierDonneesClient);
-			writer.append(distrib + ";" + FFI + ";" + idClnt + ";" + IUN + ";"+ flg);
+			writer.append(distrib + ";" + FFI + ";" + idClnt + ";" + IUN + ";"+ flg+"\r\n");
 			writer.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 			
-			System.out.println("Mise à jour du fichier texte DonneesClientDossier");
+			System.out.println("Mise à jour du fichier texte DonneesClientDossier.txt");
 	}
-	
-	
+		else{}}
+	*/
+	}
 
 }
