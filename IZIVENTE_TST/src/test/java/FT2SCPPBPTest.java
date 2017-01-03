@@ -32,15 +32,7 @@ private static final long serialVersionUID = 1L;
 @Test
 public void accesIzivente() throws SeleniumException {
 	// Description du scénario
-	CasEssaiIziventeBean scenario2 = new CasEssaiIziventeBean();
-	scenario2.setAlm(true);
-	scenario2.setIdUniqueTestLab(54397);
-	scenario2.setNomCasEssai("TNRSC10-" + getTime());
-	scenario2.setDescriptif("TNRSC10 - BP - IZIVENTE_Editique Prêt Etudiant");
-	scenario2.setNomTestLab("TNRSC10 - BP - IZIVENTE_Editique Prêt Etudiant");
-	//scenario2.setNomTestPlan("TNRSC10 - BP - IZIVENTE_Editique Prêt Etudiant");
-	scenario2.setCheminTestLab("POC Selenium\\IZIVENTE");
-	
+	CasEssaiIziventeBean scenario2 = new CasEssaiIziventeBean();	
 	// Configuration du driver
 	FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
 	FirefoxProfile profile = configurerProfilNatixis();
@@ -72,7 +64,7 @@ public void accesIzivente() throws SeleniumException {
 		scenario2.getTests().add(CT04Participants(scenario2, outil));
 		scenario2.getTests().add(CT05FinalisationInstruction(scenario2, outil));
 		scenario2.getTests().add(CT06MiseGestion(scenario2, outil));
-		
+		ecritureFichierDonnees("BP", scenario2.getNumeroFFI(), scenario2.getIdClient(), null, null, scenario2.getFlag());
 	} catch (SeleniumException ex) {
 		// Finalisation en erreur du cas de test.
 		finaliserTestEnErreur(outil, scenario2, ex, scenario2.getNomCasEssai() + scenario2.getDateCreation().getTime());
@@ -164,6 +156,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario2, Se
 	// SAISIE DU DOSSIER
 	/////////////////////////////////////////////////////////////////////////////////////////////////////		
 	//Step 1 : Sélectionner l'offre désirée dans le menu déroulant selon le scénario
+	scenario2.setFlag(1);
 	outil.attendreChargementElement(Cibles.SELECTEUR_UNIVERS_CREDIT, true, true);
 	outil.selectionner("JEUNES", Cibles.SELECTEUR_UNIVERS_CREDIT, false);
 	outil.attendre(2);
@@ -262,6 +255,7 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	CT05.validerObjectif(outil.getDriver(), "IMPRESSION", true);
 	//Step 7 : Préparation du contrat et envoi à l'octroi		
 	outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT);
+	scenario2.setFlag(2);
 	CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
 	CT05.validerObjectif(outil.getDriver(), CT05.getNomCasEssai() + CT05.getTime(),true);
 	return CT05;
@@ -318,6 +312,7 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario2, Sele
 	//Step 5 : Vérification du passage à l'état FORC
 	outil.attendrePresenceTexte("Liste des dossiers");
 	outil.attendrePresenceTexte("FORC");
+	scenario2.setFlag(3);
 	CT06.validerObjectif(outil.getDriver(), "MISEENFORCE", true);
 return CT06;
 }

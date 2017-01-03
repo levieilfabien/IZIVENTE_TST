@@ -32,13 +32,6 @@ private static final long serialVersionUID = 1L;
 public void accesIzivente() throws SeleniumException {
 	// Description du scénario
 	CasEssaiIziventeBean scenario3 = new CasEssaiIziventeBean();
-	scenario3.setAlm(true);
-	scenario3.setIdUniqueTestLab(54391);
-	scenario3.setNomCasEssai("TNRSC02-" + getTime());
-	scenario3.setDescriptif("TNRSC02 - CE - IZIVENTE_Editique Izicarte");
-	scenario3.setNomTestLab("TNRSC02 - CE - IZIVENTE_Editique Izicarte");
-	//scenario3.setNomTestPlan("TNRSC02 - IZIVENTE_Editique Izicarte");
-	scenario3.setCheminTestLab("POC Selenium\\IZIVENTE");
 	
 	// Configuration du driver
 	FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
@@ -70,7 +63,7 @@ public void accesIzivente() throws SeleniumException {
 		scenario3.getTests().add(CT03SaisieDossier(scenario3, outil));
 		scenario3.getTests().add(CT04Participants(scenario3, outil));
 		scenario3.getTests().add(CT05FinalisationInstruction(scenario3, outil));
-		
+		ecritureFichierDonnees("CE", scenario3.getNumeroFFI(), scenario3.getIdClient(), null, null, scenario3.getFlag());
 	} catch (SeleniumException ex) {
 		// Finalisation en erreur du cas de test.
 		finaliserTestEnErreur(outil, scenario3, ex, scenario3.getNomCasEssai() + scenario3.getDateCreation().getTime());
@@ -91,16 +84,7 @@ public void accesIzivente() throws SeleniumException {
  */
 public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario3, SeleniumOutils outil) throws SeleniumException {
 	//Paramétrage du CT01
-	CasEssaiIziventeBean CT01 = new CasEssaiIziventeBean();
-	CT01.setAlm(true);
-	CT01.setNomCasEssai("CT01 -" + getTime());
-	CT01.setDescriptif("CT01 - Accès Izivente et Initialisation");
-	CT01.setNomTestPlan("CT01 - Accès Izivente et Initialisation");
-	//Information issues du scénario.
-	CT01.setIdUniqueTestLab(scenario3.getIdUniqueTestLab());
-	CT01.setCheminTestLab(scenario3.getCheminTestLab());
-	CT01.setNomTestLab(scenario3.getNomTestLab());
-	CT01.setRepertoireTelechargement(scenario3.getRepertoireTelechargement());	
+	CasEssaiIziventeBean CT01 = new CasEssaiIziventeBean();	
 	//Gestion des steps
 	CT01.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT01.getNomCasEssai() + CT01.getTime()));
 	CT01.ajouterStep("Génération du bouchon client Izivente", "GENERATION", "Création du bouchon terminée");
@@ -132,15 +116,6 @@ public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario3, S
 public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario3, SeleniumOutils outil) throws SeleniumException {
 	//Paramétrage du CT02
 	CasEssaiIziventeBean CT02 = new CasEssaiIziventeBean();
-	CT02.setAlm(true);
-	CT02.setNomCasEssai("CT02 -" + getTime());
-	CT02.setDescriptif("CT02 - Ouverture du dossier");
-	CT02.setNomTestPlan("CT02 - Ouverture du dossier");	
-	//Information issues du scénario.
-	CT02.setIdUniqueTestLab(scenario3.getIdUniqueTestLab());
-	CT02.setCheminTestLab(scenario3.getCheminTestLab());
-	CT02.setNomTestLab(scenario3.getNomTestLab());
-	CT02.setRepertoireTelechargement(scenario3.getRepertoireTelechargement());
 	//Gestion des steps
 	CT02.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT02.getNomCasEssai() + CT02.getTime()));
 	CT02.ajouterStep("Choisir le mode de vente (Face à face ou Vente à distance)", "MODE", "Affichage de l'écran d'instruction");
@@ -180,15 +155,6 @@ public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario3,
 public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario3, SeleniumOutils outil) throws SeleniumException {
 	//Paramétrage du CT03
 	CasEssaiIziventeBean CT03 = new CasEssaiIziventeBean();
-	CT03.setAlm(true);
-	CT03.setNomCasEssai("CT03 -" + getTime());
-	CT03.setDescriptif("CT03 - Saisie du dossier");
-	CT03.setNomTestPlan("CT03 - Saisie du dossier");
-	//Information issues du scénario.
-	CT03.setIdUniqueTestLab(scenario3.getIdUniqueTestLab());
-	CT03.setNomTestLab(scenario3.getNomTestLab());
-	CT03.setCheminTestLab(scenario3.getCheminTestLab());
-	CT03.setRepertoireTelechargement(scenario3.getRepertoireTelechargement());
 	//Gestion des steps
 	CT03.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT03.getNomCasEssai() + CT03.getTime()));
 	CT03.ajouterStep("Sélectionner l'offre désirée dans le menu déroulant selon le scénario", "OFFRE", "Offre sélectionnée");
@@ -199,6 +165,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario3, Se
 	// SAISIE DU DOSSIER
 	/////////////////////////////////////////////////////////////////////////////////////////////////////		
 	//Step 1 : Sélectionner l'offre désirée dans le menu déroulant selon le scénario
+	scenario3.setFlag(1);
 	outil.attendrePresenceTexte("Informations du crédit");
 	outil.attendre(2);
 	CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
@@ -220,15 +187,6 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario3, Se
 public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario3, SeleniumOutils outil) throws SeleniumException {
 	//Paramétrage du CT04
 	CasEssaiIziventeBean CT04 = new CasEssaiIziventeBean();
-	CT04.setAlm(true);
-	CT04.setNomCasEssai("CT04 -" + getTime());
-	CT04.setDescriptif("CT04 - Choix des participants");
-	CT04.setNomTestPlan("CT04 - Choix des participants");
-	//Information issues du scénario.
-	CT04.setIdUniqueTestLab(scenario3.getIdUniqueTestLab());
-	CT04.setCheminTestLab(scenario3.getCheminTestLab());
-	CT04.setNomTestLab(scenario3.getNomTestLab());
-	CT04.setRepertoireTelechargement(scenario3.getRepertoireTelechargement());
 	//Gestion des steps
 	CT04.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT04.getNomCasEssai() + CT04.getTime()));
 	CT04.ajouterStep("Choisir les participants en fonction de la fiche de prêt et Valider: \n -Pour ajouter le conjoint, Cliquer sur Ajouter le conjoint. \n -Pour ajouter un tiers, entrer le numéro de personne physique, cliquer sur rechercher, vérifier la cohérence des données du tiers  et  valider les données du tiers. ", "PARTICIPANTS", "Affichage de l'écran 'Synthèse des participants'");
@@ -260,15 +218,6 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario3, Sel
 public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean scenario3, SeleniumOutils outil) throws SeleniumException {
 	//Paramétrage du CT05
 	CasEssaiIziventeBean CT05 = new CasEssaiIziventeBean();
-	CT05.setAlm(true);
-	CT05.setNomCasEssai("CT05 -" + getTime());
-	CT05.setDescriptif("CT05 - Finalisation de l instruction");
-	CT05.setNomTestPlan("CT05 - Finalisation de l instruction");
-	//Information issues du scénario.
-	CT05.setIdUniqueTestLab(scenario3.getIdUniqueTestLab());
-	CT05.setCheminTestLab(scenario3.getCheminTestLab());
-	CT05.setNomTestLab(scenario3.getNomTestLab());
-	CT05.setRepertoireTelechargement(scenario3.getRepertoireTelechargement());
 	//Gestion des steps
 	CT05.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT05.getNomCasEssai() + CT05.getTime()));
 	CT05.ajouterStep("Valider de l'offre contrat de crédit (clic sur le bouton 'Valider en contrat de crédit')", "VALIDATION", "Affichage de la pop up de finalisation de l'instruction ou de la page de dossier de vente");
@@ -305,6 +254,7 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	//Step 5 : Préparation du contrat - choix du mode de vente	
 	outil.attendreChargementElement(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
 	outil.cliquer(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
+	scenario3.setFlag(2);
 	CT05.validerObjectif(outil.getDriver(), "MODE", true);
 	//Step 6 : Préparation du contrat pour envoi à l'octroi
 	outil.attendre(7);
@@ -333,9 +283,9 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	outil.attendreChargementElement(Cibles.ELEMENT_SPAN_NUMEOR_FFI_IZICARTE);
 	String numeroFFI = outil.obtenirValeur(Cibles.ELEMENT_SPAN_NUMEOR_FFI_IZICARTE);
 	scenario3.setNumeroFFI(numeroFFI);
-	System.out.println(numeroFFI);
 	CT05.validerObjectif(outil.getDriver(), "CONFIRMATION", true);
 	CT05.validerObjectif(outil.getDriver(), CT05.getNomCasEssai() + CT05.getTime(),true);
+	scenario3.setFlag(3);
 	return CT05;
 	}
 }

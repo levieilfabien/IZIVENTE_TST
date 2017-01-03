@@ -408,24 +408,34 @@ public class SC00Test extends CasEssaiBean {
 		
 		return retour;
 	}
-	public void ecritureFichierDonnees(String distributeur, String numFFI, String idClient, String numIUN, int flag) throws SeleniumException {
+	/**
+	 * 
+	 * @param distributeur le distributeur (CE ou BP)
+	 * @param numFFI le numéro FFI du dossier
+	 * @param idClient le numéro de personne physique de l'emprunteur
+	 * @param numIUN le numéro IUN du client
+	 * @param flag le flag du dossier indiquant son état d'avancée 
+	 * @throws SeleniumException
+	 */
+	public void ecritureFichierDonnees(String distributeur, String numFFI, String idClient, String numIUN, String numCltDist, int flag) throws SeleniumException {
 		String distrib = distributeur;
 		String FFI = numFFI;
 		String idClnt = idClient;
 		String IUN = numIUN;
+		String cltDist = numCltDist;
 		int flg = flag;
-		File fichierDonneesClient = new File ("C:\\Users\\bardouma\\Documents\\DonneesClientDossier.txt");
+		File fichierDonneesClient = new File ("R:\\SIAL\\ETU\\FSP\\SQ\\Prive\\40 - Tests SIAL CCO\\50 - Versions\\T&R 2016\\Automatisation - Fusion\\04 - Exécution\\FFI\\DonneesClientDossier"+idClnt+".txt");
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(fichierDonneesClient);
-			writer.append(distrib + ";" + FFI + ";" + idClnt + ";" + IUN + ";" + flg);
+			writer.append(distrib + ";" + FFI + ";" + idClnt + ";" + IUN + ";" + cltDist +";" + flg);
 			writer.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 			
-			System.out.println("Mise à jour du fichier DonneesClientDossier.txt");
+			System.out.println("Mise à jour du fichier texte DonneesClientDossier");
 	}
 	
 	
