@@ -302,7 +302,8 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario1, Sele
 	outil.attendreEtCliquer(Cibles.BOUTON_SUIVANT);
 	outil.attendreChargementElement(Cibles.LIBELLE_ACCEPTATION);
 	outil.cliquer(Cibles.LIBELLE_ACCEPTATION);
-	outil.attendreEtCliquer(Cibles.BOUTON_FINALISATION_OCTROI_CR);
+	outil.attendreChargementElement(Cibles.BOUTON_FINALISATION_OCTROI_FACELIA);
+	outil.attendreEtCliquer(Cibles.BOUTON_FINALISATION_OCTROI_FACELIA);
 	CT06.validerObjectif(outil.getDriver(), "OCTROI", true);
 	//Step 4 : Finalisation de l'octroi
 	outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_CONFIRMATION_OCTROI, true, true);

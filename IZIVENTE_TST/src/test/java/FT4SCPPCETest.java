@@ -33,14 +33,6 @@ private static final long serialVersionUID = 1L;
 public void accesIzivente() throws SeleniumException {
 	// Description du scénario
 	CasEssaiIziventeBean scenario4 = new CasEssaiIziventeBean();
-	scenario4.setAlm(true);
-	scenario4.setIdUniqueTestLab(54204);
-	scenario4.setNomCasEssai("TNRSC04-" + getTime());
-	scenario4.setDescriptif("TNRSC04 - CE - IZIVENTE_Editique Travaux Echelonné");
-	scenario4.setNomTestLab("TNRSC04 - CE - IZIVENTE_Editique Travaux Echelonné");
-	//scenario4.setNomTestPlan("TNRSC04 - IZIVENTE_Editique Travaux Echelonné");
-	scenario4.setCheminTestLab("POC Selenium\\IZIVENTE");
-	
 	// Configuration du driver
 	FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
 	FirefoxProfile profile = configurerProfilNatixis();
@@ -296,15 +288,6 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario4, SeleniumOutils outil) throws SeleniumException {
 	//Paramétrage du CT06
 	CasEssaiIziventeBean CT06 = new CasEssaiIziventeBean();
-	CT06.setAlm(true);
-	CT06.setNomCasEssai("CT06 -" + getTime());
-	CT06.setDescriptif("CT06 - Mise en gestion");
-	CT06.setNomTestPlan("CT06 - Mise en gestion");
-	//Information issues du scénario.
-	CT06.setIdUniqueTestLab(scenario4.getIdUniqueTestLab());
-	CT06.setCheminTestLab(scenario4.getCheminTestLab());
-	CT06.setNomTestLab(scenario4.getNomTestLab());
-	CT06.setRepertoireTelechargement(scenario4.getRepertoireTelechargement());
 	//Gestion des steps
 	CT06.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT06.getNomCasEssai() + CT06.getTime()));
 	CT06.ajouterStep("Relancement d'Izivente et retour sur le dossier", "RETOUR", "Affichage de la page d'accueil d'Izivente avec injection du jeton");

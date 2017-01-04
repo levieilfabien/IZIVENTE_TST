@@ -387,6 +387,10 @@ public class Cibles {
 	public static final CibleBean BOUTON_FINALISATION_OCTROI_CR = new CibleBean(Clefs.VALEUR, "Terminer");
 	
 	/**
+	 * Bouton pour la finalisation de la saisie d'un dossier FACELIA
+	 */
+	public static final CibleBean BOUTON_FINALISATION_OCTROI_FACELIA = new CibleBean("decisionCR:finish");
+	/**
 	 * Bouton dans la liste des dossier pour la mise en force d'un CR.
 	 */
 	public static final CibleBean BOUTON_MISE_EN_FORCE_CR = new CibleBean("resultDossier:btnForce");
