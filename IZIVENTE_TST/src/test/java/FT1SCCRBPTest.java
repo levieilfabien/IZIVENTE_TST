@@ -24,7 +24,11 @@ import outils.SeleniumOutils;
  * @author levieilfa bardouma
  */
 public class FT1SCCRBPTest extends SC00Test {
-
+//Définir l'établissement et l'agence (1871500030000302) - La valeur null rend des valeurs par défauts qui fonctionnent pour la plupart de nos scénarios
+	String etablissement = null;
+	String agence = null;
+//Définir l'étape d'avancement du dossier (EDIT pour finaliser l'édition, FORC pour réaliser la mise en force)
+	String avancement = "EDIT";
 	/**
  * Id de sérialisation.
  */
@@ -64,7 +68,10 @@ public void accesIzivente() throws SeleniumException {
 			scenario1.getTests().add(CT03SaisieDossier(scenario1, outil));
 			scenario1.getTests().add(CT04Participants(scenario1, outil));
 			scenario1.getTests().add(CT05FinalisationInstruction(scenario1, outil));
+			if (avancement == "FORC"){
 			scenario1.getTests().add(CT06MiseGestion(scenario1, outil));
+			}
+			else{}
 			ecritureFichierDonnees("BP", scenario1.getNumeroFFI(), scenario1.getIdClient(), null, "CR", scenario1.getFlag());
 		} catch (SeleniumException ex) {
 			// Finalisation en erreur du cas de test.
@@ -99,7 +106,7 @@ public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario1, S
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Jeton OK SC01 : "9500425"
 	//Steps 1,2,3,4 : Génération du bouchon - Accès à l'écran de reroutage et injection du jeton - Accès à Izivente
-	String idClient = saisieJeton(outil, null, false, Constantes.CAS_BP, null, null, null);
+	String idClient = saisieJeton(outil, null, false, Constantes.CAS_BP, null, agence, etablissement);
 	scenario1.setIdClient(idClient);
 	CT01.validerObjectif(outil.getDriver(), "GENERATION", true);
 	CT01.validerObjectif(outil.getDriver(), "ACCESREROUTAGE", true);

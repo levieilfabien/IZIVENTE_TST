@@ -26,7 +26,7 @@ public class TNRSC00 extends SC00Test {
 	//Définir le distributeur Constantes.CAS_CE pour CE/Constantes.CAS_BP pour BP
 	int distributeur = Constantes.CAS_BP;
 	//Définir le type de dossier FACELIA/CREODIS/IZICARTE/CREDIT_AMORT
-	int typeDossier = Constantes.FACELIA;
+	int typeDossier = Constantes.CREDIT_AMORT;
 	//Définir l'établissement et l'agence (1871500030000302) - La valeur null rend des valeurs par défauts qui fonctionnent pour la plupart de nos scénarios
 	String etablissement = null;
 	String agence = null;
@@ -39,7 +39,7 @@ public class TNRSC00 extends SC00Test {
 	//Renseigner le numéro de personne physique pour le coemprunteur tiers (BP : 9500855 P1E CE : 942500400).
 	String numPersPhys = "942500400";
 	//Définir la présence d'assurance pour les emprunteurs (oui/non).
-	String empAssurance = "oui";
+	String empAssurance = "non";
 	String coempAssurance = "oui";
 	
 /**
@@ -52,13 +52,13 @@ public void accesIzivente() throws SeleniumException {
 	
 	//Description du scénario
 	CasEssaiIziventeBean scenario0 = new CasEssaiIziventeBean();
-	scenario0.setAlm(true);
+/*	scenario0.setAlm(true);
 	scenario0.setIdUniqueTestLab(49375);
 	scenario0.setNomCasEssai("TNRSC00-" + getTime());
 	scenario0.setDescriptif("TNRSC00 - IZIVENTE_Editique XX");
 	scenario0.setNomTestLab("TNRSC00 - IZIVENTE_Editique XX");
 	//scenario0.setNomTestPlan("TNRSC00 - IZIVENTE_Editique XX");
-	scenario0.setCheminTestLab("POC Selenium\\IZIVENTE");
+	scenario0.setCheminTestLab("POC Selenium\\IZIVENTE");*/
 	
 	//Configuration du driver
 	FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
@@ -342,10 +342,24 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario, Sele
 	// PARTICIPANTS
 	/////////////////////////////////////////////////////////////////////////////////////////////////////		
 	//Step 1 : Choisir les participants en fonction de la fiche de prêt et Valider. Aucun co-emprunteur dans ce scénario
-    outil.attendreChargementElement(Cibles.LIBELLE_ONGLET_AJOUT_PARTICIPANT);
     switch(coemprunteur){
     	case "" :
-    		outil.cliquer(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);	
+    		switch (typeDossier){
+    	    case Constantes.CREDIT_AMORT :
+    	    	outil.attendreChargementElement(Cibles.LIBELLE_ONGLET_AJOUT_PARTICIPANT);
+    			outil.cliquer(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
+    		break;
+    	    case Constantes.IZICARTE :
+    	    	outil.attendreChargementElement(Cibles.LIBELLE_ONGLET_AJOUT_PARTICIPANT);
+    	    	outil.cliquer(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
+    	    break;
+    	    case Constantes.FACELIA :
+    	    	outil.attendreChargementElement(Cibles.LIBELLE_ONGLET_AJOUT_PARTICIPANT);
+    	    	outil.cliquer(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
+    	    	CT04.validerObjectif(outil.getDriver(), "PARTICIPANTS", true);
+    	    break;
+    	    case Constantes.CREODIS :
+    	    break;}	
     	break;
     	case "conjoint" :
     		if(typeDossier == Constantes.CREDIT_AMORT){outil.cliquer(Cibles.BOUTON_AJOUT_CONJOINT);}
@@ -570,16 +584,9 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 		outil.cliquer(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
 		CT05.validerObjectif(outil.getDriver(), "MODE", true);
 		//Step 6 : Préparation du contrat pour envoi à l'octroi
-		outil.attendre(8);
-		outil.attendreChargementElement(Cibles.BOUTON_PASSAGE_OCTROI_CR);
-		outil.cliquer(Cibles.BOUTON_PASSAGE_OCTROI_CR);
-		outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
-		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
-		CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
-		outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ);
-		outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-		outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_VERIFIE);
-		outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_VERIFIE);
+		outil.attendre(7);
+		outil.attendreChargementElement(Cibles.BOUTON_TERMINER_EDITION_CR);
+		outil.cliquer(Cibles.BOUTON_TERMINER_EDITION_CR);
 		CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);
 		CT05.validerObjectif(outil.getDriver(), "CONFIRMATION", true);
 	break;
