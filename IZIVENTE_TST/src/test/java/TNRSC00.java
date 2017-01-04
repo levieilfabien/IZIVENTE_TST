@@ -25,6 +25,7 @@ public class TNRSC00 extends SC00Test {
 
 	//Définir le distributeur Constantes.CAS_CE pour CE/Constantes.CAS_BP pour BP
 	int distributeur = Constantes.CAS_BP;
+	//TODO Notion fonctionnelle dernière ces libellés ?
 	//Définir le type de dossier FACELIA/CREODIS/IZICARTE/CREDIT_AMORT
 	int typeDossier = Constantes.CREDIT_AMORT;
 	//Définir l'établissement et l'agence (1871500030000302) - La valeur null rend des valeurs par défauts qui fonctionnent pour la plupart de nos scénarios
@@ -36,8 +37,13 @@ public class TNRSC00 extends SC00Test {
 	String typeObjet = "TRESORERIE";
 	//Définir s'il y a ou non un coemprenteur ("" si aucun CEMP, "conjoint" si CEMP conjoint, "tiers" si CEMP tiers).
 	String coemprunteur = "";
+	
+	Boolean conjointCoEmp = false;
+	Boolean tiersCoEmp = false;
+	Boolean tiersCaution = false;
+	
 	//Renseigner le numéro de personne physique pour le coemprunteur tiers (BP : 9500855 P1E CE : 942500400).
-	String numPersPhys = "942500400";
+	String numPersPhysTiers = "942500400";
 	//Définir la présence d'assurance pour les emprunteurs (oui/non).
 	String empAssurance = "non";
 	String coempAssurance = "oui";
@@ -344,50 +350,22 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario, Sele
 	//Step 1 : Choisir les participants en fonction de la fiche de prêt et Valider. Aucun co-emprunteur dans ce scénario
     switch(coemprunteur){
     	case "" :
-    		switch (typeDossier){
-    	    case Constantes.CREDIT_AMORT :
-    	    	outil.attendreChargementElement(Cibles.LIBELLE_ONGLET_AJOUT_PARTICIPANT);
-    			outil.cliquer(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
-    		break;
-    	    case Constantes.IZICARTE :
-    	    	outil.attendreChargementElement(Cibles.LIBELLE_ONGLET_AJOUT_PARTICIPANT);
-    	    	outil.cliquer(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
-    	    break;
-    	    case Constantes.FACELIA :
-    	    	outil.attendreChargementElement(Cibles.LIBELLE_ONGLET_AJOUT_PARTICIPANT);
-    	    	outil.cliquer(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
-    	    	CT04.validerObjectif(outil.getDriver(), "PARTICIPANTS", true);
-    	    break;
-    	    case Constantes.CREODIS :
-    	    break;}	
+    		aucunCoEmprunteur(CT04, outil);
     	break;
     	case "conjoint" :
-    		if(typeDossier == Constantes.CREDIT_AMORT){outil.cliquer(Cibles.BOUTON_AJOUT_CONJOINT);}
-    		else{System.out.println("On ne peut pas inscrire de co emprunteur sur un CR sauf Izicarte muni d'un compte joint");
+    		if(typeDossier == Constantes.CREDIT_AMORT) {
+    			outil.cliquer(Cibles.BOUTON_AJOUT_CONJOINT);
+    		} else{
+    			//TODO Gérer le mode IZICARTE avec compte joint
+    			System.out.println("On ne peut pas inscrire de co emprunteur sur un CR sauf Izicarte muni d'un compte joint");
     			//outil.attendreChargementElement(Cibles.LIBELLE_ONGLET_AJOUT_PARTICIPANT);
         		//outil.cliquer(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
-    			}
+    		}
     	break;
     	case "tiers" :
-    		outil.attendreChargementElement(Cibles.SELECTEUR_IDENTIFICATION_PARTICIPANT, true, true);
-    		outil.selectionner("RCHNUMERO", Cibles.SELECTEUR_IDENTIFICATION_PARTICIPANT, false);
-    		outil.attendreChargementElement(Cibles.SAISIE_NUMERO_PERS_PHY);
-    		outil.viderEtSaisir(numPersPhys, Cibles.SAISIE_NUMERO_PERS_PHY);
-    		outil.cliquer(Cibles.BOUTON_RECHERCHER);
-    		//Ajout du tiers
-    	    outil.attendreChargementElement(Cibles.BOUTON_AJOUT_TIERS);
-    		outil.cliquer(Cibles.BOUTON_AJOUT_TIERS);
-    		if(distributeur == Constantes.CAS_CE){outil.attendrePresenceTexte("Attention");
-    			outil.cliquer(Cibles.BOUTON_POPUP_FERMER);;
-    			outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_DETAILS_TIERS_1);
-    			outil.cliquer(Cibles.BOUTON_VALIDATION_DETAILS_TIERS_1);}
-    		else {outil.attendrePresenceTexte("ATTENTION");
-	    		outil.cliquer(Cibles.BOUTON_POPUP_FERMER);
-	    		outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_DETAILS_TIERS_BP);
-	    		outil.cliquer(Cibles.BOUTON_VALIDATION_DETAILS_TIERS_BP);}
-	    	outil.attendrePresenceTexte("Synthèse des informations sur le Tiers");
-    		outil.cliquer(Cibles.BOUTON_POPUP_VALIDER_SYNTHESE_TIERS);
+    		ajoutTiers(outil);
     	break;}
+    
 	CT04.validerObjectif(outil.getDriver(), "PARTICIPANTS", true);
 	//Step 2 : Pour chaque participant, choisir le rôle et l'assurance en fonction des hypothèses. Valider la listes des participants et confirmer l'assurance
 	//Assurance de l'emprunteur
@@ -622,5 +600,58 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	}
 	CT05.validerObjectif(outil.getDriver(), CT05.getNomCasEssai() + CT05.getTime(),true);
 	return CT05;
+	}
+
+
+	/**
+	 * Fonction générique permettant pour tout type de produit de ne positionner aucun coemprunteur.
+	 * @param cas le cas de test concerné.
+	 * @param outil la boite à outil selenium.
+	 * @throws SeleniumException en cas d'erreur lors de l'interaction avec l'IHM.
+	 */
+	private void aucunCoEmprunteur(CasEssaiIziventeBean cas, SeleniumOutils outil) throws SeleniumException {
+		
+		// Si le type de dossier est CREODIS
+		if (typeDossier != Constantes.CREODIS) {
+	    	outil.attendreChargementElement(Cibles.LIBELLE_ONGLET_AJOUT_PARTICIPANT);
+	    	outil.cliquer(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
+		}
+		cas.validerObjectif(outil.getDriver(), "PARTICIPANTS", true);
+		
+	}
+	
+	/**
+	 * Fonction générique d'ajout d'un tiers dont le numéro de personne physique est connu et paramètré dans la classe.
+	 * @param outil la boite à outil.
+	 * @throws SeleniumException en cas d'erreur.
+	 */
+	private void ajoutTiers(SeleniumOutils outil) throws SeleniumException {
+		
+		// Recherche du tiers à partir du numéro paramètre
+		outil.attendreChargementElement(Cibles.SELECTEUR_IDENTIFICATION_PARTICIPANT, true, true);
+		outil.selectionner("RCHNUMERO", Cibles.SELECTEUR_IDENTIFICATION_PARTICIPANT, false);
+		outil.attendreChargementElement(Cibles.SAISIE_NUMERO_PERS_PHY);
+		outil.viderEtSaisir(numPersPhysTiers, Cibles.SAISIE_NUMERO_PERS_PHY);
+		outil.cliquer(Cibles.BOUTON_RECHERCHER);
+		//Ajout du tiers
+	    outil.attendreChargementElement(Cibles.BOUTON_AJOUT_TIERS);
+		outil.cliquer(Cibles.BOUTON_AJOUT_TIERS);
+		
+		// On valide la popup relative au tiers ajouté
+		if(distributeur == Constantes.CAS_CE) {
+			outil.attendrePresenceTexte("Attention");
+			outil.cliquer(Cibles.BOUTON_POPUP_FERMER);
+			outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_DETAILS_TIERS_1);
+			outil.cliquer(Cibles.BOUTON_VALIDATION_DETAILS_TIERS_1);
+		} else {
+			outil.attendrePresenceTexte("ATTENTION");
+    		outil.cliquer(Cibles.BOUTON_POPUP_FERMER);
+    		outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_DETAILS_TIERS_BP);
+    		outil.cliquer(Cibles.BOUTON_VALIDATION_DETAILS_TIERS_BP);
+    	}
+		
+		// Validation de la synthèse du tiers
+    	outil.attendrePresenceTexte("Synthèse des informations sur le Tiers");
+		outil.cliquer(Cibles.BOUTON_POPUP_VALIDER_SYNTHESE_TIERS);
 	}
 }
