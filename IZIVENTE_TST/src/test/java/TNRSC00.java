@@ -463,6 +463,7 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	break;
 	case Constantes.IZICARTE :
 		//Step 1 : Valider de l'offre contrat de crédit (Etape non présente dans un CR)
+		//Step 1 : Valider de l'offre contrat de crédit 
 		outil.attendreChargementElement(Cibles.BOUTON_VALIDER_OPC_CR);
 		outil.attendreEtCliquer(Cibles.BOUTON_VALIDER_OPC_CR);
 		CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
@@ -482,8 +483,8 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 		outil.attendreChargementElement(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
 		outil.cliquer(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
 		CT05.validerObjectif(outil.getDriver(), "MODE", true);
-		//Step 6 : Préparation du contrat pour envoi à l'octroi
-		//outil.attendre(7);
+		//Step 6 : Fin de l'édition
+		outil.attendreChargementElement(Cibles.BOUTON_PASSAGE_OCTROI_CR, true, true);
 		outil.attendreChargementElement(Cibles.BOUTON_TERMINER_EDITION_CR, true, true);
 		outil.cliquer(Cibles.BOUTON_TERMINER_EDITION_CR);
 		CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);

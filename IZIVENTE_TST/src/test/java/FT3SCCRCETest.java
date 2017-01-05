@@ -272,24 +272,12 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_VERIFIE);
 	outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_VERIFIE);
 	CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);
-	outil.attendre(7);
-	outil.attendreChargementElement(Cibles.BOUTON_PASSAGE_OCTROI_CR, true, true);
-	outil.cliquer(Cibles.BOUTON_PASSAGE_OCTROI_CR);
-	outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
-	outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
-	CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
-	outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ);
-	outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-	outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_VERIFIE);
-	outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_VERIFIE);
-	CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);
 	//Step 7 : Acceptation du contrat - envoi à l'octroi
 	outil.attendreChargementElement(Cibles.BOUTON_SUIVANT);
 	outil.cliquer(Cibles.BOUTON_SUIVANT);
 	outil.attendreChargementElement(Cibles.LIBELLE_ACCEPTATION);
 	outil.cliquer(Cibles.LIBELLE_ACCEPTATION);
-	outil.attendre(7);
-	outil.attendreChargementElement(Cibles.BOUTON_FINALISATION_OCTROI_CR);
+	outil.attendreChargementElement(Cibles.BOUTON_FINALISATION_OCTROI_CR, true, true);
 	outil.cliquer(Cibles.BOUTON_FINALISATION_OCTROI_CR);
 	outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
 	outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OUI_MAJ);

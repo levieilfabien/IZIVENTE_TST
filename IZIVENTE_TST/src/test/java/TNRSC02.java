@@ -287,7 +287,7 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// FINALISATION DE L'INSTRUCTION
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	//Step 1 : Valider de l'offre contrat de crédit (Etape non présente dans un CR)
+	//Step 1 : Valider de l'offre contrat de crédit 
 	outil.attendreChargementElement(Cibles.BOUTON_VALIDER_OPC_CR);
 	outil.attendreEtCliquer(Cibles.BOUTON_VALIDER_OPC_CR);
 	CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
@@ -312,7 +312,6 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	CT05.validerObjectif(outil.getDriver(), "MODE", true);
 	//TODO modifier le step 6 en CT06 (voir FT3SCCRCE) 
 	//Step 6 : Préparation du contrat pour envoi à l'octroi
-	//outil.attendre(7);
 	outil.attendreChargementElement(Cibles.BOUTON_MISE_EN_FORCE_CR, true, true);
 	outil.cliquer(Cibles.BOUTON_MISE_EN_FORCE_CR);
 	outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
@@ -328,8 +327,7 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	outil.cliquer(Cibles.BOUTON_SUIVANT);
 	outil.attendreChargementElement(Cibles.LIBELLE_ACCEPTATION);
 	outil.cliquer(Cibles.LIBELLE_ACCEPTATION);
-	outil.attendre(7);
-	outil.attendreChargementElement(Cibles.BOUTON_FINALISATION_OCTROI_CR);
+	outil.attendreChargementElement(Cibles.BOUTON_FINALISATION_OCTROI_CR, true, true);
 	outil.cliquer(Cibles.BOUTON_FINALISATION_OCTROI_CR);
 	outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
 	outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
