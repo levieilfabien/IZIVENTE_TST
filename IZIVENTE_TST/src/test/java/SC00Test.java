@@ -454,5 +454,4 @@ public class SC00Test extends CasEssaiBean {
 		String[] tableauDonneesClient = contenu.split(";");
 		return tableauDonneesClient;
 	}
-		//ligne = "A;B;C" => String[] toto =  ligne.split(";") => String[3] {A, B, C} =>if (numFFI.equals(toto[1] )) 
 }

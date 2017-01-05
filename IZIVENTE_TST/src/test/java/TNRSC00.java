@@ -35,18 +35,20 @@ public class TNRSC00 extends SC00Test {
 	String typeUnivers = "TRESORERIE";
 	String typeOffre = "CREDIT TRESORERIE";
 	String typeObjet = "TRESORERIE";
-	//Définir s'il y a ou non un coemprenteur ("" si aucun CEMP, "conjoint" si CEMP conjoint, "tiers" si CEMP tiers).
-	String coemprunteur = "";
-	
+	//Définir l'absence ou la présence de coemprunteur et leurs rôles.
+	Boolean aucunCoEmp = false;
 	Boolean conjointCoEmp = false;
+	Boolean conjointCaution = false;
 	Boolean tiersCoEmp = false;
-	Boolean tiersCaution = false;
+	Boolean tiersCaution = true;
 	
 	//Renseigner le numéro de personne physique pour le coemprunteur tiers (BP : 9500855 P1E CE : 942500400).
-	String numPersPhysTiers = "942500400";
-	//Définir la présence d'assurance pour les emprunteurs (oui/non).
-	String empAssurance = "non";
-	String coempAssurance = "oui";
+	String numPersPhysTiers = "9500855";
+	//Définir la présence d'assurance pour les emprunteurs (true = oui /false = non).
+	Boolean assuranceEmp = true;
+	Boolean assuranceConjointCoEmp = false;
+	Boolean assuranceTiers = false;
+	
 	
 /**
  * Id de sérialisation par défaut.
@@ -58,7 +60,7 @@ public void accesIzivente() throws SeleniumException {
 	
 	//Description du scénario
 	CasEssaiIziventeBean scenario0 = new CasEssaiIziventeBean();
-/*	scenario0.setAlm(true);
+	/*scenario0.setAlm(true);
 	scenario0.setIdUniqueTestLab(49375);
 	scenario0.setNomCasEssai("TNRSC00-" + getTime());
 	scenario0.setDescriptif("TNRSC00 - IZIVENTE_Editique XX");
@@ -348,111 +350,29 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario, Sele
 	// PARTICIPANTS
 	/////////////////////////////////////////////////////////////////////////////////////////////////////		
 	//Step 1 : Choisir les participants en fonction de la fiche de prêt et Valider. Aucun co-emprunteur dans ce scénario
-    switch(coemprunteur){
-    	case "" :
-    		aucunCoEmprunteur(CT04, outil);
-    	break;
-    	case "conjoint" :
-    		if(typeDossier == Constantes.CREDIT_AMORT) {
-    			outil.cliquer(Cibles.BOUTON_AJOUT_CONJOINT);
-    		} else{
-    			//TODO Gérer le mode IZICARTE avec compte joint
-    			System.out.println("On ne peut pas inscrire de co emprunteur sur un CR sauf Izicarte muni d'un compte joint");
-    			//outil.attendreChargementElement(Cibles.LIBELLE_ONGLET_AJOUT_PARTICIPANT);
-        		//outil.cliquer(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
-    		}
-    	break;
-    	case "tiers" :
-    		ajoutTiers(outil);
-    	break;}
     
+    if (aucunCoEmp == true) {
+    		aucunCoEmprunteur(outil);
+    }
+    else if(conjointCoEmp == true && conjointCaution == false && tiersCoEmp == false && tiersCaution == false) {
+    	ajoutConjointCoEmprunteurUnique(outil);
+    }
+    else if(tiersCoEmp == true || tiersCaution == true){
+    	ajoutTiers(outil);
+    }
+    
+    //Rôle du tiers
+  	roleTiers(outil);
+    //Rôle du conjoint (sélectionnable que si un tiers est présent sur le dossier)
+  	roleConjoint(outil);
 	CT04.validerObjectif(outil.getDriver(), "PARTICIPANTS", true);
 	//Step 2 : Pour chaque participant, choisir le rôle et l'assurance en fonction des hypothèses. Valider la listes des participants et confirmer l'assurance
 	//Assurance de l'emprunteur
-	outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
-	outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
-	switch(empAssurance){
-	case "oui" :
-		switch (typeDossier){
-		case Constantes.CREDIT_AMORT :
-			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
-			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
-			outil.attendre(2);
-			outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-		break;
-		case Constantes.IZICARTE :
-			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
-			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
-			outil.attendre(1);
-			outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR);
-			outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
-		break;
-		case Constantes.FACELIA :
-			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
-			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
-			outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_FACELIA);
-			outil.cliquer(Cibles.RADIO_AVEC_ASS_FACELIA);
-		break;
-		case Constantes.CREODIS :
-			outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASS_1_CR);
-		break;}
-	break;
-	case "non" :
-		switch (typeDossier){
-		case Constantes.CREDIT_AMORT :
-			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
-			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
-			outil.attendre(2);
-			outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
-		break;
-		case Constantes.IZICARTE :
-			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
-			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
-			outil.attendre(1);
-			outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_CR);
-			outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
-		break;
-		case Constantes.FACELIA :
-			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
-			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
-			outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_FACELIA);
-			outil.cliquer(Cibles.RADIO_SANS_ASS_FACELIA);
-		break;
-		case Constantes.CREODIS :
-			outil.attendreEtCliquer(Cibles.RADIO_SELECTION_SANS_ASS_CR);
-		break;}
-	break;}
-	if (coemprunteur == "conjoint"){
-		switch(coempAssurance){
-		case "oui" :
-			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT1);
-			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
-			outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-		break;
-		case "non" :
-			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT1);
-			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
-			outil.attendre(2);
-			outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
-		break;}}
-		else if(coemprunteur == "tiers"){
-			switch (distributeur){
-			case Constantes.CAS_BP :
-				outil.selectionner("CAUTION PERSONNE PHYSIQUE", Cibles.SELECTEUR_ROLE_PARTICIPANT);
-				outil.attendreChargementElement(Cibles.BOUTON_SUPP_PARTICIPANT_2_BP);
-				outil.cliquer(Cibles.BOUTON_SUPP_PARTICIPANT_2_BP);
-				outil.attendrePresenceTexte("Demande de confirmation de suppression");
-				outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
-			break;
-			case Constantes.CAS_CE :
-				outil.selectionner("CAUTION PERSONNE PHYSIQUE", Cibles.SELECTEUR_ROLE_PARTICIPANT);
-				outil.attendreChargementElement(Cibles.BOUTON_SUPP_PARTICIPANT_2_CE);
-				outil.cliquer(Cibles.BOUTON_SUPP_PARTICIPANT_2_CE);
-				outil.attendrePresenceTexte("Demande de confirmation de suppression");
-				outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
-			break;}
-		}
-		else{}
+	assuranceEmprunteur(outil);
+	//Assurance du conjoint
+	assuranceConjoint(outil);
+	//Assurance du tiers
+	assuranceTiers(outil);
 	CT04.validerObjectif(outil.getDriver(), "ASSURANCEROLE", true);
 	//Step 3 : Valider la liste des participants
 	outil.attendreChargementElement(Cibles.BOUTON_VALIDER_LISTE_PARTICIPANT);
@@ -609,15 +529,24 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	 * @param outil la boite à outil selenium.
 	 * @throws SeleniumException en cas d'erreur lors de l'interaction avec l'IHM.
 	 */
-	private void aucunCoEmprunteur(CasEssaiIziventeBean cas, SeleniumOutils outil) throws SeleniumException {
+	private void aucunCoEmprunteur(SeleniumOutils outil) throws SeleniumException {
 		
-		// Si le type de dossier est CREODIS
+		// Si le type de dossier est tout sauf CREODIS
 		if (typeDossier != Constantes.CREODIS) {
 	    	outil.attendreChargementElement(Cibles.LIBELLE_ONGLET_AJOUT_PARTICIPANT);
 	    	outil.cliquer(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
 		}
-		cas.validerObjectif(outil.getDriver(), "PARTICIPANTS", true);
-		
+	}
+	
+	private void ajoutConjointCoEmprunteurUnique(SeleniumOutils outil) throws SeleniumException {
+		if(typeDossier == Constantes.CREDIT_AMORT) {
+			outil.cliquer(Cibles.BOUTON_AJOUT_CONJOINT);
+		} else{
+			//TODO Gérer le mode IZICARTE avec compte joint
+			System.out.println("On ne peut pas inscrire de co emprunteur sur un CR sauf Izicarte muni d'un compte joint");
+			//outil.attendreChargementElement(Cibles.LIBELLE_ONGLET_AJOUT_PARTICIPANT);
+    		//outil.cliquer(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
+		}
 	}
 	
 	/**
@@ -654,4 +583,161 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
     	outil.attendrePresenceTexte("Synthèse des informations sur le Tiers");
 		outil.cliquer(Cibles.BOUTON_POPUP_VALIDER_SYNTHESE_TIERS);
 	}
+	
+	/**
+	 * Fonction générique pour la mise en place ou non d'une assurance pour l'emprunteur
+	 * @param outil la boîte à outil
+	 * @throws SeleniumException en cas d'erreur
+	 */
+	private void assuranceEmprunteur(SeleniumOutils outil) throws SeleniumException {
+		//TODO prévoir le choix de type d'assurance
+		outil.attendre(1);
+		outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
+		outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
+		if (assuranceEmp == true ) {
+				switch (typeDossier) {
+						case Constantes.CREDIT_AMORT :
+							outil.attendre(2);
+							outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+						break;
+						case Constantes.IZICARTE :
+							outil.attendre(1);
+							outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR);
+							outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
+						break;
+						case Constantes.FACELIA :
+							outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_FACELIA);
+							outil.cliquer(Cibles.RADIO_AVEC_ASS_FACELIA);
+						break;
+						case Constantes.CREODIS :
+							outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASS_1_CR);
+						break;
+					}
+		}
+		else{
+			switch (typeDossier) {
+					case Constantes.CREDIT_AMORT :
+						outil.attendre(2);
+						outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
+					break;
+					case Constantes.IZICARTE :
+						outil.attendre(1);
+						outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_CR);
+						outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
+					break;
+					case Constantes.FACELIA :
+						outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_FACELIA);
+						outil.cliquer(Cibles.RADIO_SANS_ASS_FACELIA);
+					break;
+					case Constantes.CREODIS :
+						outil.attendreEtCliquer(Cibles.RADIO_SELECTION_SANS_ASS_CR);
+					break;
+				}
+		}
+		}
+
+	/**
+	 * Fonction générique pour le choix d'une assurance sur le conjoint
+	 * @param outil la boîte à outil
+	 * @throws SeleniumException en cas d'erreur
+	 */
+	private void assuranceConjoint(SeleniumOutils outil) throws SeleniumException {
+		if (tiersCoEmp == false && tiersCaution == false){
+			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT1);
+			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
+		}
+		else if(tiersCoEmp == true || tiersCaution == true){
+			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT2);
+			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT2);
+		}
+		if (assuranceConjointCoEmp == true){
+			outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+		}
+		else if(assuranceConjointCoEmp == false){
+			outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
+		}
+	}
+	/**
+	 * Fonction générique pour le choix d'une assurance sur le tiers
+	 * @param outil la boîte à outil
+	 * @throws SeleniumException en cas d'erreur
+	 */
+	private void assuranceTiers(SeleniumOutils outil) throws SeleniumException {
+		if(tiersCoEmp == true || tiersCaution == true){
+			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT1);
+			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
+			if(assuranceTiers == true){
+				outil.attendre(1);
+				outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+				outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);			
+			}
+			else{
+				outil.attendre(1);
+				outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ);
+				outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
+			}
+			
+		}
+	}
+	/**
+	 * Fonction permettant de choisir le rôle du conjoint (co emprunnteur ou caution) seulement dans le cas de la présence d'un tiers sur le dossier
+	 * @param outil la boîte à outil
+	 * @throws SeleniumException en cas d'erreur
+	 */
+	private void roleConjoint(SeleniumOutils outil) throws SeleniumException {
+		if((conjointCoEmp == false && conjointCaution == false) && (tiersCoEmp == true || tiersCaution == true)){
+			//S'il n'il n'y a pas d'indication sur le conjoint avec présence de tiers, on supprime le conjoint du dossier
+			outil.attendre(2);
+			switch (distributeur){
+				case Constantes.CAS_CE :
+				outil.attendreChargementElement(Cibles.BOUTON_SUPP_PARTICIPANT_2_CE);
+				outil.cliquer(Cibles.BOUTON_SUPP_PARTICIPANT_2_CE);
+				outil.attendrePresenceTexte("Demande de confirmation de suppression");
+				break;
+				case Constantes.CAS_BP :
+					outil.attendreChargementElement(Cibles.BOUTON_SUPP_PARTICIPANT_2_BP);
+					outil.cliquer(Cibles.BOUTON_SUPP_PARTICIPANT_2_BP);
+					outil.attendrePresenceTexte("Demande de confirmation de suppression");
+				break;
+			}
+			outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
+			outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
+		}
+		else if ((conjointCoEmp == true && conjointCaution == false) && (tiersCoEmp == true || tiersCaution == true)){
+			outil.attendre(2);
+			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT2);
+			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT2);
+			outil.attendre(1);
+			outil.attendreChargementElement(Cibles.SELECTEUR_ROLE_PARTICIPANT);
+			outil.selectionner("C", Cibles.SELECTEUR_ROLE_PARTICIPANT);
+		}
+		else if((conjointCoEmp == false && conjointCaution == true) && (tiersCoEmp == true || tiersCaution == true)){
+			outil.attendre(2);
+			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT2);
+			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT2);
+			outil.attendre(1);
+			outil.attendreChargementElement(Cibles.SELECTEUR_ROLE_PARTICIPANT);
+			outil.selectionner("G", Cibles.SELECTEUR_ROLE_PARTICIPANT);
+		}
+		else{}
+	}
+	private void roleTiers(SeleniumOutils outil) throws SeleniumException {
+		if (tiersCoEmp == true && tiersCaution == false){
+			outil.attendre(1);
+			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT1);
+			outil.attendre(1);
+			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
+			outil.selectionner("C", Cibles.SELECTEUR_ROLE_PARTICIPANT);
+		}
+		else if (tiersCoEmp == false && tiersCaution == true){
+			outil.attendre(1);
+			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT1);
+			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
+			outil.attendre(1);
+			outil.attendreChargementElement(Cibles.SELECTEUR_ROLE_PARTICIPANT);
+			outil.selectionner("G", Cibles.SELECTEUR_ROLE_PARTICIPANT);
+		}
+		else{}
+	}
+	
 }
