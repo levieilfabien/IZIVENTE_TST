@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
+import constantes.Erreurs;
 import beans.ObjectifBean;
 import exceptions.SeleniumException;
 import main.bean.CasEssaiIziventeBean;
@@ -685,42 +686,52 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	 * @throws SeleniumException en cas d'erreur
 	 */
 	private void roleConjoint(SeleniumOutils outil) throws SeleniumException {
-		if((conjointCoEmp == false && conjointCaution == false) && (tiersCoEmp == true || tiersCaution == true)){
-			//S'il n'il n'y a pas d'indication sur le conjoint avec présence de tiers, on supprime le conjoint du dossier
-			outil.attendre(2);
-			switch (distributeur){
-				case Constantes.CAS_CE :
-				outil.attendreChargementElement(Cibles.BOUTON_SUPP_PARTICIPANT_2_CE);
-				outil.cliquer(Cibles.BOUTON_SUPP_PARTICIPANT_2_CE);
+		
+		// Un tiers as t'il un rôle ?
+		Boolean roleTiers = (tiersCoEmp == true || tiersCaution == true);
+		
+		// Quel rôle est réservé au conjoint ?
+		if (conjointCoEmp == true && conjointCaution == true) {
+			throw new SeleniumException(Erreurs.E030, "Impossible d'avoir deux rôles pour le conjoint.");
+		}
+		// Si le tiers dispose d'un rôle, on doit soit supprimer le conjoint si il n'as pas de rôle soit choisir son rôle
+		if (roleTiers) {
+			if(conjointCoEmp == false && conjointCaution == false){
+				//S'il n'il n'y a pas d'indication sur le conjoint avec présence de tiers, on supprime le conjoint du dossier
+				boolean CE = (distributeur == Constantes.CAS_CE);
+				outil.attendre(2);
+				outil.attendreChargementElement(CE?Cibles.BOUTON_SUPP_PARTICIPANT_2_CE:Cibles.BOUTON_SUPP_PARTICIPANT_2_BP);
+				outil.cliquer(CE?Cibles.BOUTON_SUPP_PARTICIPANT_2_CE:Cibles.BOUTON_SUPP_PARTICIPANT_2_BP);
 				outil.attendrePresenceTexte("Demande de confirmation de suppression");
-				break;
-				case Constantes.CAS_BP :
-					outil.attendreChargementElement(Cibles.BOUTON_SUPP_PARTICIPANT_2_BP);
-					outil.cliquer(Cibles.BOUTON_SUPP_PARTICIPANT_2_BP);
-					outil.attendrePresenceTexte("Demande de confirmation de suppression");
-				break;
+				outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
+				outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
+					
+			} else {
+				//outil.attendre(2);
+				outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT2, true, true);
+				outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT2);
+				//outil.attendre(1);
+				outil.attendreChargementElement(Cibles.SELECTEUR_ROLE_PARTICIPANT, true, true);
+				String roleDuConjoint = "";
+				
+				if (conjointCoEmp) {
+					roleDuConjoint = "C";
+				} else {
+					roleDuConjoint = "G";
+				}
+				
+				outil.selectionner(roleDuConjoint, Cibles.SELECTEUR_ROLE_PARTICIPANT);
+
 			}
-			outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
-			outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
 		}
-		else if ((conjointCoEmp == true && conjointCaution == false) && (tiersCoEmp == true || tiersCaution == true)){
-			outil.attendre(2);
-			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT2);
-			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT2);
-			outil.attendre(1);
-			outil.attendreChargementElement(Cibles.SELECTEUR_ROLE_PARTICIPANT);
-			outil.selectionner("C", Cibles.SELECTEUR_ROLE_PARTICIPANT);
-		}
-		else if((conjointCoEmp == false && conjointCaution == true) && (tiersCoEmp == true || tiersCaution == true)){
-			outil.attendre(2);
-			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT2);
-			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT2);
-			outil.attendre(1);
-			outil.attendreChargementElement(Cibles.SELECTEUR_ROLE_PARTICIPANT);
-			outil.selectionner("G", Cibles.SELECTEUR_ROLE_PARTICIPANT);
-		}
-		else{}
+		
+		
+
 	}
+	
+	
+	
+	
 	private void roleTiers(SeleniumOutils outil) throws SeleniumException {
 		if (tiersCoEmp == true && tiersCaution == false){
 			outil.attendre(1);
