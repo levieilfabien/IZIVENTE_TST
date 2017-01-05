@@ -482,8 +482,8 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 		outil.cliquer(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
 		CT05.validerObjectif(outil.getDriver(), "MODE", true);
 		//Step 6 : Préparation du contrat pour envoi à l'octroi
-		outil.attendre(7);
-		outil.attendreChargementElement(Cibles.BOUTON_TERMINER_EDITION_CR);
+		//outil.attendre(7);
+		outil.attendreChargementElement(Cibles.BOUTON_TERMINER_EDITION_CR, true, true);
 		outil.cliquer(Cibles.BOUTON_TERMINER_EDITION_CR);
 		CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);
 		CT05.validerObjectif(outil.getDriver(), "CONFIRMATION", true);
@@ -646,7 +646,7 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT1);
 			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
 		}
-		else if(tiersCoEmp == true || tiersCaution == true){
+		else if((conjointCoEmp == true || conjointCaution ==true) && (tiersCoEmp == true || tiersCaution == true)){
 			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT2);
 			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT2);
 		}

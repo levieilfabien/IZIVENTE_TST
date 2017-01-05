@@ -204,7 +204,8 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario3, Sel
 	//Assurance de l'emprunteur
 	outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
 	outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
-	outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR);
+	outil.attendre(1);
+	outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR, true, true);
 	outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
 	CT04.validerObjectif(outil.getDriver(), "ASSURANCEROLE", true);
 	//Step 3 : Valider la liste des participants
@@ -254,11 +255,25 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	//Step 5 : Préparation du contrat - choix du mode de vente	
 	outil.attendreChargementElement(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
 	outil.cliquer(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
+	outil.attendreChargementElement(Cibles.BOUTON_PASSAGE_OCTROI_CR, true, true);
+	outil.attendreChargementElement(Cibles.BOUTON_TERMINER_EDITION_CR, true, true);
+	outil.cliquer(Cibles.BOUTON_TERMINER_EDITION_CR);
 	scenario3.setFlag(2);
 	CT05.validerObjectif(outil.getDriver(), "MODE", true);
+	//TODO modifier le step 6 en CT06 (voir FT3SCCRCE) 
 	//Step 6 : Préparation du contrat pour envoi à l'octroi
+	outil.attendreChargementElement(Cibles.BOUTON_MISE_EN_FORCE_CR, true, true);
+	outil.cliquer(Cibles.BOUTON_MISE_EN_FORCE_CR);
+	outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
+	outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
+	CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
+	outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ);
+	outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+	outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_VERIFIE);
+	outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_VERIFIE);
+	CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);
 	outil.attendre(7);
-	outil.attendreChargementElement(Cibles.BOUTON_PASSAGE_OCTROI_CR);
+	outil.attendreChargementElement(Cibles.BOUTON_PASSAGE_OCTROI_CR, true, true);
 	outil.cliquer(Cibles.BOUTON_PASSAGE_OCTROI_CR);
 	outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
 	outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
