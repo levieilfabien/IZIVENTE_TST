@@ -12,6 +12,7 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import outils.PropertiesOutil;
 import main.constantes.Constantes;
 
 public class IZIVENTEOutils {
@@ -155,9 +156,9 @@ public class IZIVENTEOutils {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			Connection connect = null;
 			if (distributeur == Constantes.CAS_BP)  {
-				connect = DriverManager.getConnection("jdbc:sqlserver://SWUDFRSQL2441.child.net:30206", "parc_sisp", "Ana_th3me");
+				connect = DriverManager.getConnection(PropertiesOutil.getInfoConstante("URL_BDD_IZIBOX_BP"), PropertiesOutil.getInfoConstante("USER_BDD_IZIBOX"), PropertiesOutil.getInfoConstante("PWD_BDD_IZIBOX"));
 			} else {
-				connect = DriverManager.getConnection("jdbc:sqlserver://SWUDFRSQL2442.child.net:30208", "parc_sisp", "Ana_th3me");
+				connect = DriverManager.getConnection(PropertiesOutil.getInfoConstante("URL_BDD_IZIBOX_CE"), PropertiesOutil.getInfoConstante("USER_BDD_IZIBOX"), PropertiesOutil.getInfoConstante("PWD_BDD_IZIBOX"));
 			}
 			Statement st = connect.createStatement();
 			
