@@ -45,16 +45,12 @@ import exceptions.SeleniumException;
  *
  */
 public class SC00Test extends CasEssaiBean {
-	private int distributeur = 0;
 	
-		public int getDistributeur() {
-			return distributeur;
-		}
-
-
-		public void setDistributeur(int distributeur) {
-			this.distributeur = distributeur;
-		}
+//	/**
+//	 * Le distributeur associé au test.
+//	 */
+//	private int distributeur = 0;
+		
 	/**
 	 * Ide de sérialisation.
 	 */
@@ -440,6 +436,12 @@ public class SC00Test extends CasEssaiBean {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();} 
 		}
+	
+	/**
+	 * Cette fonction à pour objectif de lire le fichier de données.
+	 * @return le contenu du fichier de donnée.
+	 * @throws IOException en cas d'erreur d'accès au fichier.
+	 */
 	public String[] lectureFichierDonnees() throws IOException {
 		String contenu = "";
 		String pathfichierDonnees = "src/test/DonneesClientDossier.txt";
@@ -454,4 +456,13 @@ public class SC00Test extends CasEssaiBean {
 		String[] tableauDonneesClient = contenu.split(";");
 		return tableauDonneesClient;
 	}
+	
+//	public int getDistributeur() {
+//		return distributeur;
+//	}
+//
+//
+//	public void setDistributeur(int distributeur) {
+//		this.distributeur = distributeur;
+//	}
 }

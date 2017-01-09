@@ -51,6 +51,7 @@ public class TNRSC00 extends SC00Test {
 	Boolean assuranceConjointCoEmp = false;
 	Boolean assuranceTiers = false;
 	//Définir l'état de fin de saisie (EDIT = false ; FORCE = true)
+	public Boolean edition = true;
 	Boolean miseEnGestion = true;
 
 /**
@@ -60,71 +61,83 @@ private static final long serialVersionUID = 1L;
 
 @Test
 public void accesIzivente() throws SeleniumException {
-	
+	lancement(null);
+}
+
+public CasEssaiIziventeBean lancement(CasEssaiIziventeBean scenario0) throws SeleniumException {
 	//Description du scénario
-	CasEssaiIziventeBean scenario0 = new CasEssaiIziventeBean();
-	/*scenario0.setAlm(true);
-	scenario0.setIdUniqueTestLab(49375);
-	scenario0.setNomCasEssai("TNRSC00-" + getTime());
-	scenario0.setDescriptif("TNRSC00 - IZIVENTE_Editique XX");
-	scenario0.setNomTestLab("TNRSC00 - IZIVENTE_Editique XX");
-	//scenario0.setNomTestPlan("TNRSC00 - IZIVENTE_Editique XX");
-	scenario0.setCheminTestLab("POC Selenium\\IZIVENTE");*/
-	
-	//Configuration du driver
-	FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
-	FirefoxProfile profile = configurerProfilNatixis();
-	
-	//Création et configuration du repertoire de téléchargement
-	//File repertoireTelechargement = new File(".\\" + scenario0.getNomCasEssai());
-	//repertoireTelechargement.mkdir();
-	//profile.setPreference(Constantes.PREF_FIREFOX_REPERTOIRE_TELECHARGEMENT, repertoireTelechargement.getAbsolutePath());
-	String repertoire = creerRepertoireTelechargement(scenario0, profile);
-	scenario0.setRepertoireTelechargement(repertoire);
-	// Initialisation du driver
-	FirefoxImpl driver = new FirefoxImpl(ffBinary, profile);
-	
-	if (distributeur == Constantes.CAS_CE){
-		driver.get(Constantes.URL_CE_FUTURE_REROUTAGE);
+	if (scenario0 == null) {
+		scenario0 = new CasEssaiIziventeBean();
+		scenario0.setAlm(false);
+		// LISTE DES OBJECTIFS DU CAS DE TEST
+		scenario0.ajouterObjectif(new ObjectifBean("Test arrivé à terme", scenario0.getNomCasEssai() + scenario0.getTime()));
 	}
-	else {
-		driver.get(Constantes.URL_BP_FUTURE_REROUTAGE);
-	}
-	
-	// LISTE DES OBJECTIFS DU CAS DE TEST
-	scenario0.ajouterObjectif(new ObjectifBean("Test arrivé à terme", scenario0.getNomCasEssai() + scenario0.getTime()));
-   
-    SeleniumOutils outil = new SeleniumOutils(driver, GenericDriver.FIREFOX_IMPL);
-    outil.setRepertoireRacine(scenario0.getRepertoireTelechargement());
-    
-    try {
-		//CT01 - Accès Izivente et initialisation
-		//CT02 - Ouverture du dossier et validation des informations client
-		//CT03 - Saisie des paramètres relatifs a	u type de dossier et validation
-		//CT04 - Choix des participants et des assurances associées et validation des participants
-		//CT05 - Validation de l'instruction
-    	//CT06 - Mise en Gestion
-		scenario0.getTests().add(CT01Initialisation(scenario0, outil));
-		scenario0.getTests().add(CT02OuvertureDossier(scenario0, outil));
-		scenario0.getTests().add(CT03SaisieDossier(scenario0, outil));
-		scenario0.getTests().add(CT04Participants(scenario0, outil));
-		scenario0.getTests().add(CT05FinalisationInstruction(scenario0, outil));
-		//Condition pour accéder au cas de test de mise en force
-		if (miseEnGestion){
-		scenario0.getTests().add(CT06MiseGestion(scenario0, outil));
-		}
-		//Récupération des données dossier pour alimentation du fichier de données IZIVENTE_TST.src.test.DonneesClientDossier.txt
-		String nomDistributeur = chaineDistributeur(distributeur);
-		String typeProduit = chaineProduit(typeDossier);
-		ecritureFichierDonnees(nomDistributeur, scenario0.getNumeroFFI(), scenario0.getIdClient(), null, typeProduit, scenario0.getFlag());
 		
-	} catch (SeleniumException ex) {
-		// Finalisation en erreur du cas de test.
-		finaliserTestEnErreur(outil, scenario0, ex, scenario0.getNomCasEssai() + scenario0.getDateCreation().getTime());
-		throw ex;
-	}
-	// Finalisation normale du cas de test.
-	finaliserTest(outil, scenario0, scenario0.getNomCasEssai() + scenario0.getDateCreation().getTime());
+		/*scenario0.setAlm(true);
+		scenario0.setIdUniqueTestLab(49375);
+		scenario0.setNomCasEssai("TNRSC00-" + getTime());
+		scenario0.setDescriptif("TNRSC00 - IZIVENTE_Editique XX");
+		scenario0.setNomTestLab("TNRSC00 - IZIVENTE_Editique XX");
+		//scenario0.setNomTestPlan("TNRSC00 - IZIVENTE_Editique XX");
+		scenario0.setCheminTestLab("POC Selenium\\IZIVENTE");*/
+		
+		//Configuration du driver
+		FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
+		FirefoxProfile profile = configurerProfilNatixis();
+		
+		//Création et configuration du repertoire de téléchargement
+		//File repertoireTelechargement = new File(".\\" + scenario0.getNomCasEssai());
+		//repertoireTelechargement.mkdir();
+		//profile.setPreference(Constantes.PREF_FIREFOX_REPERTOIRE_TELECHARGEMENT, repertoireTelechargement.getAbsolutePath());
+		String repertoire = creerRepertoireTelechargement(scenario0, profile);
+		scenario0.setRepertoireTelechargement(repertoire);
+		// Initialisation du driver
+		FirefoxImpl driver = new FirefoxImpl(ffBinary, profile);
+		
+		if (distributeur == Constantes.CAS_CE){
+			driver.get(Constantes.URL_CE_FUTURE_REROUTAGE);
+		}
+		else {
+			driver.get(Constantes.URL_BP_FUTURE_REROUTAGE);
+		}
+		
+
+	   
+	    SeleniumOutils outil = new SeleniumOutils(driver, GenericDriver.FIREFOX_IMPL);
+	    outil.setRepertoireRacine(scenario0.getRepertoireTelechargement());
+	    
+	    try {
+			//CT01 - Accès Izivente et initialisation
+			//CT02 - Ouverture du dossier et validation des informations client
+			//CT03 - Saisie des paramètres relatifs a	u type de dossier et validation
+			//CT04 - Choix des participants et des assurances associées et validation des participants
+			//CT05 - Validation de l'instruction
+	    	//CT06 - Mise en Gestion
+	    	if (edition) {
+				scenario0.getTests().add(CT01Initialisation(scenario0, outil));
+				scenario0.getTests().add(CT02OuvertureDossier(scenario0, outil));
+				scenario0.getTests().add(CT03SaisieDossier(scenario0, outil));
+				scenario0.getTests().add(CT04Participants(scenario0, outil));
+				scenario0.getTests().add(CT05FinalisationInstruction(scenario0, outil));
+	    	}
+			//Condition pour accéder au cas de test de mise en force
+			if (miseEnGestion){
+				scenario0.getTests().add(CT06MiseGestion(scenario0, outil));
+			}
+			//Récupération des données dossier pour alimentation du fichier de données IZIVENTE_TST.src.test.DonneesClientDossier.txt
+			String nomDistributeur = chaineDistributeur(distributeur);
+			String typeProduit = chaineProduit(typeDossier);
+			ecritureFichierDonnees(nomDistributeur, scenario0.getNumeroFFI(), scenario0.getIdClient(), null, typeProduit, scenario0.getFlag());
+			
+		} catch (SeleniumException ex) {
+			// Finalisation en erreur du cas de test.
+			finaliserTestEnErreur(outil, scenario0, ex, scenario0.getNomCasEssai() + scenario0.getDateCreation().getTime());
+			throw ex;
+		}
+		// Finalisation normale du cas de test.
+		finaliserTest(outil, scenario0, scenario0.getNomCasEssai() + scenario0.getDateCreation().getTime());
+		
+		return scenario0;
 }
 
 /**
@@ -137,7 +150,7 @@ public void accesIzivente() throws SeleniumException {
 public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT01
 	CasEssaiIziventeBean CT01 = new CasEssaiIziventeBean();
-	CT01.setAlm(true);
+	CT01.setAlm(false);
 	CT01.setNomCasEssai("CT01 -" + getTime());
 	CT01.setDescriptif("CT01 - Accès Izivente et Initialisation");
 	CT01.setNomTestPlan("CT01 - Accès Izivente et Initialisation");
@@ -158,7 +171,7 @@ public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario0, S
 	ModificateurBouchon modificateur = new ModificateurBouchon();
 	//modificateur.emprunteurCasden = true;
 	//Steps 1,2,3,4 : Génération du bouchon - Accès à l'écran de reroutage et injection du jeton - Accès à Izivente
-	String idClient = saisieJeton(outil, null, false, distributeur, modificateur, agence, etablissement);
+	String idClient = saisieJeton(outil, scenario0.getIdClient(), false, distributeur, modificateur, agence, etablissement);
 	scenario0.setIdClient(idClient);
 	CT01.validerObjectif(outil.getDriver(), "GENERATION", true);
 	CT01.validerObjectif(outil.getDriver(), "ACCESREROUTAGE", true);
@@ -171,7 +184,7 @@ public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario0, S
 public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT02
 	CasEssaiIziventeBean CT02 = new CasEssaiIziventeBean();
-	CT02.setAlm(true);
+	CT02.setAlm(false);
 	CT02.setNomCasEssai("CT02 -" + getTime());
 	CT02.setDescriptif("CT02 - Ouverture du dossier");
 	CT02.setNomTestPlan("CT02 - Ouverture du dossier");	
@@ -242,7 +255,7 @@ public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario0,
 public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT03
 	CasEssaiIziventeBean CT03 = new CasEssaiIziventeBean();
-	CT03.setAlm(true);
+	CT03.setAlm(false);
 	CT03.setNomCasEssai("CT03 -" + getTime());
 	CT03.setDescriptif("CT03 - Saisie du dossier");
 	CT03.setNomTestPlan("CT03 - Saisie du dossier");
@@ -271,7 +284,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 			outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR);
 			outil.selectionner("Prêt immobilier", Cibles.SELECTEUR_SITUATION_VENTE_CR);
 			outil.viderEtSaisir("7500",  Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
-			outil.attendreChargementElement(Cibles.SAISIE_MENSUALITE_CR); 
+			outil.attendreChargementElement(Cibles.SAISIE_MENSUALITE_CR, true, true); 
 			outil.viderEtSaisir("750", Cibles.SAISIE_MENSUALITE_CR);
 		break;
 		case Constantes.CREODIS :
@@ -324,7 +337,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT04
 	CasEssaiIziventeBean CT04 = new CasEssaiIziventeBean();
-	CT04.setAlm(true);
+	CT04.setAlm(false);
 	CT04.setNomCasEssai("CT04 -" + getTime());
 	CT04.setDescriptif("CT04 - Choix des participants");
 	CT04.setNomTestPlan("CT04 - Choix des participants");
@@ -382,7 +395,7 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, Sel
 public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT05
 	CasEssaiIziventeBean CT05 = new CasEssaiIziventeBean();
-	CT05.setAlm(true);
+	CT05.setAlm(false);
 	CT05.setNomCasEssai("CT05 -" + getTime());
 	CT05.setDescriptif("CT05 - Finalisation de l instruction");
 	CT05.setNomTestPlan("CT05 - Finalisation de l instruction");
@@ -535,6 +548,7 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramétrage du CT06
 	CasEssaiIziventeBean CT06 = new CasEssaiIziventeBean();
+	CT06.setAlm(false);
 	//Information issues du scénario.
 	//Gestion des steps
 	CT06.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT06.getNomCasEssai() + CT06.getTime()));
