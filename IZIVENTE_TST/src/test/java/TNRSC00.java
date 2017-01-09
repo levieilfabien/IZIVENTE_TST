@@ -3,6 +3,7 @@ package test.java;
 import java.io.File;
 
 import org.junit.Test;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
@@ -25,10 +26,10 @@ import outils.SeleniumOutils;
 public class TNRSC00 extends SC00Test {
 
 	//Définir le distributeur Constantes.CAS_CE pour CE/Constantes.CAS_BP pour BP
-	int distributeur = Constantes.CAS_BP;
+	int distributeur = Constantes.CAS_CE;
 	//TODO Notion fonctionnelle dernière ces libellés ?
 	//Définir le type de dossier FACELIA/CREODIS/IZICARTE/CREDIT_AMORT
-	int typeDossier = Constantes.CREDIT_AMORT;
+	int typeDossier = Constantes.IZICARTE;
 	//Définir l'établissement et l'agence (1871500030000302) - La valeur null rend des valeurs par défauts qui fonctionnent pour la plupart de nos scénarios
 	String etablissement = null;
 	String agence = null;
@@ -37,20 +38,21 @@ public class TNRSC00 extends SC00Test {
 	String typeOffre = "CREDIT TRESORERIE";
 	String typeObjet = "TRESORERIE";
 	//Définir l'absence ou la présence de coemprunteur et leurs rôles.
-	Boolean aucunCoEmp = false;
+	Boolean aucunCoEmp = true;
 	Boolean conjointCoEmp = false;
 	Boolean conjointCaution = false;
 	Boolean tiersCoEmp = false;
-	Boolean tiersCaution = true;
-	
+	Boolean tiersCaution = false;
+
 	//Renseigner le numéro de personne physique pour le coemprunteur tiers (BP : 9500855 P1E CE : 942500400).
 	String numPersPhysTiers = "9500855";
 	//Définir la présence d'assurance pour les emprunteurs (true = oui /false = non).
 	Boolean assuranceEmp = true;
 	Boolean assuranceConjointCoEmp = false;
 	Boolean assuranceTiers = false;
-	
-	
+	//Définir l'état de fin de saisie (EDIT = false ; FORCE = true)
+	Boolean miseEnGestion = true;
+
 /**
  * Id de sérialisation par défaut.
  */
@@ -82,13 +84,12 @@ public void accesIzivente() throws SeleniumException {
 	// Initialisation du driver
 	FirefoxImpl driver = new FirefoxImpl(ffBinary, profile);
 	
-	switch(distributeur){
-	case Constantes.CAS_CE :
+	if (distributeur == Constantes.CAS_CE){
 		driver.get(Constantes.URL_CE_FUTURE_REROUTAGE);
-	break;
-	case Constantes.CAS_BP :
+	}
+	else {
 		driver.get(Constantes.URL_BP_FUTURE_REROUTAGE);
-	break;}
+	}
 	
 	// LISTE DES OBJECTIFS DU CAS DE TEST
 	scenario0.ajouterObjectif(new ObjectifBean("Test arrivé à terme", scenario0.getNomCasEssai() + scenario0.getTime()));
@@ -102,11 +103,20 @@ public void accesIzivente() throws SeleniumException {
 		//CT03 - Saisie des paramètres relatifs a	u type de dossier et validation
 		//CT04 - Choix des participants et des assurances associées et validation des participants
 		//CT05 - Validation de l'instruction
+    	//CT06 - Mise en Gestion
 		scenario0.getTests().add(CT01Initialisation(scenario0, outil));
 		scenario0.getTests().add(CT02OuvertureDossier(scenario0, outil));
 		scenario0.getTests().add(CT03SaisieDossier(scenario0, outil));
 		scenario0.getTests().add(CT04Participants(scenario0, outil));
 		scenario0.getTests().add(CT05FinalisationInstruction(scenario0, outil));
+		//Condition pour accéder au cas de test de mise en force
+		if (miseEnGestion){
+		scenario0.getTests().add(CT06MiseGestion(scenario0, outil));
+		}
+		//Récupération des données dossier pour alimentation du fichier de données IZIVENTE_TST.src.test.DonneesClientDossier.txt
+		String nomDistributeur = chaineDistributeur(distributeur);
+		String typeProduit = chaineProduit(typeDossier);
+		ecritureFichierDonnees(nomDistributeur, scenario0.getNumeroFFI(), scenario0.getIdClient(), null, typeProduit, scenario0.getFlag());
 		
 	} catch (SeleniumException ex) {
 		// Finalisation en erreur du cas de test.
@@ -124,7 +134,7 @@ public void accesIzivente() throws SeleniumException {
  * @return le cas d'essai documenté pour ajout au scénario.
  * @throws SeleniumException en cas d'erreur.
  */
-public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario, SeleniumOutils outil) throws SeleniumException {
+public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT01
 	CasEssaiIziventeBean CT01 = new CasEssaiIziventeBean();
 	CT01.setAlm(true);
@@ -132,9 +142,9 @@ public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario, Se
 	CT01.setDescriptif("CT01 - Accès Izivente et Initialisation");
 	CT01.setNomTestPlan("CT01 - Accès Izivente et Initialisation");
 	//Information issues du scénario.
-	CT01.setIdUniqueTestLab(scenario.getIdUniqueTestLab());
-	CT01.setCheminTestLab(scenario.getCheminTestLab());
-	CT01.setRepertoireTelechargement(scenario.getRepertoireTelechargement());	
+	CT01.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
+	CT01.setCheminTestLab(scenario0.getCheminTestLab());
+	CT01.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());	
 	//Gestion des steps
 	CT01.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT01.getNomCasEssai() + CT01.getTime()));
 	CT01.ajouterStep("Génération du bouchon client Izivente", "GENERATION", "Création du bouchon terminée");
@@ -149,7 +159,7 @@ public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario, Se
 	//modificateur.emprunteurCasden = true;
 	//Steps 1,2,3,4 : Génération du bouchon - Accès à l'écran de reroutage et injection du jeton - Accès à Izivente
 	String idClient = saisieJeton(outil, null, false, distributeur, modificateur, agence, etablissement);
-	scenario.setIdClient(idClient);
+	scenario0.setIdClient(idClient);
 	CT01.validerObjectif(outil.getDriver(), "GENERATION", true);
 	CT01.validerObjectif(outil.getDriver(), "ACCESREROUTAGE", true);
 	CT01.validerObjectif(outil.getDriver(), "INJECTION", true);
@@ -158,7 +168,7 @@ public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario, Se
 	return CT01;
 }
 
-public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario, SeleniumOutils outil) throws SeleniumException {
+public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT02
 	CasEssaiIziventeBean CT02 = new CasEssaiIziventeBean();
 	CT02.setAlm(true);
@@ -166,9 +176,9 @@ public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario, 
 	CT02.setDescriptif("CT02 - Ouverture du dossier");
 	CT02.setNomTestPlan("CT02 - Ouverture du dossier");	
 	//Information issues du scénario.
-	CT02.setIdUniqueTestLab(scenario.getIdUniqueTestLab());
-	CT02.setCheminTestLab(scenario.getCheminTestLab());
-	CT02.setRepertoireTelechargement(scenario.getRepertoireTelechargement());
+	CT02.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
+	CT02.setCheminTestLab(scenario0.getCheminTestLab());
+	CT02.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
 	//Gestion des steps
 	CT02.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT02.getNomCasEssai() + CT02.getTime()));
 	CT02.ajouterStep("Choisir le mode de vente (Face à face ou Vente à distance)", "MODE", "Affichage de l'écran d'instruction");
@@ -185,36 +195,36 @@ public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario, 
 	CT02.validerObjectif(outil.getDriver(), "MODE", true);
 	//Step 2 : Sélectionner l'option d'ouverture d'un dossier correspondant au type voulu. 
 	switch(typeDossier){
-	 case Constantes.CREDIT_AMORT :
-		outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER);
-		CT02.validerObjectif(outil.getDriver(), "OUVERTURE", true);
-		 break;
-	 case Constantes.FACELIA : 
-		outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER_FACELIA);
-		CT02.validerObjectif(outil.getDriver(), "OUVERTURE", true);
-		//Step 3 : Fermeture des pop ups 'Attention' confirmant l'ouverture du dossier
-		outil.attendrePresenceTexte("INFORMATION");
-		outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
-	break;
-	 case Constantes.CREODIS : 
-		outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER_FC);
-		CT02.validerObjectif(outil.getDriver(), "OUVERTURE", true);
-	 break;
-	 case Constantes.IZICARTE : 
-		outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_IZICARTE);
-		CT02.validerObjectif(outil.getDriver(), "OUVERTURE", true);
-		//Step 3 : Fermeture des pop ups 'Attention' confirmant l'ouverture du dossier
-		outil.attendrePresenceTexte("Information");
-		outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
-	 break;
-	 case Constantes.TEOZ : 
-		//outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_TEOZ);
-		//outil.cliquerSiPossible(Cibles.BOUTON_MENU_NOUVEAU_DOSSIER);
-	 break;}
-	if(distributeur == Constantes.CAS_CE)
-	{outil.attendrePresenceTexte("Attention");}
-	else
-	{outil.attendrePresenceTexte("ATTENTION");}
+		case Constantes.CREDIT_AMORT :
+			outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER);
+		break;
+		case Constantes.FACELIA : 
+			outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER_FACELIA);
+			//Step 3 : Fermeture des pop ups 'Attention' confirmant l'ouverture du dossier
+			outil.attendrePresenceTexte("INFORMATION");
+			outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
+		break;
+		case Constantes.CREODIS : 
+			outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER_FC);
+		break;
+		case Constantes.IZICARTE : 
+			outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_IZICARTE);
+			//Step 3 : Fermeture des pop ups 'Attention' confirmant l'ouverture du dossier
+			outil.attendrePresenceTexte("Information");
+			outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
+		break;
+		case Constantes.TEOZ : 
+			//outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_TEOZ);
+			//outil.cliquerSiPossible(Cibles.BOUTON_MENU_NOUVEAU_DOSSIER);
+		break;
+	 }
+	CT02.validerObjectif(outil.getDriver(), "OUVERTURE", true);
+	if(distributeur == Constantes.CAS_CE){
+		outil.attendrePresenceTexte("Attention");
+	}
+	else {
+		outil.attendrePresenceTexte("ATTENTION");
+	}
 	CT02.validerObjectif(outil.getDriver(), "CONFIRMATION", true);
 	// Cette étape n'as lieu que si le dossier est déjà porteur d'un autre dossier
 	outil.cliquerSiPossible(Cibles.BOUTON_MENU_NOUVEAU_DOSSIER);
@@ -229,7 +239,7 @@ public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario, 
 	return CT02;
 }
 	
-public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario, SeleniumOutils outil) throws SeleniumException {
+public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT03
 	CasEssaiIziventeBean CT03 = new CasEssaiIziventeBean();
 	CT03.setAlm(true);
@@ -237,9 +247,9 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario, Sel
 	CT03.setDescriptif("CT03 - Saisie du dossier");
 	CT03.setNomTestPlan("CT03 - Saisie du dossier");
 	//Information issues du scénario.
-	CT03.setIdUniqueTestLab(scenario.getIdUniqueTestLab());
-	CT03.setCheminTestLab(scenario.getCheminTestLab());
-	CT03.setRepertoireTelechargement(scenario.getRepertoireTelechargement());
+	CT03.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
+	CT03.setCheminTestLab(scenario0.getCheminTestLab());
+	CT03.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
 	//Gestion des steps
 	CT03.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT03.getNomCasEssai() + CT03.getTime()));
 	CT03.ajouterStep("Sélectionner l'offre désirée dans le menu déroulant selon le scénario", "OFFRE", "Offre sélectionnée");
@@ -250,47 +260,45 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario, Sel
 	// SAISIE DU DOSSIER
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Step 1 : Sélectionner l'offre désirée dans le menu déroulant selon le scénario
+	scenario0.setFlag(1);
 	switch(typeDossier){
-	case Constantes.FACELIA : 
-		outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT_CR, true, true);
-		outil.selectionner("FACELIA", Cibles.SELECTEUR_OFFRE_CREDIT_CR, false);
-		outil.attendre(2);
-		CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
-		//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
-		outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR);
-		outil.selectionner("Prêt immobilier", Cibles.SELECTEUR_SITUATION_VENTE_CR);
-		outil.viderEtSaisir("7500",  Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
-		outil.attendreChargementElement(Cibles.SAISIE_MENSUALITE_CR); 
-		outil.viderEtSaisir("750", Cibles.SAISIE_MENSUALITE_CR);
-	break;
-	case Constantes.CREODIS :
-		outil.attendrePresenceTexte("INFORMATIONS DU CREDIT");
-		outil.attendre(2);
-		CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
-		//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
-		outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR);
-		outil.selectionner("Entrée en relation", Cibles.SELECTEUR_SITUATION_VENTE_CR);
-		outil.viderEtSaisir("2000", Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
-		outil.viderEtSaisir("80,00", Cibles.SAISIE_MENSUALITE_CR);
-	break;
-	case Constantes.IZICARTE : 
-		outil.attendrePresenceTexte("Informations du crédit");
-		outil.attendre(2);
-		CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
-		//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
-		outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR, true, true);
-		outil.selectionner("BANC", Cibles.SELECTEUR_SITUATION_VENTE_CR);
-		outil.attendre(2);
-		outil.attendreChargementElement(Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR, true, true);
-		outil.viderEtSaisir("8000", Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
-	break;
-	case Constantes.CREDIT_AMORT :
-		switch(distributeur){
-		case Constantes.CAS_CE :
+		case Constantes.FACELIA : 
+			outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT_CR, true, true);
+			outil.selectionner("FACELIA", Cibles.SELECTEUR_OFFRE_CREDIT_CR, false);
+			outil.attendre(2);
+			CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
+			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
+			outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR);
+			outil.selectionner("Prêt immobilier", Cibles.SELECTEUR_SITUATION_VENTE_CR);
+			outil.viderEtSaisir("7500",  Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
+			outil.attendreChargementElement(Cibles.SAISIE_MENSUALITE_CR); 
+			outil.viderEtSaisir("750", Cibles.SAISIE_MENSUALITE_CR);
+		break;
+		case Constantes.CREODIS :
+			outil.attendrePresenceTexte("INFORMATIONS DU CREDIT");
+			outil.attendre(2);
+			CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
+			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
+			outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR);
+			outil.selectionner("Entrée en relation", Cibles.SELECTEUR_SITUATION_VENTE_CR);
+			outil.viderEtSaisir("2000", Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
+			outil.viderEtSaisir("80,00", Cibles.SAISIE_MENSUALITE_CR);
+		break;
+		case Constantes.IZICARTE : 
 			outil.attendrePresenceTexte("Informations du crédit");
 			outil.attendre(2);
-			outil.attendreChargementElement(Cibles.SELECTEUR_UNIVERS_CREDIT_CE, true, true);
-			outil.selectionner(typeUnivers, Cibles.SELECTEUR_UNIVERS_CREDIT_CE, false);
+			CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
+			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
+			outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR, true, true);
+			outil.selectionner("BANC", Cibles.SELECTEUR_SITUATION_VENTE_CR);
+			outil.attendre(2);
+			outil.attendreChargementElement(Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR, true, true);
+			outil.viderEtSaisir("8000", Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
+		break;
+		case Constantes.CREDIT_AMORT :
+			outil.attendre(2);
+			outil.attendreChargementElement(Cibles.SELECTEUR_UNIVERS_CREDIT, true, true);
+			outil.selectionner(typeUnivers, Cibles.SELECTEUR_UNIVERS_CREDIT, false);
 			outil.attendre(5); //2 secondes ne suffisent pas
 			outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT, true, true);
 			outil.selectionner(typeOffre, Cibles.SELECTEUR_OFFRE_CREDIT, false);
@@ -303,23 +311,6 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario, Sel
 			outil.viderEtSaisir("20000", Cibles.SAISIE_MONTANT_DEMANDE);
 			outil.viderEtSaisir("60", Cibles.SAISIE_DUREE_DEMANDE);
 		break;
-		case Constantes.CAS_BP : 
-			//Step 1 : Sélectionner l'offre désirée dans le menu déroulant selon le scénario
-			outil.attendreChargementElement(Cibles.SELECTEUR_UNIVERS_CREDIT, true, true);
-			outil.selectionner(typeUnivers, Cibles.SELECTEUR_UNIVERS_CREDIT, false);
-			outil.attendre(2);
-			outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT, true, true);
-			outil.selectionner(typeOffre, Cibles.SELECTEUR_OFFRE_CREDIT, false);
-			CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
-			outil.attendre(2);
-			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
-			outil.selectionner(typeObjet, Cibles.SELECTEUR_OBJET_FINANCE);
-			outil.viderEtSaisir("20000", Cibles.SAISIE_COUT_PROJET);
-			outil.selectionner("Aucun", Cibles.SELECTEUR_REPORT_PREMIERE_MENS, false);
-			outil.viderEtSaisir("20000", Cibles.SAISIE_MONTANT_DEMANDE);
-			outil.viderEtSaisir("60", Cibles.SAISIE_DUREE_DEMANDE);
-		break;}
-	break;
 	}
 	CT03.validerObjectif(outil.getDriver(), "PARAMETRES", true);
 	//Step 3 : Cliquer sur le bouton 'Suivant' pour valider les informations du dossier
@@ -330,7 +321,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario, Sel
 	return CT03;
 }
 	
-public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario, SeleniumOutils outil) throws SeleniumException {
+public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT04
 	CasEssaiIziventeBean CT04 = new CasEssaiIziventeBean();
 	CT04.setAlm(true);
@@ -338,9 +329,9 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario, Sele
 	CT04.setDescriptif("CT04 - Choix des participants");
 	CT04.setNomTestPlan("CT04 - Choix des participants");
 	//Information issues du scénario.
-	CT04.setIdUniqueTestLab(scenario.getIdUniqueTestLab());
-	CT04.setCheminTestLab(scenario.getCheminTestLab());
-	CT04.setRepertoireTelechargement(scenario.getRepertoireTelechargement());
+	CT04.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
+	CT04.setCheminTestLab(scenario0.getCheminTestLab());
+	CT04.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
 	//Gestion des steps
 	CT04.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT04.getNomCasEssai() + CT04.getTime()));
 	CT04.ajouterStep("Choisir les participants en fonction de la fiche de prêt et Valider: \n -Pour ajouter le conjoint, Cliquer sur Ajouter le conjoint. \n -Pour ajouter un tiers, entrer le numéro de personne physique, cliquer sur rechercher, vérifier la cohérence des données du tiers  et  valider les données du tiers. ", "PARTICIPANTS", "Affichage de l'écran 'Synthèse des participants'");
@@ -362,9 +353,9 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario, Sele
     	ajoutTiers(outil);
     }
     
-    //Rôle du tiers
+    //Définition du rôle du tiers
   	roleTiers(outil);
-    //Rôle du conjoint (sélectionnable que si un tiers est présent sur le dossier)
+    //Définition du rôle du conjoint
   	roleConjoint(outil);
 	CT04.validerObjectif(outil.getDriver(), "PARTICIPANTS", true);
 	//Step 2 : Pour chaque participant, choisir le rôle et l'assurance en fonction des hypothèses. Valider la listes des participants et confirmer l'assurance
@@ -375,15 +366,20 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario, Sele
 	//Assurance du tiers
 	assuranceTiers(outil);
 	CT04.validerObjectif(outil.getDriver(), "ASSURANCEROLE", true);
-	//Step 3 : Valider la liste des participants
+	//Step 3 : Valider la liste des participants (étape différente pour une CREODIS)
+	if(typeDossier != Constantes.CREODIS){
 	outil.attendreChargementElement(Cibles.BOUTON_VALIDER_LISTE_PARTICIPANT);
 	outil.cliquer(Cibles.BOUTON_VALIDER_LISTE_PARTICIPANT);
+	}
+	else { 
+	outil.cliquer(Cibles.BOUTON_SUIVANT);
+	}
 	CT04.validerObjectif(outil.getDriver(),  "VALIDATIONPARTICIPANTS", true);
 	CT04.validerObjectif(outil.getDriver(), CT04.getNomCasEssai() + CT04.getTime(),true);
 	return CT04;
 }
 	
-public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean scenario, SeleniumOutils outil) throws SeleniumException {
+public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT05
 	CasEssaiIziventeBean CT05 = new CasEssaiIziventeBean();
 	CT05.setAlm(true);
@@ -391,9 +387,9 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	CT05.setDescriptif("CT05 - Finalisation de l instruction");
 	CT05.setNomTestPlan("CT05 - Finalisation de l instruction");
 	//Information issues du scénario.
-	CT05.setIdUniqueTestLab(scenario.getIdUniqueTestLab());
-	CT05.setCheminTestLab(scenario.getCheminTestLab());
-	CT05.setRepertoireTelechargement(scenario.getRepertoireTelechargement());
+	CT05.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
+	CT05.setCheminTestLab(scenario0.getCheminTestLab());
+	CT05.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
 	//Gestion des steps
 	CT05.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT05.getNomCasEssai() + CT05.getTime()));
 	CT05.ajouterStep("Valider de l'offre contrat de crédit (clic sur le bouton 'Valider en contrat de crédit')", "VALIDATION", "Affichage de la pop up de finalisation de l'instruction ou de la page de dossier de vente");
@@ -412,118 +408,202 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	// FINALISATION DE L'INSTRUCTION
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	switch(typeDossier){
-	case Constantes.FACELIA :
-		//Step 1 : Valider de l'offre contrat de crédit
-		outil.attendreChargementElement(Cibles.BOUTON_VALIDER_OPC_CR);
-		outil.cliquer(Cibles.BOUTON_VALIDER_OPC_CR);
-		outil.attendre(1);//Ne pas enlever
-		CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
-		//Step 2 : Finalisation de l'instruction
-		outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
-		outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
-		CT05.validerObjectif(outil.getDriver(), "VALIDATIONINSTRUCTION", true);
-		//Step 3 : Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires
-		outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-		outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-		CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
-		//Step 4 : Imprimer la liasse de document
-		outil.attendreChargementElement(Cibles.BOUTON_IMPRIMER_LIASSE);
-		outil.cliquer(Cibles.BOUTON_IMPRIMER_LIASSE);
-		outil.attendrePresenceTexte("Préparation contrat");
-		CT05.validerObjectif(outil.getDriver(), "IMPRESSION", true);
-		//Step 5 : Préparation du contrat et envoi à l'octroi	
-		outil.attendrePresenceTexte("Passage vers le choix du mode de signature");
-		outil.attendreChargementElement(Cibles.ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE);
-		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT_FIN);
-		CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
-	break;
-	case Constantes.CREODIS :
-		//Step 1 : Valider de l'offre contrat de crédit
-		outil.attendreChargementElement(Cibles.ELEMENT_TABLEAU_PRELEVEMENT);
-		outil.attendreEtCliquer(Cibles.BOUTON_VALIDER_CREODIS_CR);
-		CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
-		//Step 2 : Finalisation de l'instruction
-		outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
-		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
-		CT05.validerObjectif(outil.getDriver(), "VALIDATIONINSTRUCTION", true);
-		//Step 3 : Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires
-		outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-		outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-		CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
-		//Step 4 : Imprimer la liasse de document
-		outil.attendreChargementElement(Cibles.BOUTON_IMPRIMER_LIASSE);
-		outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_LIASSE);
-		outil.attendrePresenceTexte("Préparation contrat");
-		CT05.validerObjectif(outil.getDriver(), "IMPRESSION", true);
-		//Step 5 : Préparation du contrat et envoi à l'octroi	
-		outil.attendrePresenceTexte("Passage vers le choix du mode de signature");
-		outil.attendreChargementElement(Cibles.ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE);
-		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT_FIN);
-		CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
-	break;
-	case Constantes.IZICARTE :
-		//Step 1 : Valider de l'offre contrat de crédit (Etape non présente dans un CR)
-		//Step 1 : Valider de l'offre contrat de crédit 
-		outil.attendreChargementElement(Cibles.BOUTON_VALIDER_OPC_CR);
-		outil.attendreEtCliquer(Cibles.BOUTON_VALIDER_OPC_CR);
-		CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
-		//Step 2 : Finalisation de l'instruction
-		outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
-		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
-		CT05.validerObjectif(outil.getDriver(), "VALIDATIONINSTRUCTION", true);
-		//Step 3 : Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires
-		outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-		outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-		CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
-		//Step 4 : Imprimer la liasse de document
-		outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_LIASSE);
-		outil.attendrePresenceTexte("Préparation contrat");
-		CT05.validerObjectif(outil.getDriver(), "IMPRESSION", true);
-		//Step 5 : Préparation du contrat - choix du mode de vente	
-		outil.attendreChargementElement(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
-		outil.cliquer(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
-		CT05.validerObjectif(outil.getDriver(), "MODE", true);
-		//Step 6 : Fin de l'édition
-		outil.attendreChargementElement(Cibles.BOUTON_PASSAGE_OCTROI_CR, true, true);
-		outil.attendreChargementElement(Cibles.BOUTON_TERMINER_EDITION_CR, true, true);
-		outil.cliquer(Cibles.BOUTON_TERMINER_EDITION_CR);
-		CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);
-		CT05.validerObjectif(outil.getDriver(), "CONFIRMATION", true);
-	break;
-	case Constantes.CREDIT_AMORT :
-		//Step 1 : Valider de l'offre contrat de crédit
-		outil.attendrePresenceTexte("Alerte(s)");
-		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OK_MAJ);
-		outil.attendreEtCliquer(Cibles.BOUTON_VALIDER);
-		CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
-		//Step 2 : Sélectionner le compte de prélèvement et valider l'offre de crédit
-		outil.attendreEtCliquer(Cibles.BOUTON_VALIDER_OPC);
-		CT05.validerObjectif(outil.getDriver(), "VALIDATIONINSTRUCTION", true);
-		//Step 3 : Vérifier les justificatifs et valider
-		outil.attendreChargementElement(Cibles.ELEMENT_FIN_INSTRUCTION, true, true);
-		outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_VERIFIE);
-		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_VALIDER_JUSTIFICATIFS);
-		CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);
-		//Step 4 : Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires
-		outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-		outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-		CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
-		//Step 5 : Imprimer la synthèse de l'offre
-		outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_SYNTHESE);
-		CT05.validerObjectif(outil.getDriver(), "IMPRESSIONSYNTHESE", true);
-		//Step 6 : Imprimer la liasse de document
-		outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_LIASSE);
-		outil.attendrePresenceTexte("Préparation contrat");
-		CT05.validerObjectif(outil.getDriver(), "IMPRESSION", true);
-		//Step 7 : Préparation du contrat et envoi à l'octroi		
-		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT);
-		CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
-	break;
+		case Constantes.FACELIA :
+			//Step 1 : Valider de l'offre contrat de crédit
+			outil.attendreChargementElement(Cibles.BOUTON_VALIDER_OPC_CR);
+			outil.cliquer(Cibles.BOUTON_VALIDER_OPC_CR);
+			outil.attendre(1);//Ne pas enlever
+			CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
+			//Step 2 : Finalisation de l'instruction
+			outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
+			outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
+			CT05.validerObjectif(outil.getDriver(), "VALIDATIONINSTRUCTION", true);
+			//Step 3 : Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires
+			outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+			outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+			CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
+			//Récupération du numéro FFI
+			String numeroFFIFacelia = outil.obtenirValeur(Cibles.ELEMENT_SPAN_NUMERO_FFI_CR);
+			scenario0.setNumeroFFI(numeroFFIFacelia);
+			//Step 4 : Imprimer la liasse de document
+			outil.attendreChargementElement(Cibles.BOUTON_IMPRIMER_LIASSE);
+			outil.cliquer(Cibles.BOUTON_IMPRIMER_LIASSE);
+			outil.attendrePresenceTexte("Préparation contrat");
+			CT05.validerObjectif(outil.getDriver(), "IMPRESSION", true);
+			//Step 5 : Préparation du contrat et envoi à l'octroi	
+			outil.attendrePresenceTexte("Passage vers le choix du mode de signature");
+			outil.attendreChargementElement(Cibles.ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE);
+			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT_FIN);
+			CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
+		break;
+		case Constantes.CREODIS :
+			//Step 1 : Valider de l'offre contrat de crédit
+			outil.attendreChargementElement(Cibles.ELEMENT_TABLEAU_PRELEVEMENT);
+			outil.attendreEtCliquer(Cibles.BOUTON_VALIDER_CREODIS_CR);
+			CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
+			//Step 2 : Finalisation de l'instruction
+			outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
+			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
+			CT05.validerObjectif(outil.getDriver(), "VALIDATIONINSTRUCTION", true);
+			//Step 3 : Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires
+			outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+			outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+			CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
+			String numeroFFICREODIS = outil.obtenirValeur(Cibles.ELEMENT_SPAN_NUMERO_FFI_CR);
+			scenario0.setNumeroFFI(numeroFFICREODIS);
+			//Step 4 : Imprimer la liasse de document
+			outil.attendreChargementElement(Cibles.BOUTON_IMPRIMER_LIASSE);
+			outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_LIASSE);
+			outil.attendrePresenceTexte("Préparation contrat");
+			CT05.validerObjectif(outil.getDriver(), "IMPRESSION", true);
+			//Step 5 : Préparation du contrat et envoi à l'octroi	
+			outil.attendrePresenceTexte("Passage vers le choix du mode de signature");
+			outil.attendreChargementElement(Cibles.ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE);
+			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT_FIN);
+			CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
+		break;
+		case Constantes.IZICARTE :
+			//Step 1 : Valider de l'offre contrat de crédit (Etape non présente dans un CR)
+			//Step 1 : Valider de l'offre contrat de crédit 
+			outil.attendreChargementElement(Cibles.BOUTON_VALIDER_OPC_CR);
+			outil.attendreEtCliquer(Cibles.BOUTON_VALIDER_OPC_CR);
+			CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
+			//Step 2 : Finalisation de l'instruction
+			outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
+			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
+			CT05.validerObjectif(outil.getDriver(), "VALIDATIONINSTRUCTION", true);
+			//Step 3 : Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires
+			outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+			outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+			CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
+			//Step 4 : Imprimer la liasse de document
+			outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_LIASSE);
+			outil.attendrePresenceTexte("Préparation contrat");
+			CT05.validerObjectif(outil.getDriver(), "IMPRESSION", true);
+			//Step 5 : Préparation du contrat - choix du mode de vente	
+			outil.attendreChargementElement(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
+			outil.cliquer(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
+			CT05.validerObjectif(outil.getDriver(), "MODE", true);
+			//Step 6 : Fin de l'édition
+			outil.attendreChargementElement(Cibles.BOUTON_PASSAGE_OCTROI_CR, true, true);
+			outil.attendreChargementElement(Cibles.BOUTON_TERMINER_EDITION_CR, true, true);
+			outil.cliquer(Cibles.BOUTON_TERMINER_EDITION_CR);
+			//Récupération du numéro FFI
+			String numeroFFIIzicarte = outil.obtenirValeur(Cibles.ELEMENT_SPAN_NUMEOR_FFI_IZICARTE);
+			scenario0.setNumeroFFI(numeroFFIIzicarte);
+			CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);
+			CT05.validerObjectif(outil.getDriver(), "CONFIRMATION", true);
+		break;
+		case Constantes.CREDIT_AMORT :
+			//Step 1 : Valider de l'offre contrat de crédit
+			outil.attendrePresenceTexte("Alerte(s)");
+			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OK_MAJ);
+			outil.attendreEtCliquer(Cibles.BOUTON_VALIDER);
+			CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
+			//Step 2 : Sélectionner le compte de prélèvement et valider l'offre de crédit
+			outil.attendreEtCliquer(Cibles.BOUTON_VALIDER_OPC);
+			CT05.validerObjectif(outil.getDriver(), "VALIDATIONINSTRUCTION", true);
+			//Step 3 : Vérifier les justificatifs et valider
+			outil.attendreChargementElement(Cibles.ELEMENT_FIN_INSTRUCTION, true, true);
+			outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_VERIFIE);
+			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_VALIDER_JUSTIFICATIFS);
+			CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);
+			//Step 4 : Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires
+			outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+			outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+			CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
+			//Step 5 : Imprimer la synthèse de l'offre
+			outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_SYNTHESE);
+			CT05.validerObjectif(outil.getDriver(), "IMPRESSIONSYNTHESE", true);
+			//Récupération du numéro FFI
+			String numeroFFIPP = outil.obtenirValeur(Cibles.ELEMENT_SPAN_NUMERO_FFI);
+			scenario0.setNumeroFFI(numeroFFIPP);
+			//Step 6 : Imprimer la liasse de document
+			outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_LIASSE);
+			outil.attendrePresenceTexte("Préparation contrat");
+			CT05.validerObjectif(outil.getDriver(), "IMPRESSION", true);
+			//Step 7 : Préparation du contrat et envoi à l'octroi		
+			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT);
+			CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
+		break;
 	}
+	scenario0.setFlag(2);
 	CT05.validerObjectif(outil.getDriver(), CT05.getNomCasEssai() + CT05.getTime(),true);
 	return CT05;
-	}
+}
 
+public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
+	//Paramétrage du CT06
+	CasEssaiIziventeBean CT06 = new CasEssaiIziventeBean();
+	//Information issues du scénario.
+	//Gestion des steps
+	CT06.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT06.getNomCasEssai() + CT06.getTime()));
+	CT06.ajouterStep("Relancement d'Izivente et retour sur le dossier", "RETOUR", "Affichage de la page d'accueil d'Izivente avec injection du jeton");
+	CT06.ajouterStep("Ouverture et du dossier et recherche du numéro FFI", "RECHERCHE", "Affichage des données dossier et client");
+	CT06.ajouterStep("Passage à l'octroi et premières vérification", "OCTROI", "Dossier accepté pour l'octroi ");
+	CT06.ajouterStep("Finalisation de l'octroi et dernières confirmations avant mise en gestion", "FINALISATION", "Affichage des données dossiers et client avec état FORC");
+	CT06.ajouterStep("Vérification des données dossier et client", "MISENFORCE", "Dossier à l'état FORC");
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////// MISE EN GESTION ////////////////////////////////////////////
+	//if (typeDossier != Constantes.CREDIT_AMORT){
+	//Step 1 : Rechargement de l'URL d'Izivente et réinjection du jeton
+	saisieJeton(outil, scenario0.getIdClient(), false, distributeur, null, agence, etablissement);
+	CT06.validerObjectif(outil.getDriver(), "RETOUR", true);
+	//Step 2 : Ouverture du dossier et recherche du numéro FFI
+	if (typeDossier == Constantes.FACELIA || typeDossier == Constantes.IZICARTE) {
+		outil.cliquer(Cibles.BOUTON_MENU_REPRISE_DOSSIER);
+	}
+	else if(typeDossier == Constantes.CREODIS) {
+		outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER_FC);
+	}
+	else if(typeDossier == Constantes.CREDIT_AMORT) {
+		outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER);
+	}
+	outil.attendrePresenceTexte("Liste des dossiers");
+	for (WebElement coche : outil.obtenirElements(Cibles.COCHES_LISTE_DOSSIER)) {
+		coche.click();
+		outil.attendre(1);
+		if (outil.testerPresenceTexte(scenario0.getNumeroFFI(), true)) {
+			break;
+		}
+	}
+	CT06.validerObjectif(outil.getDriver(), "RECHERCHE", true);
+	// Step 3 : Passage à l'octroi
+	if (typeDossier == Constantes.CREDIT_AMORT) {
+		outil.cliquer(Cibles.BOUTON_PASSAGE_OCTROI);
+		outil.attendrePresenceTexte("Demande de confirmation");
+	}
+	else {
+		outil.attendreChargementElement(Cibles.BOUTON_MISE_EN_FORCE_CR, true, true);
+		outil.cliquer(Cibles.BOUTON_MISE_EN_FORCE_CR);
+	}
+	outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ, true, true);
+	outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
+	outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);
+	outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+	outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_VERIFIE);
+	CT06.validerObjectif(outil.getDriver(), "VERIFICATION", true);
+	//Step 4 : Acceptation et finalisation de l'octroi
+	outil.attendreChargementElement(Cibles.BOUTON_SUIVANT, true, true);
+	outil.cliquer(Cibles.BOUTON_SUIVANT);
+	outil.attendreChargementElement(Cibles.LIBELLE_ACCEPTATION);
+	outil.cliquer(Cibles.LIBELLE_ACCEPTATION);
+	outil.attendre(1);
+	outil.attendreChargementElement(Cibles.BOUTON_FINALISATION_OCTROI_CR, true, true);
+	outil.cliquer(Cibles.BOUTON_FINALISATION_OCTROI_CR);
+	CT06.validerObjectif(outil.getDriver(), "OCTROI", true);
+	outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
+	outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
+	outil.attendreChargementElement(Cibles.BOUTON_POPUP_TERMINER_CONFIRMATION_OCTROI, true, true);
+	outil.cliquer(Cibles.BOUTON_POPUP_TERMINER_CONFIRMATION_OCTROI);
+	CT06.validerObjectif(outil.getDriver(), "FINALISATION", true);
+	//Step 5 : Vérification du passage à l'état FORC
+	outil.attendrePresenceTexte("Liste des dossiers");
+	CT06.validerObjectif(outil.getDriver(), "MISEENFORCE", true);
+	scenario0.setFlag(3);
+	return CT06;
+}
 
 	/**
 	 * Fonction générique permettant pour tout type de produit de ne positionner aucun coemprunteur.
@@ -532,8 +612,8 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	 * @throws SeleniumException en cas d'erreur lors de l'interaction avec l'IHM.
 	 */
 	private void aucunCoEmprunteur(SeleniumOutils outil) throws SeleniumException {
-		
-		// Si le type de dossier est tout sauf CREODIS
+		// Si le type de dossier est tout sauf CREODIS on clique sur le bouton "Aucun CoEmprunteur"
+		//On passe automatiquement à l'étape de choix d'assurance pour le CREODIS
 		if (typeDossier != Constantes.CREODIS) {
 	    	outil.attendreChargementElement(Cibles.LIBELLE_ONGLET_AJOUT_PARTICIPANT);
 	    	outil.cliquer(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
@@ -541,6 +621,8 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	}
 	
 	private void ajoutConjointCoEmprunteurUnique(SeleniumOutils outil) throws SeleniumException {
+		//On clique sur le bouton "Ajouter Conjoint CoEmprunteur" si on ne veut que le conjoint coemprunteur sur le dossier.
+		//Cette option n'est accessible que pour les PP et les CR IZICARTE dont l'emprunteur et le conjoint ont un compte joint
 		if(typeDossier == Constantes.CREDIT_AMORT) {
 			outil.cliquer(Cibles.BOUTON_AJOUT_CONJOINT);
 		} else{
@@ -569,6 +651,7 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 		outil.cliquer(Cibles.BOUTON_AJOUT_TIERS);
 		
 		// On valide la popup relative au tiers ajouté
+		//TODO Amélioration possible sur le bouton de validation pour éviter la différenciation entre les distributeurs
 		if(distributeur == Constantes.CAS_CE) {
 			outil.attendrePresenceTexte("Attention");
 			outil.cliquer(Cibles.BOUTON_POPUP_FERMER);
@@ -594,27 +677,30 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	private void assuranceEmprunteur(SeleniumOutils outil) throws SeleniumException {
 		//TODO prévoir le choix de type d'assurance
 		outil.attendre(1);
-		outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
-		outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
+		
 		if (assuranceEmp == true ) {
-				switch (typeDossier) {
-						case Constantes.CREDIT_AMORT :
-							outil.attendre(2);
-							outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-						break;
-						case Constantes.IZICARTE :
-							outil.attendre(1);
-							outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR);
-							outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
-						break;
-						case Constantes.FACELIA :
+				if (typeDossier != Constantes.CREODIS) {
+					outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
+					outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
+					outil.attendre(2);
+					switch (typeDossier) {
+					case Constantes.CREDIT_AMORT :
+						outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);
+						outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+					break;
+					case Constantes.IZICARTE :
+						outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR, true, true);
+						outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
+					break;
+					case Constantes.FACELIA :
 							outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_FACELIA);
-							outil.cliquer(Cibles.RADIO_AVEC_ASS_FACELIA);
-						break;
-						case Constantes.CREODIS :
-							outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASS_1_CR);
-						break;
+						outil.cliquer(Cibles.RADIO_AVEC_ASS_FACELIA);
+					break;
 					}
+				}
+				else {
+					outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASS_1_CR);
+				}	
 		}
 		else{
 			switch (typeDossier) {
@@ -644,19 +730,25 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	 * @throws SeleniumException en cas d'erreur
 	 */
 	private void assuranceConjoint(SeleniumOutils outil) throws SeleniumException {
-		if (tiersCoEmp == false && tiersCaution == false){
-			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT1);
-			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
-		}
-		else if((conjointCoEmp == true || conjointCaution ==true) && (tiersCoEmp == true || tiersCaution == true)){
+		Boolean presenceTiers = (tiersCoEmp || tiersCaution);
+		Boolean presenceConjoint = (conjointCoEmp || conjointCaution);
+		if (presenceConjoint) {
+		if (presenceTiers) {
 			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT2);
 			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT2);
 		}
+		else {
+			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT1);
+			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
+		}
 		if (assuranceConjointCoEmp == true){
+			outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
 			outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
 		}
 		else if(assuranceConjointCoEmp == false){
+			outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ);
 			outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
+		}
 		}
 	}
 	/**
@@ -665,11 +757,12 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	 * @throws SeleniumException en cas d'erreur
 	 */
 	private void assuranceTiers(SeleniumOutils outil) throws SeleniumException {
-		if(tiersCoEmp == true || tiersCaution == true){
+		if((tiersCoEmp == true || tiersCaution == true) && (assuranceConjointCoEmp == false || assuranceEmp == false)){
 			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT1);
 			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
-			if(assuranceTiers == true){
-				outil.attendre(1);
+			outil.attendre(1);
+			
+			if(assuranceTiers){
 				outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
 				outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);			
 			}
@@ -678,7 +771,6 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 				outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ);
 				outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
 			}
-			
 		}
 	}
 	/**
@@ -695,7 +787,7 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 		if (conjointCoEmp == true && conjointCaution == true) {
 			throw new SeleniumException(Erreurs.E030, "Impossible d'avoir deux rôles pour le conjoint.");
 		}
-		// Si le tiers dispose d'un rôle, on doit soit supprimer le conjoint si il n'as pas de rôle soit choisir son rôle
+		// Si le tiers dispose d'un rôle, soit on supprime le conjoint si il n'as pas de rôle, soit on choisit le rôle demandé
 		if (roleTiers) {
 			if(conjointCoEmp == false && conjointCaution == false){
 				//S'il n'il n'y a pas d'indication sur le conjoint avec présence de tiers, on supprime le conjoint du dossier
@@ -711,7 +803,7 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 				//outil.attendre(2);
 				outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT2, true, true);
 				outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT2);
-				//outil.attendre(1);
+				outil.attendre(1);
 				outil.attendreChargementElement(Cibles.SELECTEUR_ROLE_PARTICIPANT, true, true);
 				String roleDuConjoint = "";
 				
@@ -722,34 +814,67 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 				}
 				
 				outil.selectionner(roleDuConjoint, Cibles.SELECTEUR_ROLE_PARTICIPANT);
-
 			}
 		}
-		
-		
-
 	}
-	
-	
-	
-	
+	/**
+	 * Fonction générique pour définir le rôle du tiers
+	 * @param outil
+	 * @throws SeleniumException
+	 */
 	private void roleTiers(SeleniumOutils outil) throws SeleniumException {
-		if (tiersCoEmp == true && tiersCaution == false){
-			outil.attendre(1);
-			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT1);
-			outil.attendre(1);
-			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
-			outil.selectionner("C", Cibles.SELECTEUR_ROLE_PARTICIPANT);
+		
+		// Un tiers as t'il un rôle ?
+		Boolean roleTiers = (tiersCoEmp == true || tiersCaution == true);
+		// Si le tiers dispose d'un rôle, on doit soit supprimer le conjoint si il n'as pas de rôle soit choisir son rôle
+		if (roleTiers) {
+			// Quel rôle est réservé au conjoint ?
+			
+		if (tiersCoEmp == true && tiersCaution == true) {
+			throw new SeleniumException(Erreurs.E030, "Impossible d'avoir deux rôles pour le tiers.");
 		}
-		else if (tiersCoEmp == false && tiersCaution == true){
-			outil.attendre(1);
-			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT1);
-			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
-			outil.attendre(1);
-			outil.attendreChargementElement(Cibles.SELECTEUR_ROLE_PARTICIPANT);
-			outil.selectionner("G", Cibles.SELECTEUR_ROLE_PARTICIPANT);
+		outil.attendre(1);
+		outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT1, true, true);
+		outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
+		outil.attendre(1);
+		String roleDuTiers = "";
+		
+		if (tiersCoEmp) {
+			roleDuTiers = "C";
+		} else {
+			roleDuTiers = "G";
 		}
-		else{}
+
+		outil.selectionner(roleDuTiers, Cibles.SELECTEUR_ROLE_PARTICIPANT);
+		}
 	}
-	
+	/**
+	 * Fonction permettant de récupérer une chaine de caractère (BP ou CE) en fonction du distributeur sélectionné
+	 */
+	private String chaineDistributeur (int casDistributeur) {
+		String dist = "";
+		if (casDistributeur == Constantes.CAS_CE){
+			dist = "CE";
+		}
+		else {
+			dist = "BP";
+		}
+		return dist;
+		
+	}
+	/**
+	 * Fonction permettant de récupérer une chaîne de caractère (CR ou PP) en fonction du type de dossier
+	 * @param typeDossier2
+	 * @return
+	 */
+	private String chaineProduit(int typeDossier2) {
+		String nomProduit = "";
+		if (typeDossier2 == Constantes.CREDIT_AMORT){
+			nomProduit = "PP";
+		}
+		else {
+			nomProduit = "CR";
+		}
+		return nomProduit;
+	}
 }
