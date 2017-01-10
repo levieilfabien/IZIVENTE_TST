@@ -15,7 +15,7 @@ public class TranserveSC01Test {
 	@Test
 	public void lancement() throws SeleniumException {
 		
-		miseAEdit();
+		//miseAEdit();
 		miseEnForce();
 		
 	}
@@ -27,17 +27,17 @@ public class TranserveSC01Test {
 		
 		// Configurer le générateur :
 		generateurSimu.setAlm(false);
-		generateurSimu.distributeur = Constantes.CAS_CE;
+		generateurSimu.distributeur = Constantes.CAS_BP;
 		generateurSimu.edition = true;
 		generateurSimu.miseEnGestion = false;
-		generateurSimu.aucunCoEmp = false;
+		generateurSimu.aucunCoEmp = true;
 		generateurSimu.assuranceEmp = false;
-		generateurSimu.tiersCoEmp = true;
-		generateurSimu.typeDossier = Constantes.CREDIT_AMORT;
+		generateurSimu.tiersCoEmp = false;
+		generateurSimu.typeDossier = Constantes.FACELIA;
 		
 		// Lancement la simulation.
 		CasEssaiIziventeBean simulationEdit = generateurSimu.lancement();
-		generateurSimu.ecritureFichierDonnees(simulationEdit, Constantes.ETAPE_SUIVANTE_MEG, new Date());
+		generateurSimu.ecritureFichierDonnees(simulationEdit, new Date());
 	}
 	
 	public void miseEnForce() throws SeleniumException {
@@ -58,7 +58,7 @@ public class TranserveSC01Test {
 			if (simulationEdit != null) {
 				// Reprise de la simulation.
 				CasEssaiIziventeBean simulationForc = generateurSimu.lancement(simulationEdit);
-				generateurSimu.ecritureFichierDonnees(simulationForc, Constantes.ETAPE_SUIVANTE_MURIR, new Date());
+				generateurSimu.ecritureFichierDonnees(simulationForc, new Date());
 			}
 		}
 	}

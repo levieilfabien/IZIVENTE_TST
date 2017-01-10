@@ -519,11 +519,13 @@ public class SC00Test extends CasEssaiBean {
 				if (temp.length > 2 && temp[1].equals(numeroFFI)) {
 					contenu.add(chaine);
 					System.out.println("J'ai remplacer : " + ligne + " par " + chaine);
-				} else {
+					remplacement = true;
+				} 
+				else {
 					contenu.add(ligne);
 				}
 			}
-			buff.close(); 
+			buff.close();
 			
 			// On vide le fichier actuel et on créer le nouveau fichier contenant le nouveau contenu
 			PrintWriter writer = new PrintWriter(new File(pathfichierDonnees));
@@ -531,7 +533,7 @@ public class SC00Test extends CasEssaiBean {
 			writer.close();
 			
 			for (String instance : contenu) {
-				Files.write(Paths.get(pathfichierDonnees),instance.getBytes(),StandardOpenOption.APPEND);
+				Files.write(Paths.get(pathfichierDonnees),(instance+"\r\n").getBytes(),StandardOpenOption.APPEND);
 			}
 			
 			return remplacement;
@@ -543,15 +545,4 @@ public class SC00Test extends CasEssaiBean {
 			throw new SeleniumException(Erreurs.E020, "Impossible de lire dans DonneesClientDossier");
 		} 
 	}
-	
-
-	
-//	public int getDistributeur() {
-//		return distributeur;
-//	}
-//
-//
-//	public void setDistributeur(int distributeur) {
-//		this.distributeur = distributeur;
-//	}
 }

@@ -148,9 +148,6 @@ public CasEssaiIziventeBean lancement(CasEssaiIziventeBean scenario0) throws Sel
 				scenario0.getTests().add(CT01Initialisation(scenario0, outil));
 				scenario0.getTests().add(CT06MiseGestion(scenario0, outil));
 			}
-			//Récupération des données dossier pour alimentation du fichier de données IZIVENTE_TST.src.test.DonneesClientDossier.txt
-			String nomDistributeur = chaineDistributeur(distributeur);
-			String typeProduit = chaineProduit(typeDossier);
 			
 		} catch (SeleniumException ex) {
 			// Finalisation en erreur du cas de test.
@@ -641,6 +638,7 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, Sele
 	outil.attendrePresenceTexte("Liste des dossiers");
 	CT06.validerObjectif(outil.getDriver(), "MISEENFORCE", true);
 	scenario0.setFlag(3);
+	//outil.fermerFenetreCourante();
 	return CT06;
 }
 
@@ -930,14 +928,14 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, Sele
 	 * @param date à quelle date doit ont faire la prochaine action?
 	 * @throws SeleniumException en cas d'erreur d'accès au fichier.
 	 */
-	public void ecritureFichierDonnees(CasEssaiIziventeBean scenario, int flag, Date date) throws SeleniumException {
+	public void ecritureFichierDonnees(CasEssaiIziventeBean scenario, Date date) throws SeleniumException {
 		String distrib = chaineDistributeur(this.distributeur);
 		String FFI = scenario.getNumeroFFI();
 		String idClnt = scenario.getIdClient();
 		String IUN = null;
 		String typeDos = chaineProduit(this.typeDossier);
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
-		int flg = flag;
+		int flg = scenario.getFlag();
 		String chaine = (distrib +";"+ FFI + ";" + idClnt + ";" + IUN + ";"+ typeDos +";"+ flg +";" + sdf.format(date) + "\r\n");
 
 		
