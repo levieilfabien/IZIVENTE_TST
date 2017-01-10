@@ -26,10 +26,10 @@ import outils.SeleniumOutils;
 public class TNRSC00 extends SC00Test {
 
 	//Définir le distributeur Constantes.CAS_CE pour CE/Constantes.CAS_BP pour BP
-	int distributeur = Constantes.CAS_CE;
+	int distributeur = Constantes.CAS_BP;
 	//TODO Notion fonctionnelle dernière ces libellés ?
 	//Définir le type de dossier FACELIA/CREODIS/IZICARTE/CREDIT_AMORT
-	int typeDossier = Constantes.IZICARTE;
+	int typeDossier = Constantes.CREDIT_AMORT;
 	//Définir l'établissement et l'agence (1871500030000302) - La valeur null rend des valeurs par défauts qui fonctionnent pour la plupart de nos scénarios
 	String etablissement = null;
 	String agence = null;
@@ -38,14 +38,14 @@ public class TNRSC00 extends SC00Test {
 	String typeOffre = "CREDIT TRESORERIE";
 	String typeObjet = "TRESORERIE";
 	//Définir l'absence ou la présence de coemprunteur et leurs rôles.
-	Boolean aucunCoEmp = true;
+	Boolean aucunCoEmp = false;
 	Boolean conjointCoEmp = false;
 	Boolean conjointCaution = false;
-	Boolean tiersCoEmp = false;
+	Boolean tiersCoEmp = true;
 	Boolean tiersCaution = false;
 
 	//Renseigner le numéro de personne physique pour le coemprunteur tiers (BP : 9500855 P1E CE : 942500400).
-	String numPersPhysTiers = "9500855";
+	String numPersPhysTiers = "942500400";
 	//Définir la présence d'assurance pour les emprunteurs (true = oui /false = non).
 	Boolean assuranceEmp = true;
 	Boolean assuranceConjointCoEmp = false;
@@ -122,6 +122,7 @@ public CasEssaiIziventeBean lancement(CasEssaiIziventeBean scenario0) throws Sel
 	    	}
 			//Condition pour accéder au cas de test de mise en force
 			if (miseEnGestion){
+				scenario0.getTests().add(CT01Initialisation(scenario0, outil));
 				scenario0.getTests().add(CT06MiseGestion(scenario0, outil));
 			}
 			//Récupération des données dossier pour alimentation du fichier de données IZIVENTE_TST.src.test.DonneesClientDossier.txt
@@ -509,9 +510,11 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 		break;
 		case Constantes.CREDIT_AMORT :
 			//Step 1 : Valider de l'offre contrat de crédit
-			outil.attendrePresenceTexte("Alerte(s)");
-			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OK_MAJ);
-			outil.attendreEtCliquer(Cibles.BOUTON_VALIDER);
+			//outil.attendrePresenceTexte("Alerte(s)");
+			//outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OK_MAJ);
+			//outil.attendreEtCliquer(Cibles.BOUTON_VALIDER);
+			outil.attendreChargementElement(Cibles.BOUTON_ACCES_VALIDATION_OPC,true, true);
+			outil.cliquer(Cibles.BOUTON_ACCES_VALIDATION_OPC);
 			CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
 			//Step 2 : Sélectionner le compte de prélèvement et valider l'offre de crédit
 			outil.attendreEtCliquer(Cibles.BOUTON_VALIDER_OPC);
@@ -562,7 +565,7 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, Sele
 	//////////////////////////////////////// MISE EN GESTION ////////////////////////////////////////////
 	//if (typeDossier != Constantes.CREDIT_AMORT){
 	//Step 1 : Rechargement de l'URL d'Izivente et réinjection du jeton
-	saisieJeton(outil, scenario0.getIdClient(), false, distributeur, null, agence, etablissement);
+	//saisieJeton(outil, scenario0.getIdClient(), false, distributeur, null, agence, etablissement);
 	CT06.validerObjectif(outil.getDriver(), "RETOUR", true);
 	//Step 2 : Ouverture du dossier et recherche du numéro FFI
 	if (typeDossier == Constantes.FACELIA || typeDossier == Constantes.IZICARTE) {

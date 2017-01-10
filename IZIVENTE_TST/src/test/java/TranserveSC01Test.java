@@ -17,12 +17,13 @@ public class TranserveSC01Test {
 		
 		// Configurer le générateur :
 		generateurSimu.setAlm(false);
-		generateurSimu.distributeur = Constantes.CAS_BP;
+		generateurSimu.distributeur = Constantes.CAS_CE;
 		generateurSimu.edition = true;
 		generateurSimu.miseEnGestion = false;
-		generateurSimu.aucunCoEmp = true;
+		generateurSimu.aucunCoEmp = false;
 		generateurSimu.assuranceEmp = false;
-		generateurSimu.typeDossier = Constantes.FACELIA;
+		generateurSimu.tiersCoEmp = true;
+		generateurSimu.typeDossier = Constantes.CREDIT_AMORT;
 		
 		// Lancement la simulation.
 		CasEssaiIziventeBean simulationEdit = generateurSimu.lancement(null);
