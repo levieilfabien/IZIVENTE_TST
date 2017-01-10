@@ -303,9 +303,9 @@ public class SC00Test extends CasEssaiBean {
 		logger(casEssai.toString());
 
 		//TODO A remettre
-//		if (outils != null) {
-//			outils.getDriver().quit();
-//		}
+		if (outils != null) {
+			outils.getDriver().quit();
+		}
 
 		// On renseigne le rapport d'execution avec les données du cas de test.
 		XLSOutils.renseignerExcel(casEssai);
@@ -533,7 +533,7 @@ public class SC00Test extends CasEssaiBean {
 			writer.close();
 			
 			for (String instance : contenu) {
-				Files.write(Paths.get(pathfichierDonnees),(instance+"\r\n").getBytes(),StandardOpenOption.APPEND);
+				Files.write(Paths.get(pathfichierDonnees),(instance + "\r\n").getBytes(),StandardOpenOption.APPEND);
 			}
 			
 			return remplacement;

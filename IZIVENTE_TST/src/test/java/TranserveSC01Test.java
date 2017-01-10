@@ -15,7 +15,7 @@ public class TranserveSC01Test {
 	@Test
 	public void lancement() throws SeleniumException {
 		
-		//miseAEdit();
+		miseAEdit();
 		miseEnForce();
 		
 	}

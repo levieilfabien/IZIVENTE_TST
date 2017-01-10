@@ -936,13 +936,14 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, Sele
 		String typeDos = chaineProduit(this.typeDossier);
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		int flg = scenario.getFlag();
-		String chaine = (distrib +";"+ FFI + ";" + idClnt + ";" + IUN + ";"+ typeDos +";"+ flg +";" + sdf.format(date) + "\r\n");
+		String chaine = (distrib +";"+ FFI + ";" + idClnt + ";" + IUN + ";"+ typeDos +";"+ flg +";" + sdf.format(date));
 
 		
 		try {
 			boolean existence = remplacer(scenario.getNumeroFFI(), chaine);
 			if (!existence) {
 				//TODO modifier le chemin vers le fichier, il doit être dans le propertie.
+				chaine = chaine + "\r\n";
 				Files.write(Paths.get("src/test/DonneesClientDossier.txt"),chaine.getBytes(),StandardOpenOption.APPEND);
 			}
 		} catch (IOException e1) {
