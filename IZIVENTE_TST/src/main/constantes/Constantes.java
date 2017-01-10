@@ -26,6 +26,8 @@ public class Constantes {
 	public static final int CAS_BP = 3;
 	public static final int CAS_BRED = 4;
 	
+	public static final int ETAPE_SUIVANTE_MEG = 2;
+	
 	public static final String REPERTOIRE_CE_FOYER = PropertiesOutil.getInfoConstante("REPERTOIRE_CE_FOYER");
 	public static final String REPERTOIRE_BP_FOYER = PropertiesOutil.getInfoConstante("REPERTOIRE_BP_FOYER");
 	

@@ -12,9 +12,12 @@ import java.nio.file.StandardOpenOption;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import main.bean.CasEssaiIziventeBean;
 import main.bean.ModificateurBouchon;
 import main.constantes.Cibles;
 import main.constantes.Constantes;
@@ -430,12 +433,14 @@ public class SC00Test extends CasEssaiBean {
 		int flg = flag;
 		String chaine = (distrib +";"+ FFI + ";" + idClnt + ";" + IUN + ";"+ typeDos +";"+ flg +"\r\n");
 		try {
-		Files.write(Paths.get("src/test/DonneesClientDossier.txt"),chaine.getBytes(),StandardOpenOption.APPEND);
-		}
-		catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();} 
-		}
+			//TODO modifier le chemin vers le fichier, il doit être dans le propertie.
+			Files.write(Paths.get("src/test/DonneesClientDossier.txt"),chaine.getBytes(),StandardOpenOption.APPEND);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			throw new SeleniumException(Erreurs.E020, "Impossible d'écrire dans DonneesClientDossier");
+		} 
+	}
+	
 	
 	/**
 	 * Cette fonction à pour objectif de lire le fichier de données.
@@ -456,6 +461,43 @@ public class SC00Test extends CasEssaiBean {
 		String[] tableauDonneesClient = contenu.split(";");
 		return tableauDonneesClient;
 	}
+	
+	/**
+	 * Cette fonction à pour objectif de lire le fichier de données.
+	 * @return le contenu du fichier de donnée.
+	 * @throws SeleniumException en cas d'erreur d'accès au fichier.
+	 */
+	public List<String> renvoyerContenuFichierDonnee(int etapeSouhaitee) throws SeleniumException {
+		try {
+			List<String> retour = new LinkedList<String>();
+			String pathfichierDonnees = "src/test/DonneesClientDossier.txt";
+			FileInputStream flux = new FileInputStream(pathfichierDonnees);
+			InputStreamReader lecture = new InputStreamReader(flux);
+			BufferedReader buff = new BufferedReader(lecture);
+			String ligne;
+			
+			// Pour chaque ligne lue, on ajoute une chaine de caractère dans la liste.
+			while ((ligne = buff.readLine()) != null){
+				String[] temp = ligne.split(";");
+				// On vérifie qu'une étape est spécifiée et que c'est bien cette étape qui est requise
+				if (temp.length > 5 && temp[5] == Integer.toString(etapeSouhaitee)) {
+					retour.add(ligne);
+					//TODO à virer
+					System.out.println("J'ai trouver : " + ligne);
+				}
+			}
+			buff.close(); 
+			return retour;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			throw new SeleniumException(Erreurs.E020, "Impossible de lire dans DonneesClientDossier");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new SeleniumException(Erreurs.E020, "Impossible de lire dans DonneesClientDossier");
+		} 
+	}
+	
+
 	
 //	public int getDistributeur() {
 //		return distributeur;

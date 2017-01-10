@@ -1,6 +1,12 @@
 package test.java;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
@@ -64,6 +70,21 @@ public void accesIzivente() throws SeleniumException {
 	lancement(null);
 }
 
+/**
+ * Fonction qui effectue le lancement du scénario à partir des informations contenue dans l'objet TNRSC00 et le scénario paramètre.
+ * @return l'objet cas d'essai contenant les données de test en sortie (ex : Numéro du client)
+ * @throws SeleniumException en cas d'erreur.
+ */
+public CasEssaiIziventeBean lancement() throws SeleniumException {
+	return lancement(null);
+}
+
+/**
+ * Fonction qui effectue le lancement du scénario à partir des informations contenue dans l'objet TNRSC00 et le scénario paramètre.
+ * @param scenario0 le scénario paramètre dont on récupère des informations si il y à lieue, null sinon.
+ * @return l'objet cas d'essai contenant les données de test en sortie (ex : Numéro du client)
+ * @throws SeleniumException en cas d'erreur.
+ */
 public CasEssaiIziventeBean lancement(CasEssaiIziventeBean scenario0) throws SeleniumException {
 	//Description du scénario
 	if (scenario0 == null) {
@@ -128,7 +149,6 @@ public CasEssaiIziventeBean lancement(CasEssaiIziventeBean scenario0) throws Sel
 			//Récupération des données dossier pour alimentation du fichier de données IZIVENTE_TST.src.test.DonneesClientDossier.txt
 			String nomDistributeur = chaineDistributeur(distributeur);
 			String typeProduit = chaineProduit(typeDossier);
-			ecritureFichierDonnees(nomDistributeur, scenario0.getNumeroFFI(), scenario0.getIdClient(), null, typeProduit, scenario0.getFlag());
 			
 		} catch (SeleniumException ex) {
 			// Finalisation en erreur du cas de test.
@@ -893,5 +913,47 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, Sele
 			nomProduit = "CR";
 		}
 		return nomProduit;
+	}
+	
+	/**
+	 * Fonction qui aliment le fichier de données à partir des informations en paramètre.
+	 * @param scenario les informations sur le scénario
+	 * @param flag le flag du dossier indiquant son état d'avancée 
+	 * @param date à quelle date doit ont faire la prochaine action?
+	 * @throws SeleniumException en cas d'erreur d'accès au fichier.
+	 */
+	public void ecritureFichierDonnees(CasEssaiIziventeBean scenario, int flag, Date date) throws SeleniumException {
+		String distrib = chaineDistributeur(this.distributeur);
+		String FFI = scenario.getNumeroFFI();
+		String idClnt = scenario.getIdClient();
+		String IUN = null;
+		String typeDos = chaineProduit(this.typeDossier);
+		SimpleDateFormat sdf = new SimpleDateFormat("JJ/mm/YYYY");
+		int flg = flag;
+		String chaine = (distrib +";"+ FFI + ";" + idClnt + ";" + IUN + ";"+ typeDos +";"+ flg +";" + sdf.format(date) + "\r\n");
+		try {
+			//TODO modifier le chemin vers le fichier, il doit être dans le propertie.
+			Files.write(Paths.get("src/test/DonneesClientDossier.txt"),chaine.getBytes(),StandardOpenOption.APPEND);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			throw new SeleniumException(Erreurs.E020, "Impossible d'écrire dans DonneesClientDossier");
+		} 
+	}
+	
+	public CasEssaiIziventeBean initialiserScenario(String instance) {
+		CasEssaiIziventeBean scenario = new CasEssaiIziventeBean();
+		
+		//String chaine = (distrib +";"+ FFI + ";" + idClnt + ";" + IUN + ";"+ typeDos +";"+ flg +";" + sdf.format(date) + "\r\n");
+		
+		String[] instanceDecoupee = instance.split(";");
+		
+		distributeur = "CE".equals(instanceDecoupee[0])?Constantes.CAS_CE:Constantes.CAS_BP;
+		scenario.setNumeroFFI(instanceDecoupee[1]);
+		scenario.setIdClient(instanceDecoupee[2]);
+		//TODO Attention préciser le type de produit dans le fichier à écrire.
+		typeDossier = "PP".equals(instanceDecoupee[3])?Constantes.CREDIT_AMORT:Constantes.CREODIS;
+		
+		
+		return scenario;
 	}
 }
