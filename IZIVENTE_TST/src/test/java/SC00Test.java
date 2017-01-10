@@ -464,7 +464,7 @@ public class SC00Test extends CasEssaiBean {
 	
 	/**
 	 * Cette fonction à pour objectif de lire le fichier de données.
-	 * @return le contenu du fichier de donnée.
+	 * @return le contenu du fichier de données.
 	 * @throws SeleniumException en cas d'erreur d'accès au fichier.
 	 */
 	public List<String> renvoyerContenuFichierDonnee(int etapeSouhaitee) throws SeleniumException {
@@ -483,7 +483,7 @@ public class SC00Test extends CasEssaiBean {
 				if (temp.length > 5 && temp[5] == Integer.toString(etapeSouhaitee)) {
 					retour.add(ligne);
 					//TODO à virer
-					System.out.println("J'ai trouver : " + ligne);
+					System.out.println("J'ai trouvé : " + ligne);
 				}
 			}
 			buff.close(); 

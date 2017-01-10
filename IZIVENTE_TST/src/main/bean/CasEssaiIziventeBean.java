@@ -1,5 +1,7 @@
 package main.bean;
 
+import java.sql.Date;
+
 import beans.CasEssaiBean;
 
 /**
@@ -24,8 +26,28 @@ public class CasEssaiIziventeBean extends CasEssaiBean {
 	 */
 	private String idClient = "";
 	
-	private int flag=0;
+	private int flag = 0;
 	
+	private String numeroIUN = null;
+	
+	private Date date = null;
+	
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public String getNumeroIUN() {
+		return numeroIUN;
+	}
+
+	public void setNumeroIUN(String numeroIUN) {
+		this.numeroIUN = numeroIUN;
+	}
+
 	public CasEssaiIziventeBean() {
 		super();
 	}

@@ -909,8 +909,14 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, Sele
 		if (typeDossier2 == Constantes.CREDIT_AMORT){
 			nomProduit = "PP";
 		}
-		else {
+		if (typeDossier2 == Constantes.CREODIS) {
 			nomProduit = "CR";
+		}
+		if (typeDossier2 == Constantes.FACELIA) {
+			nomProduit = "FA";
+		}
+		if (typeDossier2 == Constantes.IZICARTE) {
+			nomProduit = "IZ";
 		}
 		return nomProduit;
 	}
@@ -942,7 +948,6 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, Sele
 	
 	public CasEssaiIziventeBean initialiserScenario(String instance) {
 		CasEssaiIziventeBean scenario = new CasEssaiIziventeBean();
-		
 		//String chaine = (distrib +";"+ FFI + ";" + idClnt + ";" + IUN + ";"+ typeDos +";"+ flg +";" + sdf.format(date) + "\r\n");
 		
 		String[] instanceDecoupee = instance.split(";");
@@ -950,8 +955,26 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, Sele
 		distributeur = "CE".equals(instanceDecoupee[0])?Constantes.CAS_CE:Constantes.CAS_BP;
 		scenario.setNumeroFFI(instanceDecoupee[1]);
 		scenario.setIdClient(instanceDecoupee[2]);
+		scenario.setNumeroIUN(instanceDecoupee[3]);
 		//TODO Attention préciser le type de produit dans le fichier à écrire.
-		typeDossier = "PP".equals(instanceDecoupee[3])?Constantes.CREDIT_AMORT:Constantes.CREODIS;
+		switch (instanceDecoupee[4]) {
+			case "PP" :
+				typeDossier = Constantes.CREDIT_AMORT;
+			break;
+			case "CR" :
+				typeDossier = Constantes.CREODIS;
+			break;
+			case "FA" :
+				typeDossier = Constantes.FACELIA;
+			break;
+			case "IZ" :
+				typeDossier = Constantes.IZICARTE;
+		}
+		scenario.setFlag(Integer.parseInt(instanceDecoupee[5]));
+		SimpleDateFormat sdf = new SimpleDateFormat("JJ/mm/YYYY");
+		scenario.setDate(sdf.parse(instanceDecoupee[6]));
+		
+		//typeDossier = "PP".equals(instanceDecoupee[3])?Constantes.CREDIT_AMORT:"CR".equals(instanceDecoupee[3])?Constantes.CREODIS:;
 		
 		
 		return scenario;
