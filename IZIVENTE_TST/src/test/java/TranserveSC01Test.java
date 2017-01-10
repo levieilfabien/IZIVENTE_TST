@@ -16,12 +16,6 @@ public class TranserveSC01Test {
 	public void lancement() throws SeleniumException {
 		
 		miseAEdit();
-		
-		//SOLUTION 1 : On sérialise simulationEdit
-		//SOLUTION 2 : Les infos utiles de simulationEdit sont dans le fichier de données clients
-		
-		
-		// Mettre en gestion une instance de test IZIVENTE
 		miseEnForce();
 		
 	}
@@ -59,10 +53,13 @@ public class TranserveSC01Test {
 		for (String instance : listeInstances) {
 			// On initialise le scénario avec les données de l'instance
 			CasEssaiIziventeBean simulationEdit = new CasEssaiIziventeBean();
-			generateurSimu.initialiserScenario(instance);
+			simulationEdit = generateurSimu.initialiserScenario(instance);
 			
-			// Reprise de la simulation.
-			CasEssaiIziventeBean simulationForc = generateurSimu.lancement(simulationEdit);
+			if (simulationEdit != null) {
+				// Reprise de la simulation.
+				CasEssaiIziventeBean simulationForc = generateurSimu.lancement(simulationEdit);
+				generateurSimu.ecritureFichierDonnees(simulationForc, Constantes.ETAPE_SUIVANTE_MURIR, new Date());
+			}
 		}
 	}
 }

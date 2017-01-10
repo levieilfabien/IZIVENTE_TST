@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
@@ -934,12 +936,17 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, Sele
 		String idClnt = scenario.getIdClient();
 		String IUN = null;
 		String typeDos = chaineProduit(this.typeDossier);
-		SimpleDateFormat sdf = new SimpleDateFormat("JJ/mm/YYYY");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		int flg = flag;
 		String chaine = (distrib +";"+ FFI + ";" + idClnt + ";" + IUN + ";"+ typeDos +";"+ flg +";" + sdf.format(date) + "\r\n");
+
+		
 		try {
-			//TODO modifier le chemin vers le fichier, il doit être dans le propertie.
-			Files.write(Paths.get("src/test/DonneesClientDossier.txt"),chaine.getBytes(),StandardOpenOption.APPEND);
+			boolean existence = remplacer(scenario.getNumeroFFI(), chaine);
+			if (!existence) {
+				//TODO modifier le chemin vers le fichier, il doit être dans le propertie.
+				Files.write(Paths.get("src/test/DonneesClientDossier.txt"),chaine.getBytes(),StandardOpenOption.APPEND);
+			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			throw new SeleniumException(Erreurs.E020, "Impossible d'écrire dans DonneesClientDossier");
@@ -947,36 +954,42 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, Sele
 	}
 	
 	public CasEssaiIziventeBean initialiserScenario(String instance) {
-		CasEssaiIziventeBean scenario = new CasEssaiIziventeBean();
-		//String chaine = (distrib +";"+ FFI + ";" + idClnt + ";" + IUN + ";"+ typeDos +";"+ flg +";" + sdf.format(date) + "\r\n");
-		
-		String[] instanceDecoupee = instance.split(";");
-		
-		distributeur = "CE".equals(instanceDecoupee[0])?Constantes.CAS_CE:Constantes.CAS_BP;
-		scenario.setNumeroFFI(instanceDecoupee[1]);
-		scenario.setIdClient(instanceDecoupee[2]);
-		scenario.setNumeroIUN(instanceDecoupee[3]);
-		//TODO Attention préciser le type de produit dans le fichier à écrire.
-		switch (instanceDecoupee[4]) {
-			case "PP" :
-				typeDossier = Constantes.CREDIT_AMORT;
-			break;
-			case "CR" :
-				typeDossier = Constantes.CREODIS;
-			break;
-			case "FA" :
-				typeDossier = Constantes.FACELIA;
-			break;
-			case "IZ" :
-				typeDossier = Constantes.IZICARTE;
+		CasEssaiIziventeBean scenario = null;
+		try {
+			String[] instanceDecoupee = instance.split(";");		
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+			Date date = sdf.parse(instanceDecoupee[6]);
+			GregorianCalendar jourCible = new GregorianCalendar();
+			GregorianCalendar jour = new GregorianCalendar();
+			jourCible.setTime(date);
+			jour.setTime(new Date());
+			// Si la date est la date du jour, alors on effectue l'action, sinon on passe.
+			if (jourCible.get(GregorianCalendar.DAY_OF_YEAR) <= jour.get(GregorianCalendar.DAY_OF_YEAR)) {
+				scenario = new CasEssaiIziventeBean();
+				distributeur = "CE".equals(instanceDecoupee[0])?Constantes.CAS_CE:Constantes.CAS_BP;
+				scenario.setNumeroFFI(instanceDecoupee[1]);
+				scenario.setIdClient(instanceDecoupee[2]);
+				scenario.setNumeroIUN(instanceDecoupee[3]);
+				//TODO Attention préciser le type de produit dans le fichier à écrire.
+				switch (instanceDecoupee[4]) {
+					case "PP" :
+						typeDossier = Constantes.CREDIT_AMORT;
+					break;
+					case "CR" :
+						typeDossier = Constantes.CREODIS;
+					break;
+					case "FA" :
+						typeDossier = Constantes.FACELIA;
+					break;
+					case "IZ" :
+						typeDossier = Constantes.IZICARTE;
+				}
+				scenario.setFlag(Integer.parseInt(instanceDecoupee[5]));
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		scenario.setFlag(Integer.parseInt(instanceDecoupee[5]));
-		SimpleDateFormat sdf = new SimpleDateFormat("JJ/mm/YYYY");
-		scenario.setDate(sdf.parse(instanceDecoupee[6]));
-		
-		//typeDossier = "PP".equals(instanceDecoupee[3])?Constantes.CREDIT_AMORT:"CR".equals(instanceDecoupee[3])?Constantes.CREODIS:;
-		
-		
 		return scenario;
 	}
 }

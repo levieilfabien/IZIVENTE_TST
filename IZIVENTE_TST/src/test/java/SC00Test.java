@@ -480,7 +480,7 @@ public class SC00Test extends CasEssaiBean {
 			while ((ligne = buff.readLine()) != null){
 				String[] temp = ligne.split(";");
 				// On vérifie qu'une étape est spécifiée et que c'est bien cette étape qui est requise
-				if (temp.length > 5 && temp[5] == Integer.toString(etapeSouhaitee)) {
+				if (temp.length > 5 && temp[5].equals(Integer.toString(etapeSouhaitee))) {
 					retour.add(ligne);
 					//TODO à virer
 					System.out.println("J'ai trouvé : " + ligne);
@@ -488,6 +488,53 @@ public class SC00Test extends CasEssaiBean {
 			}
 			buff.close(); 
 			return retour;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			throw new SeleniumException(Erreurs.E020, "Impossible de lire dans DonneesClientDossier");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new SeleniumException(Erreurs.E020, "Impossible de lire dans DonneesClientDossier");
+		} 
+	}
+	
+	/**
+	 * Cette fonction à pour objectif de remplacer le contenu du fichier de données.
+	 * @return le contenu du fichier de données.
+	 * @throws SeleniumException en cas d'erreur d'accès au fichier.
+	 */
+	public Boolean remplacer(String numeroFFI, String chaine) throws SeleniumException {
+		try {
+			Boolean remplacement = false;
+			List<String> contenu = new LinkedList<String>();
+			String pathfichierDonnees = "src/test/DonneesClientDossier.txt";
+			FileInputStream flux = new FileInputStream(pathfichierDonnees);
+			InputStreamReader lecture = new InputStreamReader(flux);
+			BufferedReader buff = new BufferedReader(lecture);
+			String ligne;
+			
+			// Pour chaque ligne lue, on ajoute une chaine de caractère dans la liste.
+			while ((ligne = buff.readLine()) != null){
+				String[] temp = ligne.split(";");
+				// On vérifie qu'une étape est spécifiée et que c'est bien cette étape qui est requise
+				if (temp.length > 2 && temp[1].equals(numeroFFI)) {
+					contenu.add(chaine);
+					System.out.println("J'ai remplacer : " + ligne + " par " + chaine);
+				} else {
+					contenu.add(ligne);
+				}
+			}
+			buff.close(); 
+			
+			// On vide le fichier actuel et on créer le nouveau fichier contenant le nouveau contenu
+			PrintWriter writer = new PrintWriter(new File(pathfichierDonnees));
+			writer.print("");
+			writer.close();
+			
+			for (String instance : contenu) {
+				Files.write(Paths.get(pathfichierDonnees),instance.getBytes(),StandardOpenOption.APPEND);
+			}
+			
+			return remplacement;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			throw new SeleniumException(Erreurs.E020, "Impossible de lire dans DonneesClientDossier");
