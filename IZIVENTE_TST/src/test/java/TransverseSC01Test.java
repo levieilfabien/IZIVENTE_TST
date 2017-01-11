@@ -27,12 +27,12 @@ public class TransverseSC01Test {
 		
 		// Configurer le générateur :
 		generateurSimu.setAlm(false);
-		generateurSimu.distributeur = Constantes.CAS_BP;
-		generateurSimu.typeDossier = Constantes.CREDIT_AMORT;
+		generateurSimu.distributeur = Constantes.CAS_CE;
+		generateurSimu.typeDossier = Constantes.IZICARTE;
 		generateurSimu.edition = true;
 		generateurSimu.miseEnGestion = false;
-		generateurSimu.aucunCoEmp = false;
-		generateurSimu.conjointCoEmp = true;
+		generateurSimu.aucunCoEmp = true;
+		generateurSimu.conjointCoEmp = false;
 		generateurSimu.tiersCoEmp = false;
 		generateurSimu.assuranceEmp = false;
 		generateurSimu.assuranceTiers = false;
