@@ -209,4 +209,16 @@ public class IZIVENTEOutils {
 		//System.out.println(IZIVENTEOutils.lettreFromNumerique("NM_9384464"));
 		murissement("5884749", Constantes.CAS_BP, false, null);
 	}
+	/**
+	 * Permet de récupérer les n derniers caractères d'une chaîne
+	 * @param chaine la chaine de caractère dont on doit récupérer les n derniers caractères
+	 * @param nombre nombre de caractères à récupérer en fin de chaine.
+	 * @return la chaine de caractère composé les n derniers caractères de la chaine en paramètre
+	 */
+	public static final String derniersCaracteres(String chaine, int nombre) {
+	    if (chaine.length() <= nombre)
+	       return(chaine);
+	    else
+	        return(chaine.substring(chaine.length() - nombre));
+	}
 }

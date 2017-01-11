@@ -17,7 +17,7 @@ public class FT2SCPPBPTest extends TNRSC00 {
 private static final long serialVersionUID = 1L;
 
 @Test
-public void accesIzivente() throws SeleniumException {
+public void fT2SCPPBPTest() throws SeleniumException {
 		
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;

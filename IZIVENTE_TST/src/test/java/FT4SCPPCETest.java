@@ -35,7 +35,7 @@ public void FT4SCPPCETestLancement() throws SeleniumException {
 		this.mensualite = "367";
 		this.montantCredit = "22000";
 		this.dureeDiffere = "12";
-		
+		this.modificateur.emprunteurJeune = true;
 		miseAEdit();
 		miseEnForce();
 	}

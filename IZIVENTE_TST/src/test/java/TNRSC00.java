@@ -24,6 +24,7 @@ import main.bean.CasEssaiIziventeBean;
 import main.bean.ModificateurBouchon;
 import main.constantes.Cibles;
 import main.constantes.Constantes;
+import main.outils.IZIVENTEOutils;
 import moteurs.FirefoxImpl;
 import moteurs.GenericDriver;
 import outils.SeleniumOutils;
@@ -67,6 +68,7 @@ public class TNRSC00 extends SC00Test {
 	//Définir l'état de fin de saisie (EDIT = false ; FORCE = true)
 	public Boolean edition = false;
 	Boolean miseEnGestion = false;
+	Boolean murissement = false;
 	ModificateurBouchon modificateur = new ModificateurBouchon();
 
 /**
@@ -161,6 +163,10 @@ public CasEssaiIziventeBean lancement(CasEssaiIziventeBean scenario0) throws Sel
 		if (miseEnGestion){
 			scenario0.getTests().add(CT01Initialisation(scenario0, outil));
 			scenario0.getTests().add(CT06MiseGestion(scenario0, outil));
+		}
+		
+		if (murissement) {
+			scenario0.getTests().add(CT07Murissement(scenario0, outil));
 		}
 		
 	} catch (SeleniumException ex) {
@@ -620,7 +626,16 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, Sele
 
 public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0, SeleniumOutils outil){
 	CasEssaiIziventeBean CT07 = new CasEssaiIziventeBean();
-
+	Boolean creditRenouvelable = null;
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+	String siocID = IZIVENTEOutils.derniersCaracteres(scenario0.getNumeroFFI(), 8);
+	if (typeDossier != Constantes.CREDIT_AMORT){
+		creditRenouvelable = true;
+	} else {
+		creditRenouvelable = false;
+	}
+	String date = sdf.format(new Date());
+	IZIVENTEOutils.murissement(siocID, this.distributeur, creditRenouvelable, date);
 	return CT07;
 	
 	
@@ -1028,6 +1043,26 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0, Sele
 				CasEssaiIziventeBean simulationForc = this.lancement(simulationEdit);
 				this.ecritureFichierDonnees(simulationForc, new Date());
 			}
+		}
+	}
+	
+	public void murissement() throws SeleniumException {
+		this.edition = false;
+		this.miseEnGestion = false;
+		this.murissement = true;
+		List<String> listeInstances = this.renvoyerContenuFichierDonnee(Constantes.ETAPE_SUIVANTE_MURIR);
+		
+		for (String instance : listeInstances) {
+			// On initialise le scénario avec les données de l'instance
+			CasEssaiIziventeBean simulationForc = new CasEssaiIziventeBean();
+			simulationForc = this.initialiserScenario(instance);
+			
+			if (simulationForc != null) {
+				//Reprise du dossier pour murissement
+				CasEssaiIziventeBean simulationMuri = this.lancement(simulationForc);
+				this.ecritureFichierDonnees(simulationMuri, new Date());
+			}
+			
 		}
 	}
 }
