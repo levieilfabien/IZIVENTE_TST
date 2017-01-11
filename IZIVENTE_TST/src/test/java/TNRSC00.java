@@ -47,13 +47,17 @@ public class TNRSC00 extends SC00Test {
 	String typeUnivers = "TRESORERIE";
 	String typeOffre = "CREDIT TRESORERIE";
 	String typeObjet = "TRESORERIE";
+	//Définir le cout et la mensualité du crédit
+	String coutProjet = null;
+	String mensualite = null;
+	String montantCredit = null;
+	String dureeDiffere = null;
 	//Définir l'absence ou la présence de coemprunteur et leurs rôles.
 	Boolean aucunCoEmp = false;
 	Boolean conjointCoEmp = false;
 	Boolean conjointCaution = false;
 	Boolean tiersCoEmp = false;
 	Boolean tiersCaution = false;
-
 	//Renseigner le numéro de personne physique pour le coemprunteur tiers (BP : 9500855 P1E CE : 942500400).
 	String numPersPhysTiers = "942500400";
 	//Définir la présence d'assurance pour les emprunteurs (true = oui /false = non).
@@ -63,6 +67,7 @@ public class TNRSC00 extends SC00Test {
 	//Définir l'état de fin de saisie (EDIT = false ; FORCE = true)
 	public Boolean edition = false;
 	Boolean miseEnGestion = false;
+	ModificateurBouchon modificateur = new ModificateurBouchon();
 
 /**
  * Id de sérialisation par défaut.
@@ -197,8 +202,7 @@ public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario0, S
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// ACCES IZIVENTE ET INITIALISATION
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	ModificateurBouchon modificateur = new ModificateurBouchon();
-	//modificateur.emprunteurCasden = true;
+
 	//Steps 1,2,3,4 : Génération du bouchon - Accès à l'écran de reroutage et injection du jeton - Accès à Izivente
 	String idClient = saisieJeton(outil, scenario0.getIdClient(), false, distributeur, modificateur, agence, etablissement);
 	scenario0.setIdClient(idClient);
@@ -312,7 +316,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
 			outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR);
 			outil.selectionner("Prêt immobilier", Cibles.SELECTEUR_SITUATION_VENTE_CR);
-			outil.viderEtSaisir("7500",  Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
+			outil.viderEtSaisir(montantCredit,  Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
 			outil.attendreChargementElement(Cibles.SAISIE_MENSUALITE_CR, true, true); 
 			outil.viderEtSaisir("750", Cibles.SAISIE_MENSUALITE_CR);
 		break;
@@ -323,8 +327,8 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
 			outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR);
 			outil.selectionner("Entrée en relation", Cibles.SELECTEUR_SITUATION_VENTE_CR);
-			outil.viderEtSaisir("2000", Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
-			outil.viderEtSaisir("80,00", Cibles.SAISIE_MENSUALITE_CR);
+			outil.viderEtSaisir(montantCredit, Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
+			outil.viderEtSaisir(mensualite, Cibles.SAISIE_MENSUALITE_CR);
 		break;
 		case Constantes.IZICARTE : 
 			outil.attendrePresenceTexte("Informations du crédit");
@@ -335,7 +339,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 			outil.selectionner("BANC", Cibles.SELECTEUR_SITUATION_VENTE_CR);
 			outil.attendre(2);
 			outil.attendreChargementElement(Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR, true, true);
-			outil.viderEtSaisir("8000", Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
+			outil.viderEtSaisir(montantCredit, Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
 		break;
 		case Constantes.CREDIT_AMORT :
 			outil.attendre(2);
@@ -349,9 +353,12 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
 			outil.selectionner(typeObjet, Cibles.SELECTEUR_OBJET_FINANCE);
 			outil.attendre(2);
-			outil.viderEtSaisir("20000", Cibles.SAISIE_COUT_PROJET);
-			outil.viderEtSaisir("20000", Cibles.SAISIE_MONTANT_DEMANDE);
-			outil.viderEtSaisir("60", Cibles.SAISIE_DUREE_DEMANDE);
+			outil.viderEtSaisir(coutProjet, Cibles.SAISIE_COUT_PROJET);
+			outil.viderEtSaisir(montantCredit, Cibles.SAISIE_MONTANT_DEMANDE);
+			outil.viderEtSaisir(mensualite, Cibles.SAISIE_MENSUALITE_PP);
+			if (dureeDiffere != null){
+				outil.viderEtSaisir(dureeDiffere, Cibles.SAISIE_DUREE_DIFFERE_PARTIEL);
+			}
 		break;
 	}
 	CT03.validerObjectif(outil.getDriver(), "PARAMETRES", true);
@@ -701,6 +708,13 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0, Sele
 					case Constantes.CREDIT_AMORT :
 						outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);
 						outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+						if (Integer.parseInt(montantCredit) > 21000){
+							outil.attendreChargementElement(Cibles.CASE_SELECTION_REPONSE_ASSURANCE_NON);
+							outil.cliquerMultiple(Cibles.CASE_SELECTION_REPONSE_ASSURANCE_NON);
+							outil.cliquer(Cibles.BOUTON_OUI_DES);
+							outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASSURANCE_DIM);
+						}
+
 					break;
 					case Constantes.IZICARTE :
 						outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR, true, true);
@@ -759,6 +773,11 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0, Sele
 			outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
 			// On clique sur le choix d'assurance à oui ou non.
 			outil.cliquer(assuranceConjointCoEmp?Cibles.LIBELLE_CHOIX_OUI_MAJ:Cibles.LIBELLE_CHOIX_NON_MAJ);
+			if (assuranceConjointCoEmp = true && (Integer.parseInt(montantCredit) > 21000)){
+				outil.attendreChargementElement(Cibles.CASE_SELECTION_REPONSE_ASSURANCE_NON);
+				outil.cliquerMultiple(Cibles.CASE_SELECTION_REPONSE_ASSURANCE_NON);
+			}
+
 		}
 	}
 	/**
@@ -774,7 +793,7 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0, Sele
 			
 			if(assuranceTiers){
 				outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-				outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);			
+				outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);	
 			}
 			else{
 				outil.attendre(1);

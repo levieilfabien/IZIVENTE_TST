@@ -33,6 +33,5 @@ public void FT3SCCRCETestLancement() throws SeleniumException {
 		miseEnForce();
 		
 	}
-
 	
 }

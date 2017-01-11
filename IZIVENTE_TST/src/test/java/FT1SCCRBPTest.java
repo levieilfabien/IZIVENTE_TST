@@ -20,6 +20,7 @@ private static final long serialVersionUID = 1L;
 
 @Test
 public void FT1SCCRBPTestLancement() throws SeleniumException {
+
 			
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
@@ -28,9 +29,8 @@ public void FT1SCCRBPTestLancement() throws SeleniumException {
 		this.miseEnGestion = false;
 		this.aucunCoEmp = true;
 		this.assuranceEmp = true;
-		
+
 		miseAEdit();
 		miseEnForce();
-			
 	}
 }

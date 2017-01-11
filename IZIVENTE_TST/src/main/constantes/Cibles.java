@@ -82,6 +82,12 @@ public class Cibles {
 	 * Champ de saisie pour le montant du premier financement CR.
 	 */
 	public static final CibleBean SAISIE_MONTANT_PREMIER_FINANCEMENT_CR = new CibleBean("form_demandeCR:montant1erFinancementFieldRequired:montant1erFinancement");
+	
+	/**
+	 * Champ de saisie pour la mensualité souhaité du PP
+	 */
+	public static final CibleBean SAISIE_MENSUALITE_PP = new CibleBean("form_demande:mensualiteField:mensualite");
+	
 	/**
 	 * Champ de saisie pour la mensualité souhaitée du CR.
 	 */

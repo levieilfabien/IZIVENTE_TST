@@ -1,14 +1,12 @@
 package test.java;
-
-import main.constantes.Constantes;
-
 import org.junit.Test;
 
 import exceptions.SeleniumException;
+import main.constantes.Constantes;
 
 /**
  * Scénario 2 des tests automatisés pour IZIVENTE - Projet Fusion
- * Editique Credit Amortissable Trésorerie (BP)
+ * Editique Crédit Amortissable Etudiant Immédiat (BP)
  * @author levieilfa bardouma
  */
 public class FT2SCPPBPTest extends TNRSC00 {
@@ -19,30 +17,25 @@ public class FT2SCPPBPTest extends TNRSC00 {
 private static final long serialVersionUID = 1L;
 
 @Test
-public void FT2SCPPBPTestLancement() throws SeleniumException {
-			
+public void accesIzivente() throws SeleniumException {
+		
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
-		this.typeDossier = Constantes.FACELIA;
+		this.typeDossier = Constantes.CREDIT_AMORT;
 		this.edition = true;
 		this.miseEnGestion = false;
 		this.aucunCoEmp = true;
 		this.assuranceEmp = true;
+		this.typeUnivers = "JEUNES";
+		this.typeOffre = "BPI ETUDIANT IMMEDIAT";
+		this.typeObjet = "AUTRE ETUDE";
+		this.coutProjet = "3000";
+		this.mensualite = "83";
+		this.montantCredit = "3000";
+		this.modificateur.emprunteurJeune = true;
+		this.modificateur.coEmprunteurJeune = true;
 		
 		miseAEdit();
 		miseEnForce();
-		/*ModificateurBouchon modificateur = new ModificateurBouchon();
-		modificateur.emprunteurJeune = true;
-		outil.selectionner("JEUNES", Cibles.SELECTEUR_UNIVERS_CREDIT, false);
-		outil.attendre(2);
-		outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT, true, true);
-		outil.selectionner("BPI ETUDIANT IMMEDIAT", Cibles.SELECTEUR_OFFRE_CREDIT, false);
-		outil.attendre(2);
-		CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
-		outil.viderEtSaisir("3000", Cibles.SAISIE_COUT_PROJET);
-		outil.selectionner("Aucun", Cibles.SELECTEUR_REPORT_PREMIERE_MENS, false);
-		outil.viderEtSaisir("3000", Cibles.SAISIE_MONTANT_DEMANDE);
-		outil.viderEtSaisir("36", Cibles.SAISIE_DUREE_DEMANDE);*/
-			
 	}
 }

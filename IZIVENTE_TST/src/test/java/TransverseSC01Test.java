@@ -17,8 +17,8 @@ public class TransverseSC01Test extends TNRSC00 {
 	public void transverseSC01Test() throws SeleniumException {
 		
 		this.setAlm(false);
-		this.distributeur = Constantes.CAS_CE;
-		this.typeDossier = Constantes.IZICARTE;
+		this.distributeur = Constantes.CAS_BP;
+		this.typeDossier = Constantes.CREDIT_AMORT;
 		this.edition = true;
 		this.miseEnGestion = false;
 		this.aucunCoEmp = true;
