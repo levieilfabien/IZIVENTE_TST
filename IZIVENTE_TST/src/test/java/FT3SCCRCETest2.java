@@ -30,7 +30,6 @@ public void lancement() throws SeleniumException {
 		
 	}
 	
-	
 	public void miseAEdit() throws SeleniumException {
 		// Déclarer une instance de test IZIVENTE
 		TNRSC00 generateurSimu = new TNRSC00();
