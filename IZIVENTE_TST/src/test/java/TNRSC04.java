@@ -301,8 +301,9 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Step 1 : Valider de l'offre contrat de crédit
 	outil.attendrePresenceTexte("Alerte(s)");
-	outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OK_MAJ);
-	outil.attendreEtCliquer(Cibles.BOUTON_VALIDER);
+	//outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OK_MAJ);
+	outil.cliquerSiPossible(Cibles.BOUTON_POPUP_OK_MAJ);
+	//outil.attendreEtCliquer(Cibles.BOUTON_VALIDER);
 	CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
 	//Step 2 : Sélectionner le compte de prélèvement et valider l'offre de crédit
 	outil.attendreEtCliquer(Cibles.BOUTON_VALIDER_OPC);
