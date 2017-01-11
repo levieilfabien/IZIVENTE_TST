@@ -642,6 +642,14 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, Sele
 	return CT06;
 }
 
+public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0, SeleniumOutils outil){
+	CasEssaiIziventeBean CT07 = new CasEssaiIziventeBean();
+	
+	return CT07;
+	
+	
+}
+
 	/**
 	 * Fonction générique permettant pour tout type de produit de ne positionner aucun coemprunteur.
 	 * @param cas le cas de test concerné.

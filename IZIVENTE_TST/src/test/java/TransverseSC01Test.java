@@ -10,13 +10,13 @@ import org.junit.Test;
 
 import exceptions.SeleniumException;
 
-public class TranserveSC01Test {
+public class TransverseSC01Test {
 	
 	@Test
 	public void lancement() throws SeleniumException {
 		
-		miseAEdit();
-		//miseEnForce();
+		//miseAEdit();
+		miseEnForce();
 		
 	}
 	
@@ -32,8 +32,8 @@ public class TranserveSC01Test {
 		generateurSimu.edition = true;
 		generateurSimu.miseEnGestion = false;
 		generateurSimu.aucunCoEmp = false;
-		generateurSimu.conjointCoEmp = false;
-		generateurSimu.tiersCoEmp = true;
+		generateurSimu.conjointCoEmp = true;
+		generateurSimu.tiersCoEmp = false;
 		generateurSimu.assuranceEmp = false;
 		generateurSimu.assuranceTiers = false;
 		
