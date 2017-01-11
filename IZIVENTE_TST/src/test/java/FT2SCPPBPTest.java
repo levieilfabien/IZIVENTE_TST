@@ -20,7 +20,7 @@ public class FT2SCPPBPTest extends TNRSC00 {
 private static final long serialVersionUID = 1L;
 
 @Test
-public void FT2SCPPBPTestLancement() throws SeleniumException {
+public void accesIzivente() throws SeleniumException {
 		
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
@@ -35,8 +35,9 @@ public void FT2SCPPBPTestLancement() throws SeleniumException {
 		this.coutProjet = "3000";
 		this.mensualite = "83";
 		this.montantCredit = "3000";
-		ModificateurBouchon modificateur = new ModificateurBouchon();
-		modificateur.emprunteurJeune = true;
+		//this.modificateur = new ModificateurBouchon();
+		this.modificateur.emprunteurJeune = true;
+		
 		miseAEdit();
 		miseEnForce();
 		

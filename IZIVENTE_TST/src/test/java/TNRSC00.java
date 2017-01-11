@@ -67,6 +67,7 @@ public class TNRSC00 extends SC00Test {
 	//Définir l'état de fin de saisie (EDIT = false ; FORCE = true)
 	public Boolean edition = false;
 	Boolean miseEnGestion = false;
+	ModificateurBouchon modificateur = new ModificateurBouchon();
 
 /**
  * Id de sérialisation par défaut.
@@ -203,7 +204,6 @@ public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario0, S
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//Steps 1,2,3,4 : Génération du bouchon - Accès à l'écran de reroutage et injection du jeton - Accès à Izivente
-	ModificateurBouchon modificateur = new ModificateurBouchon();
 	String idClient = saisieJeton(outil, scenario0.getIdClient(), false, distributeur, modificateur, agence, etablissement);
 	scenario0.setIdClient(idClient);
 	CT01.validerObjectif(outil.getDriver(), "GENERATION", true);
