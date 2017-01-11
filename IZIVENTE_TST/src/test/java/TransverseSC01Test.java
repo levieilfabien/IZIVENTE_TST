@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import exceptions.SeleniumException;
 
-public class TranserveSC01Test {
+public class TransverseSC01Test {
 	
 	@Test
 	public void lancement() throws SeleniumException {
