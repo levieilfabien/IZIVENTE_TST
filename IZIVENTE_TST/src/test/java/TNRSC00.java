@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
@@ -955,5 +956,52 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0, Sele
 			e.printStackTrace();
 		}
 		return scenario;
+	}
+	
+	public void miseAEdit() throws SeleniumException {
+		// Déclarer une instance de test IZIVENTE
+		//TNRSC00 generateurSimu = new TNRSC00();
+		
+		// Configurer le générateur :
+//		generateurSimu.setAlm(false);
+//		generateurSimu.distributeur = Constantes.CAS_CE;
+//		generateurSimu.typeDossier = Constantes.IZICARTE;
+//		generateurSimu.edition = true;
+//		generateurSimu.miseEnGestion = false;
+//		generateurSimu.aucunCoEmp = true;
+//		generateurSimu.conjointCoEmp = false;
+//		generateurSimu.tiersCoEmp = false;
+//		generateurSimu.assuranceEmp = false;
+//		generateurSimu.assuranceTiers = false;
+		
+		this.edition = true;
+		this.miseEnGestion = false;
+		
+		// Lancement la simulation.
+		CasEssaiIziventeBean simulationEdit = this.lancement();
+		this.ecritureFichierDonnees(simulationEdit, new Date());
+	}
+	
+	public void miseEnForce() throws SeleniumException {
+		// Déclarer une instance de test IZIVENTE
+		//TNRSC00 generateurSimu = new TNRSC00();
+		// Mettre en gestion une instance de test IZIVENTE
+		this.edition = false;
+		this.miseEnGestion = true;
+		
+		// On récupère le contenu du fichier de donnée.
+		List<String> listeInstances = this.renvoyerContenuFichierDonnee(Constantes.ETAPE_SUIVANTE_MEG);
+		
+		for (String instance : listeInstances) {
+			// On initialise le scénario avec les données de l'instance
+			CasEssaiIziventeBean simulationEdit = new CasEssaiIziventeBean();
+			simulationEdit = this.initialiserScenario(instance);
+			
+			if (simulationEdit != null) {
+				// Reprise de la simulation.
+				CasEssaiIziventeBean simulationForc = this.lancement(simulationEdit);
+				this.ecritureFichierDonnees(simulationForc, new Date());
+			}
+		}
 	}
 }
