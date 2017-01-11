@@ -16,7 +16,7 @@ public class TranserveSC01Test {
 	public void lancement() throws SeleniumException {
 		
 		miseAEdit();
-		miseEnForce();
+		//miseEnForce();
 		
 	}
 	
@@ -28,12 +28,15 @@ public class TranserveSC01Test {
 		// Configurer le générateur :
 		generateurSimu.setAlm(false);
 		generateurSimu.distributeur = Constantes.CAS_BP;
+		generateurSimu.typeDossier = Constantes.CREDIT_AMORT;
 		generateurSimu.edition = true;
 		generateurSimu.miseEnGestion = false;
-		generateurSimu.aucunCoEmp = true;
+		generateurSimu.aucunCoEmp = false;
+		generateurSimu.conjointCoEmp = false;
+		generateurSimu.tiersCoEmp = true;
 		generateurSimu.assuranceEmp = false;
-		generateurSimu.tiersCoEmp = false;
-		generateurSimu.typeDossier = Constantes.FACELIA;
+		generateurSimu.assuranceTiers = false;
+		
 		
 		// Lancement la simulation.
 		CasEssaiIziventeBean simulationEdit = generateurSimu.lancement();
