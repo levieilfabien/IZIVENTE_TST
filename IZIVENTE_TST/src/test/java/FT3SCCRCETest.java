@@ -19,7 +19,7 @@ public class FT3SCCRCETest extends TNRSC00 {
 private static final long serialVersionUID = 1L;
 
 @Test
-public void FT3SCCRCETest() throws SeleniumException {
+public void FT3SCCRCETestLancement() throws SeleniumException {
 		
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_CE;
