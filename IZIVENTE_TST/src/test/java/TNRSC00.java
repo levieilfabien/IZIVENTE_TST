@@ -16,6 +16,7 @@ import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
 import constantes.Erreurs;
+import beans.CibleBean;
 import beans.ObjectifBean;
 import exceptions.SeleniumException;
 import main.bean.CasEssaiIziventeBean;
@@ -440,128 +441,88 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// FINALISATION DE L'INSTRUCTION
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	switch(typeDossier){
-		case Constantes.FACELIA :
-			//Step 1 : Valider de l'offre contrat de crédit
-			outil.attendreChargementElement(Cibles.BOUTON_VALIDER_OPC_CR);
-			outil.cliquer(Cibles.BOUTON_VALIDER_OPC_CR);
-			outil.attendre(1);//Ne pas enlever
-			CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
-			//Step 2 : Finalisation de l'instruction
-			outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
-			outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
-			CT05.validerObjectif(outil.getDriver(), "VALIDATIONINSTRUCTION", true);
-			//Step 3 : Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires
-			outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-			outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-			CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
-			//Récupération du numéro FFI
-			String numeroFFIFacelia = outil.obtenirValeur(Cibles.ELEMENT_SPAN_NUMERO_FFI_CR);
-			scenario0.setNumeroFFI(numeroFFIFacelia);
-			//Step 4 : Imprimer la liasse de document
-			outil.attendreChargementElement(Cibles.BOUTON_IMPRIMER_LIASSE);
-			outil.cliquer(Cibles.BOUTON_IMPRIMER_LIASSE);
-			outil.attendrePresenceTexte("Préparation contrat");
-			CT05.validerObjectif(outil.getDriver(), "IMPRESSION", true);
-			//Step 5 : Préparation du contrat et envoi à l'octroi	
-			outil.attendrePresenceTexte("Passage vers le choix du mode de signature");
-			outil.attendreChargementElement(Cibles.ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE);
-			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT_FIN);
-			CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
-		break;
-		case Constantes.CREODIS :
-			//Step 1 : Valider de l'offre contrat de crédit
-			outil.attendreChargementElement(Cibles.ELEMENT_TABLEAU_PRELEVEMENT);
-			outil.attendreEtCliquer(Cibles.BOUTON_VALIDER_CREODIS_CR);
-			CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
-			//Step 2 : Finalisation de l'instruction
-			outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
-			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
-			CT05.validerObjectif(outil.getDriver(), "VALIDATIONINSTRUCTION", true);
-			//Step 3 : Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires
-			outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-			outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-			CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
-			String numeroFFICREODIS = outil.obtenirValeur(Cibles.ELEMENT_SPAN_NUMERO_FFI_CR);
-			scenario0.setNumeroFFI(numeroFFICREODIS);
-			//Step 4 : Imprimer la liasse de document
-			outil.attendreChargementElement(Cibles.BOUTON_IMPRIMER_LIASSE);
-			outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_LIASSE);
-			outil.attendrePresenceTexte("Préparation contrat");
-			CT05.validerObjectif(outil.getDriver(), "IMPRESSION", true);
-			//Step 5 : Préparation du contrat et envoi à l'octroi	
-			outil.attendrePresenceTexte("Passage vers le choix du mode de signature");
-			outil.attendreChargementElement(Cibles.ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE);
-			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT_FIN);
-			CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
-		break;
-		case Constantes.IZICARTE :
-			//Step 1 : Valider de l'offre contrat de crédit (Etape non présente dans un CR)
-			//Step 1 : Valider de l'offre contrat de crédit 
-			outil.attendreChargementElement(Cibles.BOUTON_VALIDER_OPC_CR);
-			outil.attendreEtCliquer(Cibles.BOUTON_VALIDER_OPC_CR);
-			CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
-			//Step 2 : Finalisation de l'instruction
-			outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
-			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
-			CT05.validerObjectif(outil.getDriver(), "VALIDATIONINSTRUCTION", true);
-			//Step 3 : Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires
-			outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-			outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-			CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
-			//Step 4 : Imprimer la liasse de document
-			outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_LIASSE);
-			outil.attendrePresenceTexte("Préparation contrat");
-			CT05.validerObjectif(outil.getDriver(), "IMPRESSION", true);
-			//Step 5 : Préparation du contrat - choix du mode de vente	
-			outil.attendreChargementElement(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
-			outil.cliquer(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
-			CT05.validerObjectif(outil.getDriver(), "MODE", true);
-			//Step 6 : Fin de l'édition
-			outil.attendreChargementElement(Cibles.BOUTON_PASSAGE_OCTROI_CR, true, true);
-			outil.attendreChargementElement(Cibles.BOUTON_TERMINER_EDITION_CR, true, true);
-			outil.cliquer(Cibles.BOUTON_TERMINER_EDITION_CR);
-			//Récupération du numéro FFI
-			String numeroFFIIzicarte = outil.obtenirValeur(Cibles.ELEMENT_SPAN_NUMEOR_FFI_IZICARTE);
-			scenario0.setNumeroFFI(numeroFFIIzicarte);
-			CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);
-			CT05.validerObjectif(outil.getDriver(), "CONFIRMATION", true);
-		break;
-		case Constantes.CREDIT_AMORT :
-			//Step 1 : Valider de l'offre contrat de crédit
-			//outil.attendrePresenceTexte("Alerte(s)");
-			//outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OK_MAJ);
-			//outil.attendreEtCliquer(Cibles.BOUTON_VALIDER);
-			outil.attendreChargementElement(Cibles.BOUTON_ACCES_VALIDATION_OPC,true, true);
-			outil.cliquer(Cibles.BOUTON_ACCES_VALIDATION_OPC);
-			CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
-			//Step 2 : Sélectionner le compte de prélèvement et valider l'offre de crédit
-			outil.attendreEtCliquer(Cibles.BOUTON_VALIDER_OPC);
-			CT05.validerObjectif(outil.getDriver(), "VALIDATIONINSTRUCTION", true);
-			//Step 3 : Vérifier les justificatifs et valider
-			outil.attendreChargementElement(Cibles.ELEMENT_FIN_INSTRUCTION, true, true);
-			outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_VERIFIE);
-			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_VALIDER_JUSTIFICATIFS);
-			CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);
-			//Step 4 : Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires
-			outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-			outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-			CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
-			//Step 5 : Imprimer la synthèse de l'offre
-			outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_SYNTHESE);
-			CT05.validerObjectif(outil.getDriver(), "IMPRESSIONSYNTHESE", true);
-			//Récupération du numéro FFI
-			String numeroFFIPP = outil.obtenirValeur(Cibles.ELEMENT_SPAN_NUMERO_FFI);
-			scenario0.setNumeroFFI(numeroFFIPP);
-			//Step 6 : Imprimer la liasse de document
-			outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_LIASSE);
-			outil.attendrePresenceTexte("Préparation contrat");
-			CT05.validerObjectif(outil.getDriver(), "IMPRESSION", true);
-			//Step 7 : Préparation du contrat et envoi à l'octroi		
-			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT);
-			CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
-		break;
+
+	CibleBean cibleAttenteValidationCredit = null;
+	CibleBean cibleValidationCredit = null;
+	CibleBean cibleConfirmationValidationCredit = null;
+	CibleBean cibleNumeroFFI = null;
+	if (typeDossier == Constantes.FACELIA || typeDossier == Constantes.IZICARTE) {
+		cibleAttenteValidationCredit = Cibles.BOUTON_VALIDER_OPC_CR;
+		cibleValidationCredit = Cibles.BOUTON_VALIDER_OPC_CR;
+		cibleConfirmationValidationCredit = Cibles.BOUTON_POPUP_OUI_MAJ;
+		cibleNumeroFFI = Cibles.ELEMENT_SPAN_NUMERO_FFI_CR;
 	}
+	if (typeDossier == Constantes.CREODIS) {
+		cibleAttenteValidationCredit = Cibles.ELEMENT_TABLEAU_PRELEVEMENT;
+		cibleValidationCredit = Cibles.BOUTON_VALIDER_CREODIS_CR;
+		cibleConfirmationValidationCredit = Cibles.BOUTON_POPUP_OUI_MAJ;
+		cibleNumeroFFI = Cibles.ELEMENT_SPAN_NUMERO_FFI_CR;
+	}
+	if (typeDossier == Constantes.CREDIT_AMORT) {
+		cibleAttenteValidationCredit = Cibles.BOUTON_ACCES_VALIDATION_OPC;
+		cibleValidationCredit = Cibles.BOUTON_ACCES_VALIDATION_OPC;
+		cibleConfirmationValidationCredit = Cibles.BOUTON_VALIDER_OPC;
+		cibleNumeroFFI = Cibles.ELEMENT_SPAN_NUMERO_FFI;
+	}
+	
+	//Step 1 : Valider de l'offre contrat de crédit
+	outil.attendreChargementElement(cibleAttenteValidationCredit, true, true);
+	outil.attendreEtCliquer(cibleValidationCredit);
+	CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
+	//Step 2 : Finalisation de l'instruction : Validation de la popup pour les CR, validation de l'écran pour les PP
+	outil.attendreChargementElement(cibleConfirmationValidationCredit);
+	outil.attendreEtCliquer(cibleConfirmationValidationCredit);
+	CT05.validerObjectif(outil.getDriver(), "VALIDATIONINSTRUCTION", true);
+	// Pour les PP on effectue la vérification des justificatifs.
+	if (typeDossier == Constantes.CREDIT_AMORT) {
+		//Step 3 : Vérifier les justificatifs et valider
+		outil.attendreChargementElement(Cibles.ELEMENT_FIN_INSTRUCTION, true, true);
+		outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_VERIFIE);
+		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_VALIDER_JUSTIFICATIFS);
+		CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);
+	}
+	//Step 4 : Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires
+	outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+	outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+	CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
+	// Pour les PP on effectue l'impression de la synthèse
+	if (typeDossier == Constantes.CREDIT_AMORT) {
+		//Step 5 : Imprimer la synthèse de l'offre
+		outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_SYNTHESE);
+		CT05.validerObjectif(outil.getDriver(), "IMPRESSIONSYNTHESE", true);
+	}
+	// Extraction du numéro FFI depuis l'interface
+	scenario0.setNumeroFFI(outil.obtenirValeur(cibleNumeroFFI));
+	//Step 6 : Imprimer la liasse de document
+	outil.attendreChargementElement(Cibles.BOUTON_IMPRIMER_LIASSE);
+	outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_LIASSE);
+	outil.attendrePresenceTexte("Préparation contrat");
+	CT05.validerObjectif(outil.getDriver(), "IMPRESSION", true);
+
+	// Dans le cas d'un IZICARTE on ne passe pas par les mêmes écrans après l'édition.
+	if (typeDossier == Constantes.CREDIT_AMORT) {
+		//Step 7 : Préparation du contrat et envoi à l'octroi		
+		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT);
+		CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
+	} else if (typeDossier == Constantes.IZICARTE) {
+		//Step 7 : Accès à l'IHM pour reprise du dossier
+		outil.attendreChargementElement(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
+		outil.cliquer(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
+		CT05.validerObjectif(outil.getDriver(), "MODE", true);
+		//Step 8 : Fin de l'édition
+		outil.attendreChargementElement(Cibles.BOUTON_PASSAGE_OCTROI_CR, true, true);
+		outil.attendreChargementElement(Cibles.BOUTON_TERMINER_EDITION_CR, true, true);
+		outil.cliquer(Cibles.BOUTON_TERMINER_EDITION_CR);
+		CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);
+		CT05.validerObjectif(outil.getDriver(), "CONFIRMATION", true);
+	} else {
+		//Step 7 : Préparation du contrat et envoi à l'octroi	
+		outil.attendrePresenceTexte("Passage vers le choix du mode de signature");
+		outil.attendreChargementElement(Cibles.ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE);
+		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT_FIN);
+		CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
+	}
+		
 	scenario0.setFlag(2);
 	CT05.validerObjectif(outil.getDriver(), CT05.getNomCasEssai() + CT05.getTime(),true);
 	return CT05;
@@ -778,22 +739,18 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0, Sele
 		Boolean presenceTiers = (tiersCoEmp || tiersCaution);
 		Boolean presenceConjoint = (conjointCoEmp || conjointCaution);
 		if (presenceConjoint) {
-		if (presenceTiers) {
-			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT2);
-			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT2);
-		}
-		else {
-			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT1);
-			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
-		}
-		if (assuranceConjointCoEmp == true){
-			outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-			outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-		}
-		else if(assuranceConjointCoEmp == false){
-			outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ);
-			outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
-		}
+			if (presenceTiers) {
+				outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT2);
+				outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT2);
+			} else {
+				outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT1);
+				outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
+			}
+			// On attend que les choix d'assurance soient affichés et clicable.
+			outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true , true);
+			outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
+			// On clique sur le choix d'assurance à oui ou non.
+			outil.cliquer(assuranceConjointCoEmp?Cibles.LIBELLE_CHOIX_OUI_MAJ:Cibles.LIBELLE_CHOIX_NON_MAJ);
 		}
 	}
 	/**
