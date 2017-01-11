@@ -283,6 +283,8 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	//outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OK_MAJ);
 	outil.cliquerSiPossible(Cibles.BOUTON_POPUP_OK_MAJ);
 	//outil.attendreEtCliquer(Cibles.BOUTON_VALIDER);
+	outil.attendreChargementElement(Cibles.BOUTON_ACCES_VALIDATION_OPC,true, true);
+	outil.cliquer(Cibles.BOUTON_ACCES_VALIDATION_OPC);
 	CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
 	//Step 2 : Sélectionner le compte de prélèvement et valider l'offre de crédit
 	outil.attendreEtCliquer(Cibles.BOUTON_VALIDER_OPC);

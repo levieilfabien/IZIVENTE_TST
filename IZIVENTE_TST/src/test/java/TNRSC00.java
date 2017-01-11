@@ -49,18 +49,18 @@ public class TNRSC00 extends SC00Test {
 	Boolean aucunCoEmp = false;
 	Boolean conjointCoEmp = false;
 	Boolean conjointCaution = false;
-	Boolean tiersCoEmp = true;
+	Boolean tiersCoEmp = false;
 	Boolean tiersCaution = false;
 
 	//Renseigner le numéro de personne physique pour le coemprunteur tiers (BP : 9500855 P1E CE : 942500400).
 	String numPersPhysTiers = "942500400";
 	//Définir la présence d'assurance pour les emprunteurs (true = oui /false = non).
-	Boolean assuranceEmp = true;
+	Boolean assuranceEmp = false;
 	Boolean assuranceConjointCoEmp = false;
 	Boolean assuranceTiers = false;
 	//Définir l'état de fin de saisie (EDIT = false ; FORCE = true)
-	public Boolean edition = true;
-	Boolean miseEnGestion = true;
+	public Boolean edition = false;
+	Boolean miseEnGestion = false;
 
 /**
  * Id de sérialisation par défaut.
