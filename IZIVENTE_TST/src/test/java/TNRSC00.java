@@ -69,9 +69,13 @@ public class TNRSC00 extends SC00Test {
  */
 private static final long serialVersionUID = 1L;
 
+/**
+ * Fonction de lancement par défaut ne comportant aucun paramètre.
+ * @throws SeleniumException en cas d'erreur.
+ */
 @Test
 public void accesIzivente() throws SeleniumException {
-	lancement(null);
+	lancement();
 }
 
 /**
@@ -84,20 +88,47 @@ public CasEssaiIziventeBean lancement() throws SeleniumException {
 }
 
 /**
+ * Permet d'obtenir la boite à outil Selenium associé à un driver pour le scénario donné.
+ * @param scenario0 le scénario concerné.
+ * @return la boite à outil Selenium associée au scénario.
+ */
+public SeleniumOutils obtenirDriver(CasEssaiIziventeBean scenario0) {
+	//Configuration du driver
+	FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
+	FirefoxProfile profile = configurerProfilNatixis();
+
+	//Création et configuration du repertoire de téléchargement
+	//File repertoireTelechargement = new File(".\\" + scenario0.getNomCasEssai());
+	//repertoireTelechargement.mkdir();
+	//profile.setPreference(Constantes.PREF_FIREFOX_REPERTOIRE_TELECHARGEMENT, repertoireTelechargement.getAbsolutePath());
+	String repertoire = creerRepertoireTelechargement(scenario0, profile);
+	scenario0.setRepertoireTelechargement(repertoire);
+	// Initialisation du driver
+	FirefoxImpl driver = new FirefoxImpl(ffBinary, profile);
+	
+	if (distributeur == Constantes.CAS_CE){
+		driver.get(Constantes.URL_CE_FUTURE_REROUTAGE);
+	}
+	else {
+		driver.get(Constantes.URL_BP_FUTURE_REROUTAGE);
+	}
+	
+    SeleniumOutils outil = new SeleniumOutils(driver, GenericDriver.FIREFOX_IMPL);
+    outil.setRepertoireRacine(scenario0.getRepertoireTelechargement());
+	
+	return outil;
+}
+
+/**
  * Fonction qui effectue le lancement du scénario à partir des informations contenue dans l'objet TNRSC00 et le scénario paramètre.
  * @param scenario0 le scénario paramètre dont on récupère des informations si il y à lieue, null sinon.
  * @return l'objet cas d'essai contenant les données de test en sortie (ex : Numéro du client)
  * @throws SeleniumException en cas d'erreur.
  */
 public CasEssaiIziventeBean lancement(CasEssaiIziventeBean scenario0) throws SeleniumException {
+	
 	//Description du scénario
 	if (scenario0 == null) {
-		scenario0 = new CasEssaiIziventeBean();
-		scenario0.setAlm(false);
-		// LISTE DES OBJECTIFS DU CAS DE TEST
-		scenario0.ajouterObjectif(new ObjectifBean("Test arrivé à terme", scenario0.getNomCasEssai() + scenario0.getTime()));
-	}
-		
 		/*scenario0.setAlm(true);
 		scenario0.setIdUniqueTestLab(49375);
 		scenario0.setNomCasEssai("TNRSC00-" + getTime());
@@ -105,61 +136,37 @@ public CasEssaiIziventeBean lancement(CasEssaiIziventeBean scenario0) throws Sel
 		scenario0.setNomTestLab("TNRSC00 - IZIVENTE_Editique XX");
 		//scenario0.setNomTestPlan("TNRSC00 - IZIVENTE_Editique XX");
 		scenario0.setCheminTestLab("POC Selenium\\IZIVENTE");*/
-		
-		//Configuration du driver
-		FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
-		FirefoxProfile profile = configurerProfilNatixis();
-		
-		//Création et configuration du repertoire de téléchargement
-		//File repertoireTelechargement = new File(".\\" + scenario0.getNomCasEssai());
-		//repertoireTelechargement.mkdir();
-		//profile.setPreference(Constantes.PREF_FIREFOX_REPERTOIRE_TELECHARGEMENT, repertoireTelechargement.getAbsolutePath());
-		String repertoire = creerRepertoireTelechargement(scenario0, profile);
-		scenario0.setRepertoireTelechargement(repertoire);
-		// Initialisation du driver
-		FirefoxImpl driver = new FirefoxImpl(ffBinary, profile);
-		
-		if (distributeur == Constantes.CAS_CE){
-			driver.get(Constantes.URL_CE_FUTURE_REROUTAGE);
-		}
-		else {
-			driver.get(Constantes.URL_BP_FUTURE_REROUTAGE);
-		}
-		
+		scenario0 = new CasEssaiIziventeBean();
+		scenario0.setAlm(false);
+		// LISTE DES OBJECTIFS DU CAS DE TEST
+		scenario0.ajouterObjectif(new ObjectifBean("Test arrivé à terme", scenario0.getNomCasEssai() + scenario0.getTime()));
+	}
 
-	   
-	    SeleniumOutils outil = new SeleniumOutils(driver, GenericDriver.FIREFOX_IMPL);
-	    outil.setRepertoireRacine(scenario0.getRepertoireTelechargement());
-	    
-	    try {
-			//CT01 - Accès Izivente et initialisation
-			//CT02 - Ouverture du dossier et validation des informations client
-			//CT03 - Saisie des paramètres relatifs a	u type de dossier et validation
-			//CT04 - Choix des participants et des assurances associées et validation des participants
-			//CT05 - Validation de l'instruction
-	    	//CT06 - Mise en Gestion
-	    	if (edition) {
-				scenario0.getTests().add(CT01Initialisation(scenario0, outil));
-				scenario0.getTests().add(CT02OuvertureDossier(scenario0, outil));
-				scenario0.getTests().add(CT03SaisieDossier(scenario0, outil));
-				scenario0.getTests().add(CT04Participants(scenario0, outil));
-				scenario0.getTests().add(CT05FinalisationInstruction(scenario0, outil));
-	    	}
-			//Condition pour accéder au cas de test de mise en force
-			if (miseEnGestion){
-				scenario0.getTests().add(CT01Initialisation(scenario0, outil));
-				scenario0.getTests().add(CT06MiseGestion(scenario0, outil));
-			}
-			
-		} catch (SeleniumException ex) {
-			// Finalisation en erreur du cas de test.
-			finaliserTestEnErreur(outil, scenario0, ex, scenario0.getNomCasEssai() + scenario0.getDateCreation().getTime());
-			throw ex;
+	SeleniumOutils outil = obtenirDriver(scenario0);
+    
+    try {
+    	if (edition) {
+			scenario0.getTests().add(CT01Initialisation(scenario0, outil));
+			scenario0.getTests().add(CT02OuvertureDossier(scenario0, outil));
+			scenario0.getTests().add(CT03SaisieDossier(scenario0, outil));
+			scenario0.getTests().add(CT04Participants(scenario0, outil));
+			scenario0.getTests().add(CT05FinalisationInstruction(scenario0, outil));
+    	}
+		//Condition pour accéder au cas de test de mise en force
+		if (miseEnGestion){
+			scenario0.getTests().add(CT01Initialisation(scenario0, outil));
+			scenario0.getTests().add(CT06MiseGestion(scenario0, outil));
 		}
-		// Finalisation normale du cas de test.
-		finaliserTest(outil, scenario0, scenario0.getNomCasEssai() + scenario0.getDateCreation().getTime());
 		
-		return scenario0;
+	} catch (SeleniumException ex) {
+		// Finalisation en erreur du cas de test.
+		finaliserTestEnErreur(outil, scenario0, ex, scenario0.getNomCasEssai() + scenario0.getDateCreation().getTime());
+		throw ex;
+	}
+	// Finalisation normale du cas de test.
+	finaliserTest(outil, scenario0, scenario0.getNomCasEssai() + scenario0.getDateCreation().getTime());
+	
+	return scenario0;
 }
 
 /**
