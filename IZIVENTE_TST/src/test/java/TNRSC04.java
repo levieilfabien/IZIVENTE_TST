@@ -201,8 +201,8 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario4, Se
 	//Step 1 : Sélectionner l'offre désirée dans le menu déroulant selon le scénario
 	outil.attendrePresenceTexte("Informations du crédit");
 	outil.attendre(2);
-	outil.attendreChargementElement(Cibles.SELECTEUR_UNIVERS_CREDIT_CE, true, true);
-	outil.selectionner("TRAVAUX", Cibles.SELECTEUR_UNIVERS_CREDIT_CE, false);
+	outil.attendreChargementElement(Cibles.SELECTEUR_UNIVERS_CREDIT, true, true);
+	outil.selectionner("TRAVAUX", Cibles.SELECTEUR_UNIVERS_CREDIT, false);
 	outil.attendre(5); //2 secondes ne suffisent pas
 	outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT, true, true);
 	outil.selectionner("TRAVAUX ECHELONNE DIFF TOTAL", Cibles.SELECTEUR_OFFRE_CREDIT, false);

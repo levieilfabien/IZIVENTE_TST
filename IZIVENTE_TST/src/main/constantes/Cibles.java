@@ -70,10 +70,6 @@ public class Cibles {
 	public static final CibleBean SELECTEUR_UNIVERS_CREDIT = new CibleBean(Clefs.NAME, "form_demande:universField:univers");
 	
 	/**
-	 * Selecteur pour le choix d'univers de crédit (ex : Travaux).
-	 */
-	public static final CibleBean SELECTEUR_UNIVERS_CREDIT_CE = new CibleBean(Clefs.ID, "form_demande:universField:univers");
-	/**
 	 * Selecteur pour le choix d'une situation de vente pour un produit CR (ex : Produit d'épargne).
 	 */
 	public static final CibleBean SELECTEUR_SITUATION_VENTE_CR = new CibleBean("form_demandeCR:situationVenteField:situationVente");
@@ -228,11 +224,6 @@ public class Cibles {
 	 */
 	public static final CibleBean ELEMENT_SPAN_NUMERO_FFI_CR = new CibleBean("edition:numero_dossierField:numero_dossier");
 		
-	/**
-	 * Element contenant le numéro FFI à récupérer pour une IZICARTE
-	 */
-	public static final CibleBean ELEMENT_SPAN_NUMEOR_FFI_IZICARTE = new CibleBean("contentView:j_id153:numeroDossier");
-	
 	/**
 	 * Element indiquant l'état d'avancement final du chargement de la signature electronique.
 	 */

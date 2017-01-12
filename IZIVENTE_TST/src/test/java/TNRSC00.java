@@ -348,17 +348,18 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 			outil.viderEtSaisir(montantCredit, Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
 		break;
 		case Constantes.CREDIT_AMORT :
-			outil.attendre(2);
+			outil.attendre(1);
 			outil.attendreChargementElement(Cibles.SELECTEUR_UNIVERS_CREDIT, true, true);
 			outil.selectionner(typeUnivers, Cibles.SELECTEUR_UNIVERS_CREDIT, false);
-			outil.attendre(5); //2 secondes ne suffisent pas
+			outil.attendre(4); //2 secondes ne suffisent pas
 			outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT, true, true);
 			outil.selectionner(typeOffre, Cibles.SELECTEUR_OFFRE_CREDIT, false);
-			outil.attendre(2);
+			//outil.attendre(1);
 			CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
 			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
+			outil.attendreChargementElement(Cibles.SELECTEUR_OBJET_FINANCE, true, true);
 			outil.selectionner(typeObjet, Cibles.SELECTEUR_OBJET_FINANCE);
-			outil.attendre(2);
+			outil.attendre(1);
 			outil.viderEtSaisir(coutProjet, Cibles.SAISIE_COUT_PROJET);
 			outil.viderEtSaisir(montantCredit, Cibles.SAISIE_MONTANT_DEMANDE);
 			outil.viderEtSaisir(mensualite, Cibles.SAISIE_MENSUALITE_PP);
@@ -624,7 +625,7 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, Sele
 	return CT06;
 }
 
-public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0, SeleniumOutils outil){
+public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException{
 	CasEssaiIziventeBean CT07 = new CasEssaiIziventeBean();
 	Boolean creditRenouvelable = null;
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
@@ -635,7 +636,13 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0, Sele
 		creditRenouvelable = false;
 	}
 	String date = sdf.format(new Date());
-	IZIVENTEOutils.murissement(siocID, this.distributeur, creditRenouvelable, date);
+	Boolean retour = IZIVENTEOutils.murissement(siocID, this.distributeur, creditRenouvelable, date);
+	if (retour == true){
+		scenario0.setFlag(4);
+		ecritureFichierDonnees(scenario0, new Date());
+	}
+	else { System.out.println("Le murissement n'a pas fonctionné");
+	}
 	return CT07;
 	
 	
@@ -1017,6 +1024,7 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0, Sele
 		
 		this.edition = true;
 		this.miseEnGestion = false;
+		this.murissement = false;
 		
 		// Lancement la simulation.
 		CasEssaiIziventeBean simulationEdit = this.lancement();
@@ -1029,6 +1037,7 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0, Sele
 		// Mettre en gestion une instance de test IZIVENTE
 		this.edition = false;
 		this.miseEnGestion = true;
+		this.murissement = false;
 		
 		// On récupère le contenu du fichier de donnée.
 		List<String> listeInstances = this.renvoyerContenuFichierDonnee(Constantes.ETAPE_SUIVANTE_MEG);

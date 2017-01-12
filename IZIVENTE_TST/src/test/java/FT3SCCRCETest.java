@@ -28,6 +28,7 @@ public void FT3SCCRCETestLancement() throws SeleniumException {
 		this.miseEnGestion = false;
 		this.aucunCoEmp = true;
 		this.assuranceEmp = true;
+		this.montantCredit = "3000";
 		
 		miseAEdit();
 		miseEnForce();

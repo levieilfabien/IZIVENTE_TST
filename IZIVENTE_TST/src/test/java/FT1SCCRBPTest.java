@@ -29,6 +29,7 @@ public void FT1SCCRBPTestLancement() throws SeleniumException {
 		this.miseEnGestion = false;
 		this.aucunCoEmp = true;
 		this.assuranceEmp = true;
+		this.montantCredit = "8000";
 
 		miseAEdit();
 		miseEnForce();

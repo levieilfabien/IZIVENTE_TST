@@ -200,8 +200,8 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario, Sel
 	//Step 1 : Sélectionner l'offre désirée dans le menu déroulant selon le scénario
 	outil.attendrePresenceTexte("Informations du crédit");
 	outil.attendre(2);
-	outil.attendreChargementElement(Cibles.SELECTEUR_UNIVERS_CREDIT_CE, true, true);
-	outil.selectionner("TRESORERIE", Cibles.SELECTEUR_UNIVERS_CREDIT_CE, false);
+	outil.attendreChargementElement(Cibles.SELECTEUR_UNIVERS_CREDIT, true, true);
+	outil.selectionner("TRESORERIE", Cibles.SELECTEUR_UNIVERS_CREDIT, false);
 	outil.attendre(5);
 	outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT, true, true);
 	outil.selectionner("PEE3", Cibles.SELECTEUR_OFFRE_CREDIT, false);

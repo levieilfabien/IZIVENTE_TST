@@ -19,7 +19,7 @@ public class FT4SCPPCETest extends TNRSC00 {
 private static final long serialVersionUID = 1L;
 
 @Test
-public void FT4SCPPCETestLancement() throws SeleniumException {
+public void fT4SCPPCETest() throws SeleniumException {
 		
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_CE;
@@ -36,7 +36,9 @@ public void FT4SCPPCETestLancement() throws SeleniumException {
 		this.montantCredit = "22000";
 		this.dureeDiffere = "12";
 		this.modificateur.emprunteurJeune = true;
+		
 		miseAEdit();
 		miseEnForce();
+		murissement();
 	}
 }
