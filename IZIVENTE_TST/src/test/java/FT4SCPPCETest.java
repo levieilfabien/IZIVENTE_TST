@@ -38,7 +38,7 @@ public void fT4SCPPCETest() throws SeleniumException {
 		this.modificateur.emprunteurJeune = true;
 		
 		miseAEdit();
-		//miseEnForce();
+		miseEnForce();
 		//murissement();
 	}
 }

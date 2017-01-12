@@ -31,7 +31,7 @@ public void FT3SCCRCETestLancement() throws SeleniumException {
 		this.montantCredit = "3000";
 		
 		miseAEdit();
-		//miseEnForce();
+		miseEnForce();
 		
 	}
 	

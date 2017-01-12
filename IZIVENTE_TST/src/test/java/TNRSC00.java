@@ -74,6 +74,8 @@ public class TNRSC00 extends SC00Test {
  * Id de sérialisation par défaut.
  */
 private static final long serialVersionUID = 1L;
+private String numeroBIC;
+private String numeroIBAN;
 
 ///**
 // * Fonction de lancement par défaut ne comportant aucun paramètre.
@@ -489,9 +491,8 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	//Step 1 : Valider de l'offre contrat de crédit
 	//Extraction du BIC et de l'IBAN du compte emprunteur CR
 	if (typeDossier != Constantes.CREDIT_AMORT){
-		String BIC = outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC);
-		String IBAN = outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN);
-		System.out.println("On récupère le BIC "+ BIC +" et l'IBAN "+ IBAN);
+		numeroBIC = outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC);
+		numeroIBAN = outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN);
 	}
 	outil.attendreChargementElement(cibleAttenteValidationCredit, true, true);
 	outil.attendreEtCliquer(cibleValidationCredit);
@@ -499,9 +500,8 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	//Step 2 : Finalisation de l'instruction : Validation de la popup pour les CR, validation de l'écran pour les PP
 	//Extraction du BIC et de l'IBAN du compte emprunteur PP
 	if (typeDossier == Constantes.CREDIT_AMORT){
-		String BIC = outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC);
-		String IBAN = outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN);
-		System.out.println("On récupère le BIC "+ BIC +" et l'IBAN "+ IBAN);
+		numeroBIC = outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC);
+		numeroIBAN = outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN);
 	}
 	outil.attendreChargementElement(cibleConfirmationValidationCredit);
 	outil.attendreEtCliquer(cibleConfirmationValidationCredit);
@@ -646,7 +646,7 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 		return scenario0;
 	} else {
 		//TODO Gestion d'erreur non bloquante : permettrai de passer à un autre murissement
-		return null;
+		return scenario0;
 	}
 	
 }
@@ -952,8 +952,10 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 		String IUN = null;
 		String typeDos = chaineProduit(this.typeDossier);
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		String numBIC = this.numeroBIC;
+		String numIBAN = this.numeroIBAN;
 		int flg = scenario.getFlag();
-		String chaine = (distrib +";"+ FFI + ";" + idClnt + ";" + IUN + ";"+ typeDos +";"+ flg +";" + sdf.format(date));
+		String chaine = (distrib +";"+ FFI + ";" + idClnt + ";" + IUN + ";"+ typeDos +";"+ flg +";" + sdf.format(date)+ ";" + numBIC +";"+ numIBAN);
 
 		
 		try {
