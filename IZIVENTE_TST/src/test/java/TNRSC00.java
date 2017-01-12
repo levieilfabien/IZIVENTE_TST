@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -76,14 +77,14 @@ public class TNRSC00 extends SC00Test {
  */
 private static final long serialVersionUID = 1L;
 
-/**
- * Fonction de lancement par défaut ne comportant aucun paramètre.
- * @throws SeleniumException en cas d'erreur.
- */
-@Test
-public void accesIzivente() throws SeleniumException {
-	lancement();
-}
+///**
+// * Fonction de lancement par défaut ne comportant aucun paramètre.
+// * @throws SeleniumException en cas d'erreur.
+// */
+//@Test
+//public void accesIzivente() throws SeleniumException {
+//	lancement();
+//}
 
 /**
  * Fonction qui effectue le lancement du scénario à partir des informations contenue dans l'objet TNRSC00 et le scénario paramètre.
@@ -165,9 +166,9 @@ public CasEssaiIziventeBean lancement(CasEssaiIziventeBean scenario0) throws Sel
 			scenario0.getTests().add(CT06MiseGestion(scenario0, outil));
 		}
 		
-		if (murissement) {
-			scenario0.getTests().add(CT07Murissement(scenario0, outil));
-		}
+//		if (murissement) {
+//			scenario0.getTests().add(CT07Murissement(scenario0));
+//		}
 		
 	} catch (SeleniumException ex) {
 		// Finalisation en erreur du cas de test.
@@ -625,26 +626,19 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, Sele
 	return CT06;
 }
 
-public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException{
-	CasEssaiIziventeBean CT07 = new CasEssaiIziventeBean();
-	Boolean creditRenouvelable = null;
+public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 	String siocID = IZIVENTEOutils.derniersCaracteres(scenario0.getNumeroFFI(), 8);
-	if (typeDossier != Constantes.CREDIT_AMORT){
-		creditRenouvelable = true;
-	} else {
-		creditRenouvelable = false;
-	}
 	String date = sdf.format(new Date());
-	Boolean retour = IZIVENTEOutils.murissement(siocID, this.distributeur, creditRenouvelable, date);
-	if (retour == true){
-		scenario0.setFlag(4);
-		ecritureFichierDonnees(scenario0, new Date());
+	Boolean retour = IZIVENTEOutils.murissement(siocID, this.distributeur, typeDossier != Constantes.CREDIT_AMORT, date);
+	if (retour){
+		scenario0.setFlag(Constantes.ETAPE_SUIVANTE_MEG);
+		return scenario0;
+	} else {
+		//TODO véritable gestion d'erreur : Attention ne doit pas être bloquant
+		System.out.println("Le murissement n'a pas fonctionné");
+		return null;
 	}
-	else { System.out.println("Le murissement n'a pas fonctionné");
-	}
-	return CT07;
-	
 	
 }
 
@@ -1040,7 +1034,7 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0, Sele
 		this.murissement = false;
 		
 		// On récupère le contenu du fichier de donnée.
-		List<String> listeInstances = this.renvoyerContenuFichierDonnee(Constantes.ETAPE_SUIVANTE_MEG);
+		List<String> listeInstances = this.renvoyerContenuFichierDonnee(Constantes.ETAPE_SUIVANTE_MEF);
 		
 		for (String instance : listeInstances) {
 			// On initialise le scénario avec les données de l'instance
@@ -1068,8 +1062,15 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0, Sele
 			
 			if (simulationForc != null) {
 				//Reprise du dossier pour murissement
-				CasEssaiIziventeBean simulationMuri = this.lancement(simulationForc);
-				this.ecritureFichierDonnees(simulationMuri, new Date());
+				//CasEssaiIziventeBean simulationMuri = this.lancement(simulationForc);
+				GregorianCalendar calendar = new GregorianCalendar();
+				if (calendar.get(Calendar.DAY_OF_WEEK) >= Calendar.FRIDAY) {
+					calendar.add(Calendar.DAY_OF_YEAR, 4);
+				} else {
+					calendar.add(Calendar.DAY_OF_YEAR, 2);
+				}
+				
+				this.ecritureFichierDonnees(CT07Murissement(simulationForc), calendar.getTime());
 			}
 			
 		}

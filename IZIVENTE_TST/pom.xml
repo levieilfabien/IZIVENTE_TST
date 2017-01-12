@@ -54,14 +54,14 @@
 			<artifactId>TAG_TST</artifactId>
 			<version>0.1.0-SNAPSHOT</version>
 			<scope>system</scope>
-			<systemPath>C:\Users\bardouma\workspace2\TAG_TST\target\TAG_TST-0.1.0-SNAPSHOT-jar-with-dependencies.jar</systemPath>
+			<systemPath>C:\work\repository\TAG_TST\TAG_TST\0.1.0-SNAPSHOT\TAG_TST-0.1.0-SNAPSHOT-jar-with-dependencies.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>DIVER_SQL</groupId>
 			<artifactId>sqljdbc42</artifactId>
 			<version>42</version>
 			<scope>system</scope>
-			<systemPath>C:\Users\bardouma\workspace\sqljdbc42.jar</systemPath>
+			<systemPath>C:\work\driver\sqljdbc_4.2\fra\sqljdbc42.jar</systemPath>
 		</dependency>
 	</dependencies>
 </project>

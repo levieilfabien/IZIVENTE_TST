@@ -26,9 +26,12 @@ public class TransverseSC01Test extends TNRSC00 {
 		this.tiersCoEmp = false;
 		this.assuranceEmp = false;
 		this.assuranceTiers = false;
+		this.montantCredit = "8000";
+		this.coutProjet = "8000";
 		
-		miseAEdit();
-		miseEnForce();
+		//miseAEdit();
+		//miseEnForce();
+		murissement();
 		
 	}
 	

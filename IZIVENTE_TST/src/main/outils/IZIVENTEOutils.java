@@ -156,9 +156,9 @@ public class IZIVENTEOutils {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			Connection connect = null;
 			if (distributeur == Constantes.CAS_BP)  {
-				connect = DriverManager.getConnection(PropertiesOutil.getInfoConstante("URL_BDD_IZIBOX_BP"), PropertiesOutil.getInfoConstante("USER_BDD_IZIBOX"), PropertiesOutil.getInfoConstante("PWD_BDD_IZIBOX"));
+				connect = DriverManager.getConnection(PropertiesOutil.getInfoEnvConstante("URL_BDD_IZIBOX_BP"), PropertiesOutil.getInfoEnvConstante("USER_BDD_IZIBOX"), PropertiesOutil.getInfoEnvConstante("PWD_BDD_IZIBOX"));
 			} else {
-				connect = DriverManager.getConnection(PropertiesOutil.getInfoConstante("URL_BDD_IZIBOX_CE"), PropertiesOutil.getInfoConstante("USER_BDD_IZIBOX"), PropertiesOutil.getInfoConstante("PWD_BDD_IZIBOX"));
+				connect = DriverManager.getConnection(PropertiesOutil.getInfoEnvConstante("URL_BDD_IZIBOX_CE"), PropertiesOutil.getInfoEnvConstante("USER_BDD_IZIBOX"), PropertiesOutil.getInfoEnvConstante("PWD_BDD_IZIBOX"));
 			}
 			Statement st = connect.createStatement();
 			
