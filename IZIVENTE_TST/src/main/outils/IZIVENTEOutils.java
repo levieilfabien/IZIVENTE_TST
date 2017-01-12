@@ -150,7 +150,7 @@ public class IZIVENTEOutils {
 			}
 			dateJour = sdf.format(new Date());
 			
-			System.out.println("On utilisera pour le murissement la date : " + nouvelleDate);
+			//System.out.println("On utilisera pour le murissement la date : " + nouvelleDate);
 			
 			// Connexion à IZIBOX recette
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -166,7 +166,7 @@ public class IZIVENTEOutils {
 			String SQL = "select sioc_id, SIOC_DATE_SIGNATURE_CONTRAT from [IZIBOX].[dbo].[SIMULATION_OPC_CONTRAT] simu where sioc_id = " + siocID;
 			ResultSet rs = st.executeQuery(SQL);
 			while (rs.next()) {
-				System.out.println("La date de signature du contrat initiale est " + rs.getString("SIOC_DATE_SIGNATURE_CONTRAT"));
+				//System.out.println("La date de signature du contrat initiale est " + rs.getString("SIOC_DATE_SIGNATURE_CONTRAT"));
 			}
 			
 			SQL ="update [IZIBOX].[dbo].[SIMULATION_OPC_CONTRAT] set SIOC_DATE_SIGNATURE_CONTRAT = '" + nouvelleDate + "' where sioc_id = " + siocID;
@@ -200,7 +200,6 @@ public class IZIVENTEOutils {
 			retour = false;
 			e.printStackTrace();
 		} 
-		
 		
 		return retour;
 	}
