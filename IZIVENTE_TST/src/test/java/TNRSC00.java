@@ -59,7 +59,7 @@ public class TNRSC00 extends SC00Test {
 	Boolean tiersCoEmp = false;
 	Boolean tiersCaution = false;
 	//Renseigner le numéro de personne physique pour le coemprunteur tiers (BP : 9500855 P1E CE : 942500400).
-	String numPersPhysTiers = "942500400";
+	String numPersPhysTiers = "9500855";
 	//Définir la présence d'assurance pour les emprunteurs (true = oui /false = non).
 	Boolean assuranceEmp = false;
 	Boolean assuranceConjointCoEmp = false;

@@ -521,17 +521,6 @@ public class Cibles {
 	 */
 	public static final CibleBean LIBELLE_POPUP_ALERTES_ = new CibleBean(Clefs.CRITERES_ITERATIF, "*", "id=popupMessagesErreursPopupContentTable", CibleBean.RECHERCHE, CibleBean.CRITERE_TEXTE + "=Alerte(s)");
 
-	
-	//FACELIA BIC   : validation:tab_compte_participant:0:j_id178
-	//FACELIA IBAN  : validation:tab_compte_participant:0:j_id181
-	//IZICARTE BIC  : validation:tab_compte_participant:0:j_id191
-	//IZICARTE IBAN : validation:tab_compte_participant:0:j_id194
-	//CREODIS BIC   : validation:tab_compte_participant:0:j_id178
-	//CREODIS IBAN  : validation:tab_compte_participant:0:j_id181
-	//PPBP BIC      : tab_compte_participant:0:j_id355
-	//PPBP IBAN     : tab_compte_participant:0:j_id358
-	//PPCE BIC      : tab_compte_participant:0:j_id388
-	//PPCE IBAN     : tab_compte_participant:0:j_id391
 	/**
 	 * Element pour la récupération du BIC du compte emprunteur
 	 */
