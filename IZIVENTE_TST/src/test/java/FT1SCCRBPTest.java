@@ -31,7 +31,8 @@ public void FT1SCCRBPTestLancement() throws SeleniumException {
 		this.assuranceEmp = true;
 		this.montantCredit = "8000";
 
-		miseAEdit();
+		simulation();
+		//miseAEdit();
 		//miseEnForce();
 		//murissement();
 	}

@@ -244,7 +244,7 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario, Sele
     outil.attendreChargementElement(Cibles.SELECTEUR_IDENTIFICATION_PARTICIPANT, true, true);
 	outil.selectionner("RCHNUMERO", Cibles.SELECTEUR_IDENTIFICATION_PARTICIPANT, false);
 	outil.attendreChargementElement(Cibles.SAISIE_NUMERO_PERS_PHY);
-	outil.viderEtSaisir("942500400", Cibles.SAISIE_NUMERO_PERS_PHY);
+	outil.viderEtSaisir("942500500", Cibles.SAISIE_NUMERO_PERS_PHY);
 	outil.cliquer(Cibles.BOUTON_RECHERCHER);
 	//Ajout du tiers
     outil.attendreChargementElement(Cibles.BOUTON_AJOUT_TIERS);
@@ -312,9 +312,9 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	outil.attendrePresenceTexte("Alerte(s)");
 	//outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OK_MAJ);
 	outil.cliquerSiPossible(Cibles.BOUTON_POPUP_OK_MAJ);
-	//outil.attendreEtCliquer(Cibles.BOUTON_VALIDER);
-	outil.attendreChargementElement(Cibles.BOUTON_ACCES_VALIDATION_OPC,true, true);
-	outil.cliquer(Cibles.BOUTON_ACCES_VALIDATION_OPC);
+	outil.attendreEtCliquer(Cibles.BOUTON_VALIDER);
+	//outil.attendreChargementElement(Cibles.BOUTON_ACCES_VALIDATION_OPC, true, true);
+	//outil.cliquer(Cibles.BOUTON_ACCES_VALIDATION_OPC);
 	CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
 	//Step 2 : Sélectionner le compte de prélèvement et valider l'offre de crédit
 	outil.attendrePresenceTexte("Dossier de vente");

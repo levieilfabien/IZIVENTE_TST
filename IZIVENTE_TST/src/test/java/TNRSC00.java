@@ -65,6 +65,7 @@ public class TNRSC00 extends SC00Test {
 	Boolean assuranceConjointCoEmp = false;
 	Boolean assuranceTiers = false;
 	//Définir l'état de fin de saisie (EDIT = false ; FORCE = true)
+	public Boolean simulation = false;
 	public Boolean edition = false;
 	Boolean miseEnGestion = false;
 	Boolean murissement = false;
@@ -153,6 +154,11 @@ public CasEssaiIziventeBean lancement(CasEssaiIziventeBean scenario0) throws Sel
 	SeleniumOutils outil = obtenirDriver(scenario0);
     
     try {
+    	if (simulation){
+    		scenario0.getTests().add(CT01Initialisation(scenario0, outil));
+			scenario0.getTests().add(CT02OuvertureDossier(scenario0, outil));
+			scenario0.getTests().add(CT03SaisieDossier(scenario0, outil));
+    	}
     	if (edition) {
 			scenario0.getTests().add(CT01Initialisation(scenario0, outil));
 			scenario0.getTests().add(CT02OuvertureDossier(scenario0, outil));
@@ -165,11 +171,7 @@ public CasEssaiIziventeBean lancement(CasEssaiIziventeBean scenario0) throws Sel
 			scenario0.getTests().add(CT01Initialisation(scenario0, outil));
 			scenario0.getTests().add(CT06MiseGestion(scenario0, outil));
 		}
-		
-//		if (murissement) {
-//			scenario0.getTests().add(CT07Murissement(scenario0));
-//		}
-		
+			
 	} catch (SeleniumException ex) {
 		// Finalisation en erreur du cas de test.
 		finaliserTestEnErreur(outil, scenario0, ex, scenario0.getNomCasEssai() + scenario0.getDateCreation().getTime());
@@ -317,11 +319,11 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 	switch(typeDossier){
 		case Constantes.FACELIA : 
 			outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT_CR, true, true);
-			outil.selectionner("FACELIA", Cibles.SELECTEUR_OFFRE_CREDIT_CR, false);
-			outil.attendre(2);
+			outil.selectionner("FACELIA", Cibles.SELECTEUR_OFFRE_CREDIT_CR, true);
+			//outil.attendre(2);
 			CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
 			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
-			outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR);
+			outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR, true, true);
 			outil.selectionner("Prêt immobilier", Cibles.SELECTEUR_SITUATION_VENTE_CR);
 			outil.viderEtSaisir(montantCredit,  Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
 			outil.attendreChargementElement(Cibles.SAISIE_MENSUALITE_CR, true, true); 
@@ -329,22 +331,20 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 		break;
 		case Constantes.CREODIS :
 			outil.attendrePresenceTexte("INFORMATIONS DU CREDIT");
-			outil.attendre(2);
 			CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
 			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
-			outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR);
+			outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR, true, true);
 			outil.selectionner("Entrée en relation", Cibles.SELECTEUR_SITUATION_VENTE_CR);
 			outil.viderEtSaisir(montantCredit, Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
 			outil.viderEtSaisir(mensualite, Cibles.SAISIE_MENSUALITE_CR);
 		break;
 		case Constantes.IZICARTE : 
 			outil.attendrePresenceTexte("Informations du crédit");
-			outil.attendre(2);
 			CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
 			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
 			outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR, true, true);
-			outil.selectionner("BANC", Cibles.SELECTEUR_SITUATION_VENTE_CR);
-			outil.attendre(2);
+			outil.selectionner("BANC", Cibles.SELECTEUR_SITUATION_VENTE_CR, true);
+			//outil.attendre(2);
 			outil.attendreChargementElement(Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR, true, true);
 			outil.viderEtSaisir(montantCredit, Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
 		break;
@@ -352,15 +352,16 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 			outil.attendre(1);
 			outil.attendreChargementElement(Cibles.SELECTEUR_UNIVERS_CREDIT, true, true);
 			outil.selectionner(typeUnivers, Cibles.SELECTEUR_UNIVERS_CREDIT, false);
-			outil.attendre(2); //2 secondes ne suffisent pas
+			//outil.attendre(2); //2 secondes ne suffisent pas
+			outil.attendreChargementElement(Cibles.SELECTEUR_UNIVERS_CREDIT, true, true);
 			outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT, true, true);
 			outil.selectionner(typeOffre, Cibles.SELECTEUR_OFFRE_CREDIT, false);
 			//outil.attendre(1);
 			CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
 			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
 			outil.attendreChargementElement(Cibles.SELECTEUR_OBJET_FINANCE, true, true);
-			outil.selectionner(typeObjet, Cibles.SELECTEUR_OBJET_FINANCE);
-			outil.attendre(1);
+			outil.selectionner(typeObjet, Cibles.SELECTEUR_OBJET_FINANCE, false);
+			outil.attendreChargementElement(Cibles.SAISIE_COUT_PROJET);
 			outil.viderEtSaisir(coutProjet, Cibles.SAISIE_COUT_PROJET);
 			outil.viderEtSaisir(montantCredit, Cibles.SAISIE_MONTANT_DEMANDE);
 			outil.viderEtSaisir(mensualite, Cibles.SAISIE_MENSUALITE_PP);
@@ -490,23 +491,19 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	
 	//Step 1 : Valider de l'offre contrat de crédit
 	//Extraction du BIC et de l'IBAN du compte emprunteur CR
-	
 	if (typeDossier != Constantes.CREDIT_AMORT){
 		numeroBIC = outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC);
 		numeroIBAN = outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN);
 	}
-	
 	outil.attendreChargementElement(cibleAttenteValidationCredit, true, true);
 	outil.attendreEtCliquer(cibleValidationCredit);
 	CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
 	//Step 2 : Finalisation de l'instruction : Validation de la popup pour les CR, validation de l'écran pour les PP
 	//Extraction du BIC et de l'IBAN du compte emprunteur PP
-	
 	if (typeDossier == Constantes.CREDIT_AMORT){
 		numeroBIC = outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC);
 		numeroIBAN = outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN);
 	}
-	
 	outil.attendreChargementElement(cibleConfirmationValidationCredit);
 	outil.attendreEtCliquer(cibleConfirmationValidationCredit);
 	CT05.validerObjectif(outil.getDriver(), "VALIDATIONINSTRUCTION", true);
@@ -1014,7 +1011,16 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 		}
 		return scenario;
 	}
-	
+	public void simulation() throws SeleniumException {
+		this.simulation = true;
+		this.edition = false;
+		this.miseEnGestion = false;
+		this.murissement = false;
+		
+		// Lancement la simulation.
+		CasEssaiIziventeBean simulationSimu = this.lancement();
+		this.ecritureFichierDonnees(simulationSimu, new Date());
+	}
 	public void miseAEdit() throws SeleniumException {
 		// Déclarer une instance de test IZIVENTE
 		//TNRSC00 generateurSimu = new TNRSC00();

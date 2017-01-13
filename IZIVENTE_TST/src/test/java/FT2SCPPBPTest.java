@@ -35,7 +35,8 @@ public void fT2SCPPBPTest() throws SeleniumException {
 		this.modificateur.emprunteurJeune = true;
 		this.modificateur.coEmprunteurJeune = true;
 		
-		miseAEdit();
+		simulation();
+		//miseAEdit();
 		//miseEnForce();
 	}
 }
