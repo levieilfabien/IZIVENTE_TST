@@ -193,7 +193,7 @@ public CasEssaiIziventeBean lancement(CasEssaiIziventeBean scenario0) throws Sel
 public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT01
 	CasEssaiIziventeBean CT01 = new CasEssaiIziventeBean();
-	CT01.setAlm(false);
+	CT01.setAlm(scenario0.getAlm());
 	CT01.setNomCasEssai("CT01 -" + getTime());
 	CT01.setDescriptif("CT01 - Accès Izivente et Initialisation");
 	CT01.setNomTestPlan("CT01 - Accès Izivente et Initialisation");
@@ -226,7 +226,7 @@ public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario0, S
 public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT02
 	CasEssaiIziventeBean CT02 = new CasEssaiIziventeBean();
-	CT02.setAlm(false);
+	CT02.setAlm(scenario0.getAlm());
 	CT02.setNomCasEssai("CT02 -" + getTime());
 	CT02.setDescriptif("CT02 - Ouverture du dossier");
 	CT02.setNomTestPlan("CT02 - Ouverture du dossier");	
@@ -297,7 +297,7 @@ public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario0,
 public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT03
 	CasEssaiIziventeBean CT03 = new CasEssaiIziventeBean();
-	CT03.setAlm(false);
+	CT03.setAlm(scenario0.getAlm());
 	CT03.setNomCasEssai("CT03 -" + getTime());
 	CT03.setDescriptif("CT03 - Saisie du dossier");
 	CT03.setNomTestPlan("CT03 - Saisie du dossier");
@@ -382,7 +382,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT04
 	CasEssaiIziventeBean CT04 = new CasEssaiIziventeBean();
-	CT04.setAlm(false);
+	CT04.setAlm(scenario0.getAlm());
 	CT04.setNomCasEssai("CT04 -" + getTime());
 	CT04.setDescriptif("CT04 - Choix des participants");
 	CT04.setNomTestPlan("CT04 - Choix des participants");
@@ -440,7 +440,7 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, Sel
 public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT05
 	CasEssaiIziventeBean CT05 = new CasEssaiIziventeBean();
-	CT05.setAlm(false);
+	CT05.setAlm(scenario0.getAlm());
 	CT05.setNomCasEssai("CT05 -" + getTime());
 	CT05.setDescriptif("CT05 - Finalisation de l instruction");
 	CT05.setNomTestPlan("CT05 - Finalisation de l instruction");
@@ -565,7 +565,7 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramétrage du CT06
 	CasEssaiIziventeBean CT06 = new CasEssaiIziventeBean();
-	CT06.setAlm(false);
+	CT06.setAlm(scenario0.getAlm());
 	//Information issues du scénario.
 	//Gestion des steps
 	CT06.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT06.getNomCasEssai() + CT06.getTime()));
@@ -667,6 +667,11 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 		}
 	}
 	
+	/**
+	 * Fonction dédiée à l'ajout d'un conjoint co emprunteur.
+	 * @param outil la boite à outil selenium.
+	 * @throws SeleniumException en cas d'impossibilité d'ajouter le conjoint co emprunteur.
+	 */
 	private void ajoutConjointCoEmprunteurUnique(SeleniumOutils outil) throws SeleniumException {
 		//On clique sur le bouton "Ajouter Conjoint CoEmprunteur" si on ne veut que le conjoint coemprunteur sur le dossier.
 		//Cette option n'est accessible que pour les PP et les CR IZICARTE dont l'emprunteur et le conjoint ont un compte joint
@@ -674,9 +679,9 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 			outil.cliquer(Cibles.BOUTON_AJOUT_CONJOINT);
 		} else{
 			//TODO Gérer le mode IZICARTE avec compte joint
-			System.out.println("On ne peut pas inscrire de co emprunteur sur un CR sauf Izicarte muni d'un compte joint");
 			//outil.attendreChargementElement(Cibles.LIBELLE_ONGLET_AJOUT_PARTICIPANT);
     		//outil.cliquer(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
+			outil.logger("On ne peut pas inscrire de co emprunteur sur un CR sauf Izicarte muni d'un compte joint");
 		}
 	}
 	
@@ -726,57 +731,54 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 		outil.attendre(1);
 		
 		if (assuranceEmp == true ) {
-				if (typeDossier != Constantes.CREODIS) {
-					outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
-					outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
-					outil.attendre(2);
-					switch (typeDossier) {
-					case Constantes.CREDIT_AMORT :
-						outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);
-						outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-						if (Integer.parseInt(montantCredit) > 21000){
-							outil.attendreChargementElement(Cibles.CASE_SELECTION_REPONSE_ASSURANCE_NON);
-							outil.cliquerMultiple(Cibles.CASE_SELECTION_REPONSE_ASSURANCE_NON);
-							outil.cliquer(Cibles.BOUTON_OUI_DES);
-							outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASSURANCE_DIM);
-						}
-
-					break;
-					case Constantes.IZICARTE :
-						outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR, true, true);
-						outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
-					break;
-					case Constantes.FACELIA :
-							outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_FACELIA);
-						outil.cliquer(Cibles.RADIO_AVEC_ASS_FACELIA);
-					break;
+			if (typeDossier != Constantes.CREODIS) {
+				outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
+				outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
+				outil.attendre(2);
+				switch (typeDossier) {
+				case Constantes.CREDIT_AMORT :
+					outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);
+					outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+					if (Integer.parseInt(montantCredit) > 21000){
+						outil.attendreChargementElement(Cibles.CASE_SELECTION_REPONSE_ASSURANCE_NON);
+						outil.cliquerMultiple(Cibles.CASE_SELECTION_REPONSE_ASSURANCE_NON);
+						outil.cliquer(Cibles.BOUTON_OUI_DES);
+						outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASSURANCE_DIM);
 					}
+					break;
+				case Constantes.IZICARTE :
+					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR, true, true);
+					outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
+					break;
+				case Constantes.FACELIA :
+					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_FACELIA, true, true);
+					outil.cliquer(Cibles.RADIO_AVEC_ASS_FACELIA);
+					break;
 				}
-				else {
-					outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASS_1_CR);
-				}	
-		}
-		else{
+			} else {
+				outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASS_1_CR);
+			}	
+		} else {
 			switch (typeDossier) {
-					case Constantes.CREDIT_AMORT :
-						outil.attendre(2);
-						outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
-					break;
-					case Constantes.IZICARTE :
-						outil.attendre(1);
-						outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_CR);
-						outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
-					break;
-					case Constantes.FACELIA :
-						outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_FACELIA);
-						outil.cliquer(Cibles.RADIO_SANS_ASS_FACELIA);
-					break;
-					case Constantes.CREODIS :
-						outil.attendreEtCliquer(Cibles.RADIO_SELECTION_SANS_ASS_CR);
-					break;
-				}
+				case Constantes.CREDIT_AMORT :
+					outil.attendre(2);
+					outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
+				break;
+				case Constantes.IZICARTE :
+					outil.attendre(1);
+					outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_CR);
+					outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
+				break;
+				case Constantes.FACELIA :
+					outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_FACELIA);
+					outil.cliquer(Cibles.RADIO_SANS_ASS_FACELIA);
+				break;
+				case Constantes.CREODIS :
+					outil.attendreEtCliquer(Cibles.RADIO_SELECTION_SANS_ASS_CR);
+				break;
+			}
 		}
-		}
+	}
 
 	/**
 	 * Fonction générique pour le choix d'une assurance sur le conjoint
@@ -806,23 +808,23 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 
 		}
 	}
+	
 	/**
 	 * Fonction générique pour le choix d'une assurance sur le tiers
 	 * @param outil la boîte à outil
 	 * @throws SeleniumException en cas d'erreur
 	 */
 	private void assuranceTiers(SeleniumOutils outil) throws SeleniumException {
-		if((tiersCoEmp == true || tiersCaution == true) && (assuranceConjointCoEmp == false || assuranceEmp == false)){
+		if((tiersCoEmp == true || tiersCaution == true) && (assuranceConjointCoEmp == false || assuranceEmp == false)) {
 			outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT1);
 			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
+			//TODO remplace le attendre 1 ne devrais pas être nécessaire.
 			outil.attendre(1);
 			
 			if(assuranceTiers){
 				outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
 				outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);	
-			}
-			else{
-				outil.attendre(1);
+			} else{
 				outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ);
 				outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
 			}
@@ -860,15 +862,8 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 				outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT2);
 				outil.attendre(1);
 				outil.attendreChargementElement(Cibles.SELECTEUR_ROLE_PARTICIPANT, true, true);
-				String roleDuConjoint = "";
-				
-				if (conjointCoEmp) {
-					roleDuConjoint = "C";
-				} else {
-					roleDuConjoint = "G";
-				}
-				
-				outil.selectionner(roleDuConjoint, Cibles.SELECTEUR_ROLE_PARTICIPANT);
+				// Si le role du conjoint est co emp ou sélectionne "C" sinon "G"
+				outil.selectionner(conjointCoEmp?"C":"G", Cibles.SELECTEUR_ROLE_PARTICIPANT);
 			}
 		}
 	}
@@ -892,15 +887,8 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 		outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT1, true, true);
 		outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
 		outil.attendre(1);
-		String roleDuTiers = "";
-		
-		if (tiersCoEmp) {
-			roleDuTiers = "C";
-		} else {
-			roleDuTiers = "G";
-		}
-
-		outil.selectionner(roleDuTiers, Cibles.SELECTEUR_ROLE_PARTICIPANT);
+		// Si le role du tiers est co emp ou sélectionne "C" sinon "G"
+		outil.selectionner(tiersCoEmp?"C":"G", Cibles.SELECTEUR_ROLE_PARTICIPANT);
 		}
 	}
 	/**
@@ -910,13 +898,12 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 		String dist = "";
 		if (casDistributeur == Constantes.CAS_CE){
 			dist = "CE";
-		}
-		else {
+		} else {
 			dist = "BP";
 		}
 		return dist;
-		
 	}
+	
 	/**
 	 * Fonction permettant de récupérer une chaîne de caractère (CR ou PP) en fonction du type de dossier
 	 * @param typeDossier2
@@ -958,7 +945,6 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 		int flg = scenario.getFlag();
 		String chaine = (distrib +";"+ FFI + ";" + idClnt + ";" + IUN + ";"+ typeDos +";"+ flg +";" + sdf.format(date)+ ";" + numBIC +";"+ numIBAN);
 
-		
 		try {
 			boolean existence = remplacer(scenario.getNumeroFFI(), chaine);
 			if (!existence) {
@@ -972,6 +958,11 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 		} 
 	}
 	
+	/**
+	 * Initialise un cas d'essai IZIVENTE à partir d'une instance connue extraite du fichier de donnée client.
+	 * @param instance la ligne issue du fichier de donnée servant à initaliser le cas d'essai IZIVENTE.
+	 * @return le nouveau cas d'essai initialisé.
+	 */
 	public CasEssaiIziventeBean initialiserScenario(String instance) {
 		CasEssaiIziventeBean scenario = null;
 		try {
@@ -1011,6 +1002,11 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 		}
 		return scenario;
 	}
+	
+	/**
+	 * Fonction réalisant l'étape de simulation.
+	 * @throws SeleniumException en cas d'erreur.
+	 */
 	public void simulation() throws SeleniumException {
 		this.simulation = true;
 		this.edition = false;
@@ -1021,6 +1017,11 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 		CasEssaiIziventeBean simulationSimu = this.lancement();
 		this.ecritureFichierDonnees(simulationSimu, new Date());
 	}
+	
+	/**
+	 * Fonction réalisant l'étape de mise à l'état EDIT.
+	 * @throws SeleniumException en cas d'erreur.
+	 */
 	public void miseAEdit() throws SeleniumException {
 		// Déclarer une instance de test IZIVENTE
 		//TNRSC00 generateurSimu = new TNRSC00();
@@ -1046,6 +1047,10 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 		this.ecritureFichierDonnees(simulationEdit, new Date());
 	}
 	
+	/**
+	 * Fonction permettant la mise en force de dossier identifié dans le fichier de donnée comme devant être mis en force.
+	 * @throws SeleniumException en cas d'erreur.
+	 */
 	public void miseEnForce() throws SeleniumException {
 		// Déclarer une instance de test IZIVENTE
 		//TNRSC00 generateurSimu = new TNRSC00();
@@ -1070,6 +1075,10 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 		}
 	}
 	
+	/**
+	 * Effectue le murissement de dossiers présents dans le fichier de donnée à l'étape de murissement.
+	 * @throws SeleniumException en cas d'erreur.
+	 */
 	public void murissement() throws SeleniumException {
 		this.edition = false;
 		this.miseEnGestion = false;
