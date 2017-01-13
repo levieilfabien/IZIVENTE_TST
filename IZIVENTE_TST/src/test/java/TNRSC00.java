@@ -66,6 +66,7 @@ public class TNRSC00 extends SC00Test {
 	Boolean assuranceTiers = false;
 	//Définir l'état de fin de saisie (EDIT = false ; FORCE = true)
 	public Boolean simulation = false;
+	public Boolean validation = false;
 	public Boolean edition = false;
 	Boolean miseEnGestion = false;
 	Boolean murissement = false;
@@ -158,18 +159,27 @@ public CasEssaiIziventeBean lancement(CasEssaiIziventeBean scenario0) throws Sel
     		scenario0.getTests().add(CT01Initialisation(scenario0, outil));
 			scenario0.getTests().add(CT02OuvertureDossier(scenario0, outil));
 			scenario0.getTests().add(CT03SaisieDossier(scenario0, outil));
+			scenario0.getTests().add(CT04Participants(scenario0, outil));
+    	}
+    	if (validation){
+    		scenario0.getTests().add(CT01Initialisation(scenario0, outil));
+			scenario0.getTests().add(CT02OuvertureDossier(scenario0, outil));
+			scenario0.getTests().add(CT03SaisieDossier(scenario0, outil));
+			scenario0.getTests().add(CT04Participants(scenario0, outil));
+			scenario0.getTests().add(CT05Validation(scenario0, outil));
     	}
     	if (edition) {
 			scenario0.getTests().add(CT01Initialisation(scenario0, outil));
 			scenario0.getTests().add(CT02OuvertureDossier(scenario0, outil));
 			scenario0.getTests().add(CT03SaisieDossier(scenario0, outil));
 			scenario0.getTests().add(CT04Participants(scenario0, outil));
-			scenario0.getTests().add(CT05FinalisationInstruction(scenario0, outil));
+			scenario0.getTests().add(CT05Validation(scenario0, outil));
+			scenario0.getTests().add(CT06FinalisationInstruction(scenario0, outil));
     	}
 		//Condition pour accéder au cas de test de mise en force
 		if (miseEnGestion){
 			scenario0.getTests().add(CT01Initialisation(scenario0, outil));
-			scenario0.getTests().add(CT06MiseGestion(scenario0, outil));
+			scenario0.getTests().add(CT07MiseGestion(scenario0, outil));
 		}
 			
 	} catch (SeleniumException ex) {
@@ -315,7 +325,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 	// SAISIE DU DOSSIER
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Step 1 : Sélectionner l'offre désirée dans le menu déroulant selon le scénario
-	scenario0.setFlag(1);
+	scenario0.setFlag(0);
 	switch(typeDossier){
 		case Constantes.FACELIA : 
 			outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT_CR, true, true);
@@ -376,6 +386,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 	outil.cliquer(Cibles.BOUTON_SUIVANT);
 	CT03.validerObjectif(outil.getDriver(), "SAISIEDOSSIER", true);
 	CT03.validerObjectif(outil.getDriver(), CT03.getNomCasEssai() + CT03.getTime(),true);
+	
 	return CT03;
 }
 	
@@ -434,10 +445,11 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, Sel
 	}
 	CT04.validerObjectif(outil.getDriver(),  "VALIDATIONPARTICIPANTS", true);
 	CT04.validerObjectif(outil.getDriver(), CT04.getNomCasEssai() + CT04.getTime(),true);
+	scenario0.setFlag(Constantes.ETAPE_SUIVANTE_VALIDATION);
 	return CT04;
 }
 	
-public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
+public CasEssaiIziventeBean CT05Validation(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT05
 	CasEssaiIziventeBean CT05 = new CasEssaiIziventeBean();
 	CT05.setAlm(scenario0.getAlm());
@@ -453,13 +465,6 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	CT05.ajouterStep("Valider de l'offre contrat de crédit (clic sur le bouton 'Valider en contrat de crédit')", "VALIDATION", "Affichage de la pop up de finalisation de l'instruction ou de la page de dossier de vente");
 	CT05.ajouterStep("Finalisation de l'instruction (clic sur le bouton 'Oui' dans la popup de finalisation de l'instruction", "VALIDATIONINSTRUCTION", "Affichage de l'écran de synthèse de l'offre de crédit");
 	CT05.ajouterStep("Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires (choix oui/non via boutons radio).", "OPTIONS", "Choix effectués conformément au scénario");
-    CT05.ajouterStep("Imprimer la liasse de document (clic sur le bouton 'Suivant')", "IMPRESSION", "Affichage de la pop up 'Préparation contrat'");
-    CT05.ajouterStep("Attendre la fin de la préparation du contrat puis cliquer sur suivant pour envoi à l'octroi", "PREPARATION", "Deconnexion d'Izivente");
-	//Step Izicarte
-    CT05.ajouterStep("Choisir le mode de vente (face à face ou par téléphone) selon le scénario", "MODE", "Impression en pdf de la liasse");
-    //Step PP CE
-	//CT05.ajouterStep("Imprimer la synthèse de l'offtre en pdf (clic sur bouton 'Imprimer')", "IMPRESSIONSYNTHESE", "Le fichier pdf est correctement télécharge");
-	CT05.ajouterStep("Sélectionner le compte de prélèvement et valider l'offre de crédit (clic sur bouton 'Confirmer contrat de crédit')", "CONFIRMATION", "Affichage de la pop up 'Finalisation de l'instruction'");
 	CT05.ajouterStep("Vérifier les justificatifs et valider (clic bouton radio 'Vérifié' pour chaque justificatif dans la pop up de finalisation de l'instruction' et clic sur bouton 'Valider'", "VERIFICATION", "Retour sur la page de dossier de vente");
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -469,24 +474,21 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	CibleBean cibleAttenteValidationCredit = null;
 	CibleBean cibleValidationCredit = null;
 	CibleBean cibleConfirmationValidationCredit = null;
-	CibleBean cibleNumeroFFI = null;
+
 	if (typeDossier == Constantes.FACELIA || typeDossier == Constantes.IZICARTE) {
 		cibleAttenteValidationCredit = Cibles.BOUTON_VALIDER_OPC_CR;
 		cibleValidationCredit = Cibles.BOUTON_VALIDER_OPC_CR;
 		cibleConfirmationValidationCredit = Cibles.BOUTON_POPUP_OUI_MAJ;
-		cibleNumeroFFI = Cibles.ELEMENT_SPAN_NUMERO_FFI_CR;
 	}
 	if (typeDossier == Constantes.CREODIS) {
 		cibleAttenteValidationCredit = Cibles.ELEMENT_TABLEAU_PRELEVEMENT;
 		cibleValidationCredit = Cibles.BOUTON_VALIDER_CREODIS_CR;
 		cibleConfirmationValidationCredit = Cibles.BOUTON_POPUP_OUI_MAJ;
-		cibleNumeroFFI = Cibles.ELEMENT_SPAN_NUMERO_FFI_CR;
 	}
 	if (typeDossier == Constantes.CREDIT_AMORT) {
 		cibleAttenteValidationCredit = Cibles.BOUTON_ACCES_VALIDATION_OPC;
 		cibleValidationCredit = Cibles.BOUTON_ACCES_VALIDATION_OPC;
 		cibleConfirmationValidationCredit = Cibles.BOUTON_VALIDER_OPC;
-		cibleNumeroFFI = Cibles.ELEMENT_SPAN_NUMERO_FFI;
 	}
 	
 	//Step 1 : Valider de l'offre contrat de crédit
@@ -519,11 +521,46 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
 	outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
 	CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
+	CT05.validerObjectif(outil.getDriver(), CT05.getNomCasEssai() + CT05.getTime(),true);
+	scenario0.setFlag(Constantes.ETAPE_SUIVANTE_EDITION);
+	return CT05;
+}
+public CasEssaiIziventeBean CT06FinalisationInstruction(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
+	//Paramètrage du CT06
+	CasEssaiIziventeBean CT06 = new CasEssaiIziventeBean();
+	CT06.setAlm(scenario0.getAlm());
+	CT06.setNomCasEssai("CT06 -" + getTime());
+	CT06.setDescriptif("CT06 - Finalisation de l instruction");
+	CT06.setNomTestPlan("CT06 - Finalisation de l instruction");
+	//Information issues du scénario.
+	CT06.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
+	CT06.setCheminTestLab(scenario0.getCheminTestLab());
+	CT06.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
+	//Gestion des steps
+	CT06.ajouterStep("Imprimer la liasse de document (clic sur le bouton 'Suivant')", "IMPRESSION", "Affichage de la pop up 'Préparation contrat'");
+   //Step Izicarte
+    CT06.ajouterStep("Choisir le mode de vente (face à face ou par téléphone) selon le scénario", "MODE", "Impression en pdf de la liasse");
+    //Step PP CE
+	CT06.ajouterStep("Imprimer la synthèse de l'offtre en pdf (clic sur bouton 'Imprimer')", "IMPRESSIONSYNTHESE", "Le fichier pdf est correctement télécharge");
+	CT06.ajouterStep("Sélectionner le compte de prélèvement et valider l'offre de crédit (clic sur bouton 'Confirmer contrat de crédit')", "CONFIRMATION", "Affichage de la pop up 'Finalisation de l'instruction'");
+	CT06.ajouterStep("Attendre la fin de la préparation du contrat puis cliquer sur suivant pour envoi à l'octroi", "PREPARATION", "Deconnexion d'Izivente");
+		
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	// FINALISATION DE L'INSTRUCTION
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	CibleBean cibleNumeroFFI = null;
+	if (typeDossier != Constantes.CREDIT_AMORT) {
+		cibleNumeroFFI = Cibles.ELEMENT_SPAN_NUMERO_FFI_CR;
+	}else {
+		cibleNumeroFFI = Cibles.ELEMENT_SPAN_NUMERO_FFI;
+	}
+	//TODO Fin des tests pour la validation
 	// Pour les PP on effectue l'impression de la synthèse
 	if (typeDossier == Constantes.CREDIT_AMORT) {
 		//Step 5 : Imprimer la synthèse de l'offre
 		outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_SYNTHESE);
-		CT05.validerObjectif(outil.getDriver(), "IMPRESSIONSYNTHESE", true);
+		CT06.validerObjectif(outil.getDriver(), "IMPRESSIONSYNTHESE", true);
 	}
 	// Extraction du numéro FFI depuis l'interface
 	scenario0.setNumeroFFI(outil.obtenirValeur(cibleNumeroFFI));
@@ -531,56 +568,54 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	outil.attendreChargementElement(Cibles.BOUTON_IMPRIMER_LIASSE);
 	outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_LIASSE);
 	outil.attendrePresenceTexte("Préparation contrat");
-	CT05.validerObjectif(outil.getDriver(), "IMPRESSION", true);
+	CT06.validerObjectif(outil.getDriver(), "IMPRESSION", true);
 
 	// Dans le cas d'un IZICARTE on ne passe pas par les mêmes écrans après l'édition.
 	if (typeDossier == Constantes.CREDIT_AMORT) {
 		//Step 7 : Préparation du contrat et envoi à l'octroi		
 		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT);
-		CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
+		CT06.validerObjectif(outil.getDriver(), "PREPARATION", true);
 	} else if (typeDossier == Constantes.IZICARTE) {
 		//Step 7 : Accès à l'IHM pour reprise du dossier
 		outil.attendreChargementElement(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
 		outil.cliquer(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
-		CT05.validerObjectif(outil.getDriver(), "MODE", true);
+		CT06.validerObjectif(outil.getDriver(), "MODE", true);
 		//Step 8 : Fin de l'édition
 		outil.attendreChargementElement(Cibles.BOUTON_PASSAGE_OCTROI_CR, true, true);
 		outil.attendreChargementElement(Cibles.BOUTON_TERMINER_EDITION_CR, true, true);
 		outil.cliquer(Cibles.BOUTON_TERMINER_EDITION_CR);
-		CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);
-		CT05.validerObjectif(outil.getDriver(), "CONFIRMATION", true);
+		CT06.validerObjectif(outil.getDriver(), "CONFIRMATION", true);
 	} else {
 		//Step 7 : Préparation du contrat et envoi à l'octroi	
 		outil.attendrePresenceTexte("Passage vers le choix du mode de signature");
 		outil.attendreChargementElement(Cibles.ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE);
 		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT_FIN);
-		CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
+		CT06.validerObjectif(outil.getDriver(), "PREPARATION", true);
 	}
 		
-	scenario0.setFlag(2);
-	CT05.validerObjectif(outil.getDriver(), CT05.getNomCasEssai() + CT05.getTime(),true);
-	return CT05;
+	scenario0.setFlag(Constantes.ETAPE_SUIVANTE_MEF);
+	CT06.validerObjectif(outil.getDriver(), CT06.getNomCasEssai() + CT06.getTime(),true);
+	return CT06;
 }
-
-public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
-	//Paramétrage du CT06
-	CasEssaiIziventeBean CT06 = new CasEssaiIziventeBean();
-	CT06.setAlm(scenario0.getAlm());
+public CasEssaiIziventeBean CT07MiseGestion(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
+	//Paramétrage du CT07
+	CasEssaiIziventeBean CT07 = new CasEssaiIziventeBean();
+	CT07.setAlm(scenario0.getAlm());
 	//Information issues du scénario.
 	//Gestion des steps
-	CT06.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT06.getNomCasEssai() + CT06.getTime()));
-	CT06.ajouterStep("Relancement d'Izivente et retour sur le dossier", "RETOUR", "Affichage de la page d'accueil d'Izivente avec injection du jeton");
-	CT06.ajouterStep("Ouverture et du dossier et recherche du numéro FFI", "RECHERCHE", "Affichage des données dossier et client");
-	CT06.ajouterStep("Passage à l'octroi et premières vérification", "OCTROI", "Dossier accepté pour l'octroi ");
-	CT06.ajouterStep("Finalisation de l'octroi et dernières confirmations avant mise en gestion", "FINALISATION", "Affichage des données dossiers et client avec état FORC");
-	CT06.ajouterStep("Vérification des données dossier et client", "MISENFORCE", "Dossier à l'état FORC");
+	CT07.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT07.getNomCasEssai() + CT07.getTime()));
+	CT07.ajouterStep("Relancement d'Izivente et retour sur le dossier", "RETOUR", "Affichage de la page d'accueil d'Izivente avec injection du jeton");
+	CT07.ajouterStep("Ouverture et du dossier et recherche du numéro FFI", "RECHERCHE", "Affichage des données dossier et client");
+	CT07.ajouterStep("Passage à l'octroi et premières vérification", "OCTROI", "Dossier accepté pour l'octroi ");
+	CT07.ajouterStep("Finalisation de l'octroi et dernières confirmations avant mise en gestion", "FINALISATION", "Affichage des données dossiers et client avec état FORC");
+	CT07.ajouterStep("Vérification des données dossier et client", "MISENFORCE", "Dossier à l'état FORC");
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////// MISE EN GESTION ////////////////////////////////////////////
 	//if (typeDossier != Constantes.CREDIT_AMORT){
 	//Step 1 : Rechargement de l'URL d'Izivente et réinjection du jeton
 	//saisieJeton(outil, scenario0.getIdClient(), false, distributeur, null, agence, etablissement);
-	CT06.validerObjectif(outil.getDriver(), "RETOUR", true);
+	CT07.validerObjectif(outil.getDriver(), "RETOUR", true);
 	//Step 2 : Ouverture du dossier et recherche du numéro FFI
 	if (typeDossier == Constantes.FACELIA || typeDossier == Constantes.IZICARTE) {
 		outil.cliquer(Cibles.BOUTON_MENU_REPRISE_DOSSIER);
@@ -599,7 +634,7 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, Sele
 			break;
 		}
 	}
-	CT06.validerObjectif(outil.getDriver(), "RECHERCHE", true);
+	CT07.validerObjectif(outil.getDriver(), "RECHERCHE", true);
 	// Step 3 : Passage à l'octroi
 	if (typeDossier == Constantes.CREDIT_AMORT) {
 		outil.cliquer(Cibles.BOUTON_PASSAGE_OCTROI);
@@ -614,7 +649,7 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, Sele
 	outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);
 	outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
 	outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_VERIFIE);
-	CT06.validerObjectif(outil.getDriver(), "VERIFICATION", true);
+	CT07.validerObjectif(outil.getDriver(), "VERIFICATION", true);
 	//Step 4 : Acceptation et finalisation de l'octroi
 	outil.attendreChargementElement(Cibles.BOUTON_SUIVANT, true, true);
 	outil.cliquer(Cibles.BOUTON_SUIVANT);
@@ -623,18 +658,18 @@ public CasEssaiIziventeBean CT06MiseGestion(CasEssaiIziventeBean scenario0, Sele
 	outil.attendre(1);
 	outil.attendreChargementElement(Cibles.BOUTON_FINALISATION_OCTROI_CR, true, true);
 	outil.cliquer(Cibles.BOUTON_FINALISATION_OCTROI_CR);
-	CT06.validerObjectif(outil.getDriver(), "OCTROI", true);
+	CT07.validerObjectif(outil.getDriver(), "OCTROI", true);
 	outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
 	outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
 	outil.attendreChargementElement(Cibles.BOUTON_POPUP_TERMINER_CONFIRMATION_OCTROI, true, true);
 	outil.cliquer(Cibles.BOUTON_POPUP_TERMINER_CONFIRMATION_OCTROI);
-	CT06.validerObjectif(outil.getDriver(), "FINALISATION", true);
+	CT07.validerObjectif(outil.getDriver(), "FINALISATION", true);
 	//Step 5 : Vérification du passage à l'état FORC
 	outil.attendrePresenceTexte("Liste des dossiers");
-	CT06.validerObjectif(outil.getDriver(), "MISEENFORCE", true);
+	CT07.validerObjectif(outil.getDriver(), "MISEENFORCE", true);
 	scenario0.setFlag(3);
 	//outil.fermerFenetreCourante();
-	return CT06;
+	return CT07;
 }
 
 public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
@@ -1009,6 +1044,7 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 	 */
 	public void simulation() throws SeleniumException {
 		this.simulation = true;
+		this.validation = false;
 		this.edition = false;
 		this.miseEnGestion = false;
 		this.murissement = false;
@@ -1016,6 +1052,21 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 		// Lancement la simulation.
 		CasEssaiIziventeBean simulationSimu = this.lancement();
 		this.ecritureFichierDonnees(simulationSimu, new Date());
+	}
+	/**
+	 * Fonction réalisant l'étape de validation.
+	 * @throws SeleniumException en cas d'erreur.
+	 */
+	public void validation() throws SeleniumException {
+		this.simulation = false;
+		this.validation = true;
+		this.edition = false;
+		this.miseEnGestion = false;
+		this.murissement = false;
+		
+		// Lancement la simulation.
+		CasEssaiIziventeBean simulationVali = this.lancement();
+		this.ecritureFichierDonnees(simulationVali, new Date());
 	}
 	
 	/**
@@ -1038,6 +1089,8 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 //		generateurSimu.assuranceEmp = false;
 //		generateurSimu.assuranceTiers = false;
 		
+		this.simulation = false;
+		this.validation = false;
 		this.edition = true;
 		this.miseEnGestion = false;
 		this.murissement = false;
@@ -1055,6 +1108,8 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 		// Déclarer une instance de test IZIVENTE
 		//TNRSC00 generateurSimu = new TNRSC00();
 		// Mettre en gestion une instance de test IZIVENTE
+		this.simulation = false;
+		this.validation = false;
 		this.edition = false;
 		this.miseEnGestion = true;
 		this.murissement = false;
@@ -1080,6 +1135,8 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 	 * @throws SeleniumException en cas d'erreur.
 	 */
 	public void murissement() throws SeleniumException {
+		this.simulation = false;
+		this.validation = false;
 		this.edition = false;
 		this.miseEnGestion = false;
 		this.murissement = true;

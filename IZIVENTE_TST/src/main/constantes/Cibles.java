@@ -314,6 +314,10 @@ public class Cibles {
 	public static final CibleBean BOUTON_VALIDER_CREODIS_CR = new CibleBean("validation:id_valider");
 	
 	/**
+	 * Bout de validation de la simulation pour retour à l'écran de validation de l'offre
+	 */
+	public static final CibleBean BOUTON_VALIDER_SIMULATION_PP = new CibleBean("resultDossier:Valider");
+	/**
 	 * Bouton pour la validaiton de la popup des justificatifs.
 	 */
 	public static final CibleBean BOUTON_POPUP_VALIDER_JUSTIFICATIFS = new CibleBean("form_justif:goValider");

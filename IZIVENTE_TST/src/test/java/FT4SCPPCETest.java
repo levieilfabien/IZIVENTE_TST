@@ -22,7 +22,7 @@ private static final long serialVersionUID = 1L;
 public void fT4SCPPCETest() throws SeleniumException {
 		
 		this.setAlm(false);
-		this.distributeur = Constantes.CAS_CE;
+		this.distributeur = Constantes.CAS_BP;
 		this.typeDossier = Constantes.CREDIT_AMORT;
 		this.edition = true;
 		this.miseEnGestion = false;

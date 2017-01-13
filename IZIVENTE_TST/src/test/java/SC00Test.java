@@ -516,7 +516,7 @@ public class SC00Test extends CasEssaiBean {
 			while ((ligne = buff.readLine()) != null){
 				String[] temp = ligne.split(";");
 				// On vérifie qu'une étape est spécifiée et que c'est bien cette étape qui est requise
-				if (temp.length > 2 && temp[1].equals(numeroFFI)) {
+				if (temp.length > 2 && temp[1].equals(numeroFFI) && numeroFFI != "") {
 					contenu.add(chaine);
 					System.out.println("J'ai remplacé : " + ligne + " par " + chaine);
 					remplacement = true;

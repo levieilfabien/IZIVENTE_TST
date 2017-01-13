@@ -26,6 +26,8 @@ public class Constantes {
 	public static final int CAS_BP = 3;
 	public static final int CAS_BRED = 4;
 	
+	public static final int ETAPE_SUIVANTE_VALIDATION = 0;
+	public static final int ETAPE_SUIVANTE_EDITION = 1;
 	public static final int ETAPE_SUIVANTE_MEF = 2;
 	public static final int ETAPE_SUIVANTE_MURIR = 3;
 	public static final int ETAPE_SUIVANTE_MEG = 4;
