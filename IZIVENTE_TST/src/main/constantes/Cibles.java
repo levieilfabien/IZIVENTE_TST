@@ -522,7 +522,7 @@ public class Cibles {
 	public static final CibleBean LIBELLE_POPUP_ALERTES_ = new CibleBean(Clefs.CRITERES_ITERATIF, "*", "id=popupMessagesErreursPopupContentTable", CibleBean.RECHERCHE, CibleBean.CRITERE_TEXTE + "=Alerte(s)");
 
 	
-	 //FACELIA BIC   : validation:tab_compte_participant:0:j_id178
+	//FACELIA BIC   : validation:tab_compte_participant:0:j_id178
 	//FACELIA IBAN  : validation:tab_compte_participant:0:j_id181
 	//IZICARTE BIC  : validation:tab_compte_participant:0:j_id191
 	//IZICARTE IBAN : validation:tab_compte_participant:0:j_id194
@@ -535,10 +535,10 @@ public class Cibles {
 	/**
 	 * Element pour la récupération du BIC du compte emprunteur
 	 */
-	public static final CibleBean ELEMENT_SPAN_BIC = new CibleBean(Clefs.TEXTE_PARTIEL, "CEPAFR");
+	public static final CibleBean ELEMENT_SPAN_BIC = new CibleBean(Clefs.XPATH, ".//*[text()='BIC']/../../../../tbody/tr/td[2]");;
 
 	/**
 	 * Element pour la récupération l'IBAN du compte emprunteur
 	 */
-	public static final CibleBean ELEMENT_SPAN_IBAN = new CibleBean(Clefs.TEXTE_PARTIEL, "FR76");
+	public static final CibleBean ELEMENT_SPAN_IBAN = new CibleBean(Clefs.XPATH, ".//*[text()='BIC']/../../../../tbody/tr/td[3]");
 }

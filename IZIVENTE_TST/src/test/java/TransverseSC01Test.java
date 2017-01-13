@@ -18,19 +18,19 @@ public class TransverseSC01Test extends TNRSC00 {
 		
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
-		this.typeDossier = Constantes.CREODIS;
+		this.typeDossier = Constantes.CREDIT_AMORT;
 		this.edition = true;
 		this.miseEnGestion = false;
-		this.aucunCoEmp = true;
+		this.aucunCoEmp = false;
 		this.conjointCoEmp = false;
-		this.tiersCoEmp = false;
+		this.tiersCoEmp = true;
 		this.assuranceEmp = false;
 		this.assuranceTiers = false;
 		this.montantCredit = "8000";
 		
-		//miseAEdit();
+		miseAEdit();
 		//miseEnForce();
-		murissement();
+		//murissement();
 		
 	}
 }

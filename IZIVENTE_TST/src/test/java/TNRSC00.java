@@ -490,19 +490,23 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	
 	//Step 1 : Valider de l'offre contrat de crédit
 	//Extraction du BIC et de l'IBAN du compte emprunteur CR
+	
 	if (typeDossier != Constantes.CREDIT_AMORT){
 		numeroBIC = outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC);
 		numeroIBAN = outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN);
 	}
+	
 	outil.attendreChargementElement(cibleAttenteValidationCredit, true, true);
 	outil.attendreEtCliquer(cibleValidationCredit);
 	CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
 	//Step 2 : Finalisation de l'instruction : Validation de la popup pour les CR, validation de l'écran pour les PP
 	//Extraction du BIC et de l'IBAN du compte emprunteur PP
+	
 	if (typeDossier == Constantes.CREDIT_AMORT){
 		numeroBIC = outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC);
 		numeroIBAN = outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN);
 	}
+	
 	outil.attendreChargementElement(cibleConfirmationValidationCredit);
 	outil.attendreEtCliquer(cibleConfirmationValidationCredit);
 	CT05.validerObjectif(outil.getDriver(), "VALIDATIONINSTRUCTION", true);
