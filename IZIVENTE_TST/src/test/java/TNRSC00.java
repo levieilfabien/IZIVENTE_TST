@@ -40,6 +40,8 @@ public class TNRSC00 extends SC00Test {
 	int distributeur = Constantes.CAS_BP;
 	//Définir le type de dossier FACELIA/CREODIS/IZICARTE/CREDIT_AMORT
 	int typeDossier = Constantes.CREDIT_AMORT;
+	//Définir le numéro de client/distributeur
+	String idClient = null;
 	//Définir l'établissement et l'agence (1871500030000302) - La valeur null rend des valeurs par défauts qui fonctionnent pour la plupart de nos scénarios
 	String etablissement = null;
 	String agence = null;
@@ -106,7 +108,8 @@ public SeleniumOutils obtenirDriver(CasEssaiIziventeBean scenario0) {
 	//Configuration du driver
 	FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
 	FirefoxProfile profile = configurerProfilNatixis();
-
+	if (idClient !=null){
+	scenario0.setIdClient(idClient);}
 	//Création et configuration du repertoire de téléchargement
 	//File repertoireTelechargement = new File(".\\" + scenario0.getNomCasEssai());
 	//repertoireTelechargement.mkdir();
@@ -395,8 +398,8 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, Sel
 	CasEssaiIziventeBean CT04 = new CasEssaiIziventeBean();
 	CT04.setAlm(scenario0.getAlm());
 	CT04.setNomCasEssai("CT04 -" + getTime());
-	CT04.setDescriptif("CT04 - Choix des participants");
-	CT04.setNomTestPlan("CT04 - Choix des participants");
+	CT04.setDescriptif("CT04 - Choix des participants et fin de simulation");
+	CT04.setNomTestPlan("CT04 - Choix des participants et fin de simulation");
 	//Information issues du scénario.
 	CT04.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
 	CT04.setCheminTestLab(scenario0.getCheminTestLab());
@@ -406,6 +409,7 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, Sel
 	CT04.ajouterStep("Choisir les participants en fonction de la fiche de prêt et Valider: \n -Pour ajouter le conjoint, Cliquer sur Ajouter le conjoint. \n -Pour ajouter un tiers, entrer le numéro de personne physique, cliquer sur rechercher, vérifier la cohérence des données du tiers  et  valider les données du tiers. ", "PARTICIPANTS", "Affichage de l'écran 'Synthèse des participants'");
 	CT04.ajouterStep("Pour chaque participant, choisir le rôle et l'assurance en fonction des hypothèses.", "ASSURANCEROLE", "Les informations sont conformes et le bouton de validation des participants cliquable");
     CT04.ajouterStep("Valider la liste des participants (clic sur bouton correspondant)", "VALIDATIONPARTICIPANTS", "Affichage de l'écran de 'Proposition' avec la grille alternative commerciale");
+    CT04.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT04.getNomCasEssai() + CT04.getTime()));
 	
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 	// PARTICIPANTS
@@ -444,51 +448,21 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, Sel
 	outil.cliquer(Cibles.BOUTON_SUIVANT);
 	}
 	CT04.validerObjectif(outil.getDriver(),  "VALIDATIONPARTICIPANTS", true);
-	CT04.validerObjectif(outil.getDriver(), CT04.getNomCasEssai() + CT04.getTime(),true);
-	scenario0.setFlag(Constantes.ETAPE_SUIVANTE_VALIDATION);
-	return CT04;
-}
 	
-public CasEssaiIziventeBean CT05Validation(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
-	//Paramètrage du CT05
-	CasEssaiIziventeBean CT05 = new CasEssaiIziventeBean();
-	CT05.setAlm(scenario0.getAlm());
-	CT05.setNomCasEssai("CT05 -" + getTime());
-	CT05.setDescriptif("CT05 - Finalisation de l instruction");
-	CT05.setNomTestPlan("CT05 - Finalisation de l instruction");
-	//Information issues du scénario.
-	CT05.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
-	CT05.setCheminTestLab(scenario0.getCheminTestLab());
-	CT05.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
-	//Gestion des steps
-	CT05.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT05.getNomCasEssai() + CT05.getTime()));
-	CT05.ajouterStep("Valider de l'offre contrat de crédit (clic sur le bouton 'Valider en contrat de crédit')", "VALIDATION", "Affichage de la pop up de finalisation de l'instruction ou de la page de dossier de vente");
-	CT05.ajouterStep("Finalisation de l'instruction (clic sur le bouton 'Oui' dans la popup de finalisation de l'instruction", "VALIDATIONINSTRUCTION", "Affichage de l'écran de synthèse de l'offre de crédit");
-	CT05.ajouterStep("Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires (choix oui/non via boutons radio).", "OPTIONS", "Choix effectués conformément au scénario");
-	CT05.ajouterStep("Vérifier les justificatifs et valider (clic bouton radio 'Vérifié' pour chaque justificatif dans la pop up de finalisation de l'instruction' et clic sur bouton 'Valider'", "VERIFICATION", "Retour sur la page de dossier de vente");
-	
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	// FINALISATION DE L'INSTRUCTION
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	CibleBean cibleAttenteValidationCredit = null;
 	CibleBean cibleValidationCredit = null;
-	CibleBean cibleConfirmationValidationCredit = null;
 
 	if (typeDossier == Constantes.FACELIA || typeDossier == Constantes.IZICARTE) {
 		cibleAttenteValidationCredit = Cibles.BOUTON_VALIDER_OPC_CR;
 		cibleValidationCredit = Cibles.BOUTON_VALIDER_OPC_CR;
-		cibleConfirmationValidationCredit = Cibles.BOUTON_POPUP_OUI_MAJ;
 	}
 	if (typeDossier == Constantes.CREODIS) {
 		cibleAttenteValidationCredit = Cibles.ELEMENT_TABLEAU_PRELEVEMENT;
 		cibleValidationCredit = Cibles.BOUTON_VALIDER_CREODIS_CR;
-		cibleConfirmationValidationCredit = Cibles.BOUTON_POPUP_OUI_MAJ;
 	}
 	if (typeDossier == Constantes.CREDIT_AMORT) {
 		cibleAttenteValidationCredit = Cibles.BOUTON_ACCES_VALIDATION_OPC;
 		cibleValidationCredit = Cibles.BOUTON_ACCES_VALIDATION_OPC;
-		cibleConfirmationValidationCredit = Cibles.BOUTON_VALIDER_OPC;
 	}
 	
 	//Step 1 : Valider de l'offre contrat de crédit
@@ -499,12 +473,46 @@ public CasEssaiIziventeBean CT05Validation(CasEssaiIziventeBean scenario0, Selen
 	}
 	outil.attendreChargementElement(cibleAttenteValidationCredit, true, true);
 	outil.attendreEtCliquer(cibleValidationCredit);
-	CT05.validerObjectif(outil.getDriver(), "VALIDATION", true);
+	CT04.validerObjectif(outil.getDriver(), "VALIDATION", true);
 	//Step 2 : Finalisation de l'instruction : Validation de la popup pour les CR, validation de l'écran pour les PP
 	//Extraction du BIC et de l'IBAN du compte emprunteur PP
 	if (typeDossier == Constantes.CREDIT_AMORT){
 		numeroBIC = outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC);
 		numeroIBAN = outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN);
+	}
+	CT04.validerObjectif(outil.getDriver(), CT04.getNomCasEssai() + CT04.getTime(),true);
+	scenario0.setFlag(Constantes.ETAPE_SUIVANTE_VALIDATION);
+	return CT04;
+}
+	
+public CasEssaiIziventeBean CT05Validation(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
+	//Paramètrage du CT05
+	CasEssaiIziventeBean CT05 = new CasEssaiIziventeBean();
+	CT05.setAlm(scenario0.getAlm());
+	CT05.setNomCasEssai("CT05 -" + getTime());
+	CT05.setDescriptif("CT05 - Validation du dossier");
+	CT05.setNomTestPlan("CT05 - Validation du dossier");
+	//Information issues du scénario.
+	CT05.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
+	CT05.setCheminTestLab(scenario0.getCheminTestLab());
+	CT05.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
+	//Gestion des steps
+	CT05.ajouterStep("Valider de l'offre contrat de crédit (clic sur le bouton 'Valider en contrat de crédit')", "VALIDATION", "Affichage de la pop up de finalisation de l'instruction ou de la page de dossier de vente");
+	CT05.ajouterStep("Finalisation de l'instruction (clic sur le bouton 'Oui' dans la popup de finalisation de l'instruction", "VALIDATIONINSTRUCTION", "Affichage de l'écran de synthèse de l'offre de crédit");
+	CT05.ajouterStep("Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires (choix oui/non via boutons radio).", "OPTIONS", "Choix effectués conformément au scénario");
+	CT05.ajouterStep("Vérifier les justificatifs et valider (clic bouton radio 'Vérifié' pour chaque justificatif dans la pop up de finalisation de l'instruction' et clic sur bouton 'Valider'", "VERIFICATION", "Retour sur la page de dossier de vente");
+	CT05.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT05.getNomCasEssai() + CT05.getTime()));
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	// FINALISATION DE L'INSTRUCTION
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	CibleBean cibleConfirmationValidationCredit = null;
+
+	if (typeDossier != Constantes.CREDIT_AMORT) {
+		cibleConfirmationValidationCredit = Cibles.BOUTON_POPUP_OUI_MAJ;
+	}
+	else {
+		cibleConfirmationValidationCredit = Cibles.BOUTON_VALIDER_OPC;
 	}
 	outil.attendreChargementElement(cibleConfirmationValidationCredit);
 	outil.attendreEtCliquer(cibleConfirmationValidationCredit);
