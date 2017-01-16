@@ -1,6 +1,7 @@
 package test.java;
 
 import main.constantes.Constantes;
+import main.constantes.TypeProduit;
 
 import org.junit.Test;
 
@@ -23,7 +24,7 @@ public void FT3SCCRCETestLancement() throws SeleniumException {
 		
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_CE;
-		this.typeDossier = Constantes.IZICARTE;
+		this.typeDossier = TypeProduit.IZICARTE;
 		this.edition = true;
 		this.miseEnGestion = false;
 		this.aucunCoEmp = true;

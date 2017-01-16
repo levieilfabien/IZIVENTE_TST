@@ -18,7 +18,7 @@ public class TransverseSC01Test extends TNRSC00 {
 		
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_CE;
-		this.typeDossier = Constantes.IZICARTE;
+		this.typeDossier = typeDossier.IZICARTE;
 		this.edition = true;
 		this.miseEnGestion = false;
 		this.aucunCoEmp = true;

@@ -1,6 +1,7 @@
 package test.java;
 
 import main.constantes.Constantes;
+import main.constantes.TypeProduit;
 
 import org.junit.Test;
 
@@ -23,7 +24,7 @@ public void fT4SCPPCETest() throws SeleniumException {
 		
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
-		this.typeDossier = Constantes.CREDIT_AMORT;
+		this.typeDossier = TypeProduit.CREDIT_AMORT;
 		this.edition = true;
 		this.miseEnGestion = false;
 		this.aucunCoEmp = true;

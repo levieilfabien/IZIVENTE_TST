@@ -7,32 +7,24 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.nio.file.StandardOpenOption;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.LinkedList;
+import java.util.List;
 
-import main.bean.CasEssaiIziventeBean;
 import main.bean.ModificateurBouchon;
 import main.constantes.Cibles;
 import main.constantes.Constantes;
 import main.ihm.Compte;
-import main.ihm.Creance;
 import main.ihm.Foyer;
 import main.ihm.IHMGeneration;
 import main.ihm.ListePersonnePhysique;
-import main.ihm.Risque;
 import main.ihm.PersonnePhysiqueTiers;
+import main.ihm.Risque;
 
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.firefox.internal.ProfilesIni;
-
-import com.itextpdf.text.pdf.codec.Base64.InputStream;
 
 import outils.ALMOutils;
 import outils.SeleniumOutils;

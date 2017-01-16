@@ -1,6 +1,7 @@
 package test.java;
 
 import main.constantes.Constantes;
+import main.constantes.TypeProduit;
 
 import org.junit.Test;
 
@@ -24,7 +25,7 @@ public void FT1SCCRBPTestLancement() throws SeleniumException {
 			
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
-		this.typeDossier = Constantes.FACELIA;
+		this.typeDossier = TypeProduit.FACELIA;
 		this.edition = true;
 		this.miseEnGestion = false;
 		this.aucunCoEmp = true;

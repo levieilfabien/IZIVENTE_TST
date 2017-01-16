@@ -12,22 +12,24 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxBinary;
-import org.openqa.selenium.firefox.FirefoxProfile;
-
-import beans.CibleBean;
-import beans.ObjectifBean;
-import constantes.Erreurs;
-import exceptions.SeleniumException;
 import main.bean.CasEssaiIziventeBean;
 import main.bean.ModificateurBouchon;
 import main.constantes.Cibles;
 import main.constantes.Constantes;
+import main.constantes.TypeProduit;
 import main.outils.IZIVENTEOutils;
 import moteurs.FirefoxImpl;
 import moteurs.GenericDriver;
+
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxBinary;
+import org.openqa.selenium.firefox.FirefoxProfile;
+
 import outils.SeleniumOutils;
+import beans.CibleBean;
+import beans.ObjectifBean;
+import constantes.Erreurs;
+import exceptions.SeleniumException;
 
 /**
  * Scénario 00 des tests automatisés pour IZIVENTE - 11/2016
@@ -39,7 +41,8 @@ public class TNRSC00 extends SC00Test {
 	//Définir le distributeur Constantes.CAS_CE pour CE/Constantes.CAS_BP pour BP
 	int distributeur = Constantes.CAS_BP;
 	//Définir le type de dossier FACELIA/CREODIS/IZICARTE/CREDIT_AMORT
-	int typeDossier = Constantes.CREDIT_AMORT;
+	//int typeDossier = Constantes.CREDIT_AMORT;
+	TypeProduit typeDossier = TypeProduit.CREDIT_AMORT;
 	//Définir le numéro de client/distributeur
 	String idClient = null;
 	//Définir l'établissement et l'agence (1871500030000302) - La valeur null rend des valeurs par défauts qui fonctionnent pour la plupart de nos scénarios
@@ -263,25 +266,25 @@ public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario0,
 	CT02.validerObjectif(outil.getDriver(), "MODE", true);
 	//Step 2 : Sélectionner l'option d'ouverture d'un dossier correspondant au type voulu. 
 	switch(typeDossier){
-		case Constantes.CREDIT_AMORT :
+		case CREDIT_AMORT:
 			outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER);
 		break;
-		case Constantes.FACELIA : 
+		case FACELIA : 
 			outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER_FACELIA);
 			//Step 3 : Fermeture des pop ups 'Attention' confirmant l'ouverture du dossier
 			outil.attendrePresenceTexte("INFORMATION");
 			outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
 		break;
-		case Constantes.CREODIS : 
+		case CREODIS : 
 			outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER_FC);
 		break;
-		case Constantes.IZICARTE : 
+		case IZICARTE : 
 			outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_IZICARTE);
 			//Step 3 : Fermeture des pop ups 'Attention' confirmant l'ouverture du dossier
 			outil.attendrePresenceTexte("Information");
 			outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
 		break;
-		case Constantes.TEOZ : 
+		case TEOZ : 
 			//outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_TEOZ);
 			//outil.cliquerSiPossible(Cibles.BOUTON_MENU_NOUVEAU_DOSSIER);
 		break;
@@ -330,7 +333,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 	//Step 1 : Sélectionner l'offre désirée dans le menu déroulant selon le scénario
 	scenario0.setFlag(0);
 	switch(typeDossier){
-		case Constantes.FACELIA : 
+		case FACELIA : 
 			outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT_CR, true, true);
 			outil.selectionner("FACELIA", Cibles.SELECTEUR_OFFRE_CREDIT_CR, true);
 			//outil.attendre(2);
@@ -342,7 +345,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 			outil.attendreChargementElement(Cibles.SAISIE_MENSUALITE_CR, true, true); 
 			outil.viderEtSaisir("750", Cibles.SAISIE_MENSUALITE_CR);
 		break;
-		case Constantes.CREODIS :
+		case CREODIS :
 			outil.attendrePresenceTexte("INFORMATIONS DU CREDIT");
 			CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
 			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
@@ -351,7 +354,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 			outil.viderEtSaisir(montantCredit, Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
 			outil.viderEtSaisir(mensualite, Cibles.SAISIE_MENSUALITE_CR);
 		break;
-		case Constantes.IZICARTE : 
+		case IZICARTE : 
 			outil.attendrePresenceTexte("Informations du crédit");
 			CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
 			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
@@ -361,7 +364,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 			outil.attendreChargementElement(Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR, true, true);
 			outil.viderEtSaisir(montantCredit, Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
 		break;
-		case Constantes.CREDIT_AMORT :
+		case CREDIT_AMORT :
 			outil.attendre(1);
 			outil.attendreChargementElement(Cibles.SELECTEUR_UNIVERS_CREDIT, true, true);
 			outil.selectionner(typeUnivers, Cibles.SELECTEUR_UNIVERS_CREDIT, false);
@@ -440,9 +443,9 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, Sel
 	assuranceTiers(outil);
 	CT04.validerObjectif(outil.getDriver(), "ASSURANCEROLE", true);
 	//Step 3 : Valider la liste des participants (étape différente pour une CREODIS)
-	if(typeDossier != Constantes.CREODIS){
-	outil.attendreChargementElement(Cibles.BOUTON_VALIDER_LISTE_PARTICIPANT);
-	outil.cliquer(Cibles.BOUTON_VALIDER_LISTE_PARTICIPANT);
+	if(typeDossier != TypeProduit.CREODIS){
+		outil.attendreChargementElement(Cibles.BOUTON_VALIDER_LISTE_PARTICIPANT);
+		outil.cliquer(Cibles.BOUTON_VALIDER_LISTE_PARTICIPANT);
 	}
 	else { 
 	outil.cliquer(Cibles.BOUTON_SUIVANT);
@@ -452,22 +455,22 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, Sel
 	CibleBean cibleAttenteValidationCredit = null;
 	CibleBean cibleValidationCredit = null;
 
-	if (typeDossier == Constantes.FACELIA || typeDossier == Constantes.IZICARTE) {
+	if (typeDossier == TypeProduit.FACELIA || typeDossier == TypeProduit.IZICARTE) {
 		cibleAttenteValidationCredit = Cibles.BOUTON_VALIDER_OPC_CR;
 		cibleValidationCredit = Cibles.BOUTON_VALIDER_OPC_CR;
 	}
-	if (typeDossier == Constantes.CREODIS) {
+	if (typeDossier == TypeProduit.CREODIS) {
 		cibleAttenteValidationCredit = Cibles.ELEMENT_TABLEAU_PRELEVEMENT;
 		cibleValidationCredit = Cibles.BOUTON_VALIDER_CREODIS_CR;
 	}
-	if (typeDossier == Constantes.CREDIT_AMORT) {
+	if (typeDossier == TypeProduit.CREDIT_AMORT) {
 		cibleAttenteValidationCredit = Cibles.BOUTON_ACCES_VALIDATION_OPC;
 		cibleValidationCredit = Cibles.BOUTON_ACCES_VALIDATION_OPC;
 	}
 	
 	//Step 1 : Valider de l'offre contrat de crédit
 	//Extraction du BIC et de l'IBAN du compte emprunteur CR
-	if (typeDossier != Constantes.CREDIT_AMORT){
+	if (typeDossier != TypeProduit.CREDIT_AMORT){
 		numeroBIC = outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC);
 		numeroIBAN = outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN);
 	}
@@ -476,7 +479,7 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, Sel
 	CT04.validerObjectif(outil.getDriver(), "VALIDATION", true);
 	//Step 2 : Finalisation de l'instruction : Validation de la popup pour les CR, validation de l'écran pour les PP
 	//Extraction du BIC et de l'IBAN du compte emprunteur PP
-	if (typeDossier == Constantes.CREDIT_AMORT){
+	if (typeDossier == TypeProduit.CREDIT_AMORT){
 		numeroBIC = outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC);
 		numeroIBAN = outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN);
 	}
@@ -508,7 +511,7 @@ public CasEssaiIziventeBean CT05Validation(CasEssaiIziventeBean scenario0, Selen
 
 	CibleBean cibleConfirmationValidationCredit = null;
 
-	if (typeDossier != Constantes.CREDIT_AMORT) {
+	if (typeDossier != TypeProduit.CREDIT_AMORT) {
 		cibleConfirmationValidationCredit = Cibles.BOUTON_POPUP_OUI_MAJ;
 	}
 	else {
@@ -518,7 +521,7 @@ public CasEssaiIziventeBean CT05Validation(CasEssaiIziventeBean scenario0, Selen
 	outil.attendreEtCliquer(cibleConfirmationValidationCredit);
 	CT05.validerObjectif(outil.getDriver(), "VALIDATIONINSTRUCTION", true);
 	// Pour les PP on effectue la vérification des justificatifs.
-	if (typeDossier == Constantes.CREDIT_AMORT) {
+	if (typeDossier == TypeProduit.CREDIT_AMORT) {
 		//Step 3 : Vérifier les justificatifs et valider
 		outil.attendreChargementElement(Cibles.ELEMENT_FIN_INSTRUCTION, true, true);
 		outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_VERIFIE);
@@ -558,14 +561,14 @@ public CasEssaiIziventeBean CT06FinalisationInstruction(CasEssaiIziventeBean sce
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	CibleBean cibleNumeroFFI = null;
-	if (typeDossier != Constantes.CREDIT_AMORT) {
+	if (typeDossier != TypeProduit.CREDIT_AMORT) {
 		cibleNumeroFFI = Cibles.ELEMENT_SPAN_NUMERO_FFI_CR;
 	}else {
 		cibleNumeroFFI = Cibles.ELEMENT_SPAN_NUMERO_FFI;
 	}
 	//TODO Fin des tests pour la validation
 	// Pour les PP on effectue l'impression de la synthèse
-	if (typeDossier == Constantes.CREDIT_AMORT) {
+	if (typeDossier == TypeProduit.CREDIT_AMORT) {
 		//Step 5 : Imprimer la synthèse de l'offre
 		outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_SYNTHESE);
 		CT06.validerObjectif(outil.getDriver(), "IMPRESSIONSYNTHESE", true);
@@ -579,11 +582,11 @@ public CasEssaiIziventeBean CT06FinalisationInstruction(CasEssaiIziventeBean sce
 	CT06.validerObjectif(outil.getDriver(), "IMPRESSION", true);
 
 	// Dans le cas d'un IZICARTE on ne passe pas par les mêmes écrans après l'édition.
-	if (typeDossier == Constantes.CREDIT_AMORT) {
+	if (typeDossier == TypeProduit.CREDIT_AMORT) {
 		//Step 7 : Préparation du contrat et envoi à l'octroi		
 		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT);
 		CT06.validerObjectif(outil.getDriver(), "PREPARATION", true);
-	} else if (typeDossier == Constantes.IZICARTE) {
+	} else if (typeDossier == TypeProduit.IZICARTE) {
 		//Step 7 : Accès à l'IHM pour reprise du dossier
 		outil.attendreChargementElement(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
 		outil.cliquer(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
@@ -625,13 +628,13 @@ public CasEssaiIziventeBean CT07MiseGestion(CasEssaiIziventeBean scenario0, Sele
 	//saisieJeton(outil, scenario0.getIdClient(), false, distributeur, null, agence, etablissement);
 	CT07.validerObjectif(outil.getDriver(), "RETOUR", true);
 	//Step 2 : Ouverture du dossier et recherche du numéro FFI
-	if (typeDossier == Constantes.FACELIA || typeDossier == Constantes.IZICARTE) {
+	if (typeDossier == TypeProduit.FACELIA || typeDossier == TypeProduit.IZICARTE) {
 		outil.cliquer(Cibles.BOUTON_MENU_REPRISE_DOSSIER);
 	}
-	else if(typeDossier == Constantes.CREODIS) {
+	else if(typeDossier == TypeProduit.CREODIS) {
 		outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER_FC);
 	}
-	else if(typeDossier == Constantes.CREDIT_AMORT) {
+	else if(typeDossier == TypeProduit.CREDIT_AMORT) {
 		outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER);
 	}
 	outil.attendrePresenceTexte("Liste des dossiers");
@@ -644,7 +647,7 @@ public CasEssaiIziventeBean CT07MiseGestion(CasEssaiIziventeBean scenario0, Sele
 	}
 	CT07.validerObjectif(outil.getDriver(), "RECHERCHE", true);
 	// Step 3 : Passage à l'octroi
-	if (typeDossier == Constantes.CREDIT_AMORT) {
+	if (typeDossier == TypeProduit.CREDIT_AMORT) {
 		outil.cliquer(Cibles.BOUTON_PASSAGE_OCTROI);
 		outil.attendrePresenceTexte("Demande de confirmation");
 	}
@@ -684,7 +687,7 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 	String siocID = IZIVENTEOutils.derniersCaracteres(scenario0.getNumeroFFI(), 8);
 	String date = sdf.format(new Date());
-	Boolean retour = IZIVENTEOutils.murissement(siocID, this.distributeur, typeDossier != Constantes.CREDIT_AMORT, date);
+	Boolean retour = IZIVENTEOutils.murissement(siocID, this.distributeur, typeDossier != TypeProduit.CREDIT_AMORT, date);
 	if (retour){
 		scenario0.setFlag(Constantes.ETAPE_SUIVANTE_MEG);
 		return scenario0;
@@ -704,7 +707,7 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 	private void aucunCoEmprunteur(SeleniumOutils outil) throws SeleniumException {
 		// Si le type de dossier est tout sauf CREODIS on clique sur le bouton "Aucun CoEmprunteur"
 		//On passe automatiquement à l'étape de choix d'assurance pour le CREODIS
-		if (typeDossier != Constantes.CREODIS) {
+		if (typeDossier != TypeProduit.CREODIS) {
 	    	outil.attendreChargementElement(Cibles.LIBELLE_ONGLET_AJOUT_PARTICIPANT);
 	    	outil.cliquer(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
 		}
@@ -718,7 +721,7 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 	private void ajoutConjointCoEmprunteurUnique(SeleniumOutils outil) throws SeleniumException {
 		//On clique sur le bouton "Ajouter Conjoint CoEmprunteur" si on ne veut que le conjoint coemprunteur sur le dossier.
 		//Cette option n'est accessible que pour les PP et les CR IZICARTE dont l'emprunteur et le conjoint ont un compte joint
-		if(typeDossier == Constantes.CREDIT_AMORT) {
+		if(typeDossier == TypeProduit.CREDIT_AMORT) {
 			outil.cliquer(Cibles.BOUTON_AJOUT_CONJOINT);
 		} else{
 			//TODO Gérer le mode IZICARTE avec compte joint
@@ -774,12 +777,12 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 		outil.attendre(1);
 		
 		if (assuranceEmp == true ) {
-			if (typeDossier != Constantes.CREODIS) {
+			if (typeDossier != TypeProduit.CREODIS) {
 				outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
 				outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
 				outil.attendre(2);
 				switch (typeDossier) {
-				case Constantes.CREDIT_AMORT :
+				case CREDIT_AMORT :
 					outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);
 					outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
 					if (Integer.parseInt(montantCredit) > 21000){
@@ -789,11 +792,11 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 						outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASSURANCE_DIM);
 					}
 					break;
-				case Constantes.IZICARTE :
+				case IZICARTE :
 					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR, true, true);
 					outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
 					break;
-				case Constantes.FACELIA :
+				case FACELIA :
 					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_FACELIA, true, true);
 					outil.cliquer(Cibles.RADIO_AVEC_ASS_FACELIA);
 					break;
@@ -803,22 +806,27 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 			}	
 		} else {
 			switch (typeDossier) {
-				case Constantes.CREDIT_AMORT :
+				case CREDIT_AMORT :
 					outil.attendre(2);
 					outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
 				break;
-				case Constantes.IZICARTE :
+				case IZICARTE :
 					outil.attendre(1);
 					outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_CR);
 					outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
 				break;
-				case Constantes.FACELIA :
+				case FACELIA :
 					outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_FACELIA);
 					outil.cliquer(Cibles.RADIO_SANS_ASS_FACELIA);
 				break;
-				case Constantes.CREODIS :
+				case CREODIS :
 					outil.attendreEtCliquer(Cibles.RADIO_SELECTION_SANS_ASS_CR);
 				break;
+				case TEOZ:
+					// Le TEOZ n'est pas pris en compte.
+					break;
+				default:
+					break;
 			}
 		}
 	}
@@ -952,6 +960,7 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 	 * @param typeDossier2
 	 * @return
 	 */
+	@Deprecated
 	private String chaineProduit(int typeDossier2) {
 		String nomProduit = "";
 		if (typeDossier2 == Constantes.CREDIT_AMORT){
@@ -967,6 +976,15 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 			nomProduit = "IZ";
 		}
 		return nomProduit;
+	}
+	
+	/**
+	 * Fonction permettant de récupérer une chaîne de caractère (CR ou PP) en fonction du type de dossier
+	 * @param typeDossier le type de produit choisie.
+	 * @return le code sur deux caractère correspondant au type de dossier.
+	 */
+	private String chaineProduit(TypeProduit typeDossier) {
+		return typeDossier.getCode();
 	}
 	
 	/**
@@ -1026,16 +1044,16 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 				//TODO Attention préciser le type de produit dans le fichier à écrire.
 				switch (instanceDecoupee[4]) {
 					case "PP" :
-						typeDossier = Constantes.CREDIT_AMORT;
+						typeDossier = TypeProduit.CREDIT_AMORT;
 					break;
 					case "CR" :
-						typeDossier = Constantes.CREODIS;
+						typeDossier = TypeProduit.CREODIS;
 					break;
 					case "FA" :
-						typeDossier = Constantes.FACELIA;
+						typeDossier = TypeProduit.FACELIA;
 					break;
 					case "IZ" :
-						typeDossier = Constantes.IZICARTE;
+						typeDossier = TypeProduit.IZICARTE;
 				}
 				scenario.setFlag(Integer.parseInt(instanceDecoupee[5]));
 			}

@@ -3,6 +3,7 @@ import org.junit.Test;
 
 import exceptions.SeleniumException;
 import main.constantes.Constantes;
+import main.constantes.TypeProduit;
 
 /**
  * Scénario 2 des tests automatisés pour IZIVENTE - Projet Fusion
@@ -21,7 +22,7 @@ public void fT2SCPPBPTest() throws SeleniumException {
 		
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
-		this.typeDossier = Constantes.CREDIT_AMORT;
+		this.typeDossier = TypeProduit.CREDIT_AMORT;
 		this.edition = true;
 		this.miseEnGestion = false;
 		this.aucunCoEmp = true;
