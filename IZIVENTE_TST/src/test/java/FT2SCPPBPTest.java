@@ -23,8 +23,6 @@ public void fT2SCPPBPTest() throws SeleniumException {
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
 		this.typeDossier = TypeProduit.CREDIT_AMORT;
-		this.edition = true;
-		this.miseEnGestion = false;
 		this.aucunCoEmp = true;
 		this.assuranceEmp = true;
 		this.typeUnivers = "JEUNES";
@@ -36,8 +34,10 @@ public void fT2SCPPBPTest() throws SeleniumException {
 		this.modificateur.emprunteurJeune = true;
 		this.modificateur.coEmprunteurJeune = true;
 		
-		simulation();
-		//miseAEdit();
+		//simulation();
+		//validation();
+		miseAEdit();
 		//miseEnForce();
+		//murissement();
 	}
 }

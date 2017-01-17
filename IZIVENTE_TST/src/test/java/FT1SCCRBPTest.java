@@ -28,13 +28,14 @@ public void FT1SCCRBPTestLancement() throws SeleniumException {
 		this.typeDossier = TypeProduit.FACELIA;
 		this.edition = true;
 		this.miseEnGestion = false;
-		this.aucunCoEmp = true;
-		this.assuranceEmp = true;
+		this.aucunCoEmp = true; 
+		this.assuranceEmp = false;
 		this.montantCredit = "8000";
 
-		simulation();
+		//simulation();
+		//validation();
 		//miseAEdit();
-		//miseEnForce();
+		miseEnForce();
 		//murissement();
 	}
 }

@@ -30,6 +30,27 @@ public class CasEssaiIziventeBean extends CasEssaiBean {
 	
 	private String numeroIUN = null;
 	
+	private String numeroBIC = null;
+	
+	private String numeroIBAN = null;
+	
+	
+
+	public String getNumeroBIC() {
+		return numeroBIC;
+	}
+
+	public void setNumeroBIC(String numeroBIC) {
+		this.numeroBIC = numeroBIC;
+	}
+
+	public String getNumeroIBAN() {
+		return numeroIBAN;
+	}
+
+	public void setNumeroIBAN(String numeroIBAN) {
+		this.numeroIBAN = numeroIBAN;
+	}
 
 	public String getNumeroIUN() {
 		return numeroIUN;

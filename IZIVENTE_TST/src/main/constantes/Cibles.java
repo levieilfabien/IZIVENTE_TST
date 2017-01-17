@@ -421,9 +421,54 @@ public class Cibles {
 	public static final CibleBean RADIO_AVEC_ASS_CR = new CibleBean(Clefs.TEXTE_PARTIEL, "Avec assurance");
 	
 	/**
-	 * Choix "Avec assurance" pour un participant à un FACELIA.
+	 * Choix d'une assurance pour un participant à un FACELIA.
 	 */
-	public static final CibleBean RADIO_AVEC_ASS_FACELIA = new CibleBean("form_ongletSyntheseParticipant:j_id1648:j_id1659:1");
+	public static final CibleBean RADIO_AVEC_ASS_FACELIA = new CibleBean("form_ongletSyntheseParticipant:j_id1665:0");
+	
+	/**
+	 * Choix d'une assurance décès pour l'emprunteur d'un FACELIA
+	 */
+	public static final CibleBean RADIO_ASSURANCE_DECES_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1679:0");
+	
+	/**
+	 * Absence d'une assurance décès pour l'emprunteur d'un FACELIA
+	 */
+	public static final CibleBean RADIO_ASSURANCE_DECES_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1679:1");
+	
+	/**
+	 * Choix d'une assurance invalidité pour l'emprunteur d'un FACELIA
+	 */
+	public static final CibleBean RADIO_ASSURANCE_INVALD_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1687:0");
+	
+	/**
+	 * Absence d'une assurance invalidité pour l'emprunteur d'un FACELIA
+	 */
+	public static final CibleBean RADIO_ASSURANCE_INVALD_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1687:1");
+	
+	/**
+	 * Choix d'une assurance incapacité pour l'emprunteur d'un FACELIA
+	 */
+	public static final CibleBean RADIO_ASSURANCE_INCAP_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1695:0");
+	
+	/**
+	 * Absence d'une assurance incapacité pour l'emprunteur d'un FACELIA
+	 */
+	public static final CibleBean RADIO_ASSURANCE_INCAP_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1695:1");
+	
+	/**
+	 * Choix d'une assurance perte d'emploi pour l'emprunteur d'un FACELIA
+	 */
+	public static final CibleBean RADIO_ASSURANCE_PERTE_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1703:0");
+	
+	/**
+	 * Choix d'une assurance perte d'emploi pour l'emprunteur d'un FACELIA
+	 */
+	public static final CibleBean RADIO_ASSURANCE_PERTE_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1703:1");
+
+	/**
+	 * Bouton de validation du choix d'une assurance pour un FACELIA
+	 */
+	public static final CibleBean BOUTON_VALIDATION_ASS_FACELIA = new CibleBean("form_ongletSyntheseParticipant:btOuiGARVald");
 	/**
 	 * Choix "Sans assurance" pour un participant à un CR
 	 */
@@ -432,7 +477,7 @@ public class Cibles {
 	/**
 	 * Choix "Sans assurance" pour un participant à un FACELIA
 	 */
-	public static final CibleBean RADIO_SANS_ASS_FACELIA = new CibleBean("form_ongletSyntheseParticipant:j_id1648:j_id1659:0");
+	public static final CibleBean RADIO_SANS_ASS_FACELIA = new CibleBean("form_ongletSyntheseParticipant:j_id1665:1");
 	
 	/**
 	 * Champs de saisie (en lecture seule) indiquant le CMA pour le CR couplé en cours de saisie.

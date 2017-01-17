@@ -31,9 +31,11 @@ public void FT3SCCRCETestLancement() throws SeleniumException {
 		this.assuranceEmp = true;
 		this.montantCredit = "3000";
 		
-		miseAEdit();
+		//simulation();
+		//validation();
+		//miseAEdit();
 		//miseEnForce();
-		
+		//murissement();
 	}
 	
 }

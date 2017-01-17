@@ -1,6 +1,7 @@
 package test.java;
 
 import main.constantes.Constantes;
+import main.constantes.TypeProduit;
 
 import org.junit.Test;
 
@@ -17,10 +18,8 @@ public class TransverseSC01Test extends TNRSC00 {
 	public void transverseSC01Test() throws SeleniumException {
 		
 		this.setAlm(false);
-		this.distributeur = Constantes.CAS_CE;
-		this.typeDossier = typeDossier.IZICARTE;
-		this.edition = true;
-		this.miseEnGestion = false;
+		this.distributeur = Constantes.CAS_BP;
+		this.typeDossier = TypeProduit.CREODIS;
 		this.aucunCoEmp = true;
 		this.conjointCoEmp = false;
 		this.tiersCoEmp = false;
@@ -32,10 +31,10 @@ public class TransverseSC01Test extends TNRSC00 {
 		//this.mensualite = "300";
 		//this.numPersPhysTiers = "942500502";
 		
-		simulation();
+		//simulation();
 		//validation();
 		//miseAEdit();
-		//miseEnForce();
+		miseEnForce();
 		//murissement();
 		
 	}

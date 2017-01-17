@@ -23,7 +23,7 @@ private static final long serialVersionUID = 1L;
 public void fT4SCPPCETest() throws SeleniumException {
 		
 		this.setAlm(false);
-		this.distributeur = Constantes.CAS_BP;
+		this.distributeur = Constantes.CAS_CE;
 		this.typeDossier = TypeProduit.CREDIT_AMORT;
 		this.edition = true;
 		this.miseEnGestion = false;
@@ -38,6 +38,8 @@ public void fT4SCPPCETest() throws SeleniumException {
 		this.dureeDiffere = "12";
 		this.modificateur.emprunteurJeune = true;
 		
+		//simulation();
+		//validation();
 		miseAEdit();
 		miseEnForce();
 		//murissement();

@@ -81,8 +81,6 @@ public class TNRSC00 extends SC00Test {
  * Id de sérialisation par défaut.
  */
 private static final long serialVersionUID = 1L;
-private String numeroBIC;
-private String numeroIBAN;
 
 ///**
 // * Fonction de lancement par défaut ne comportant aucun paramètre.
@@ -336,11 +334,12 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 		case FACELIA : 
 			outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT_CR, true, true);
 			outil.selectionner("FACELIA", Cibles.SELECTEUR_OFFRE_CREDIT_CR, true);
-			//outil.attendre(2);
+			outil.attendre(2);
 			CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
 			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
 			outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR, true, true);
 			outil.selectionner("Prêt immobilier", Cibles.SELECTEUR_SITUATION_VENTE_CR);
+			outil.attendreChargementElement(Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR, true, true);
 			outil.viderEtSaisir(montantCredit,  Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
 			outil.attendreChargementElement(Cibles.SAISIE_MENSUALITE_CR, true, true); 
 			outil.viderEtSaisir("750", Cibles.SAISIE_MENSUALITE_CR);
@@ -446,7 +445,7 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, Sel
 	if(typeDossier != TypeProduit.CREODIS){
 		outil.attendreChargementElement(Cibles.BOUTON_VALIDER_LISTE_PARTICIPANT);
 		outil.cliquer(Cibles.BOUTON_VALIDER_LISTE_PARTICIPANT);
-	}
+		}
 	else { 
 	outil.cliquer(Cibles.BOUTON_SUIVANT);
 	}
@@ -471,8 +470,8 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, Sel
 	//Step 1 : Valider de l'offre contrat de crédit
 	//Extraction du BIC et de l'IBAN du compte emprunteur CR
 	if (typeDossier != TypeProduit.CREDIT_AMORT){
-		numeroBIC = outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC);
-		numeroIBAN = outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN);
+		scenario0.setNumeroBIC(outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC));
+		scenario0.setNumeroIBAN(outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN));
 	}
 	outil.attendreChargementElement(cibleAttenteValidationCredit, true, true);
 	outil.attendreEtCliquer(cibleValidationCredit);
@@ -480,8 +479,8 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, Sel
 	//Step 2 : Finalisation de l'instruction : Validation de la popup pour les CR, validation de l'écran pour les PP
 	//Extraction du BIC et de l'IBAN du compte emprunteur PP
 	if (typeDossier == TypeProduit.CREDIT_AMORT){
-		numeroBIC = outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC);
-		numeroIBAN = outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN);
+		scenario0.setNumeroBIC(outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC));
+		scenario0.setNumeroIBAN(outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN));
 	}
 	CT04.validerObjectif(outil.getDriver(), CT04.getNomCasEssai() + CT04.getTime(),true);
 	scenario0.setFlag(Constantes.ETAPE_SUIVANTE_VALIDATION);
@@ -708,7 +707,7 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 		// Si le type de dossier est tout sauf CREODIS on clique sur le bouton "Aucun CoEmprunteur"
 		//On passe automatiquement à l'étape de choix d'assurance pour le CREODIS
 		if (typeDossier != TypeProduit.CREODIS) {
-	    	outil.attendreChargementElement(Cibles.LIBELLE_ONGLET_AJOUT_PARTICIPANT);
+	    	outil.attendreChargementElement(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
 	    	outil.cliquer(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
 		}
 	}
@@ -797,8 +796,16 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 					outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
 					break;
 				case FACELIA :
-					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_FACELIA, true, true);
-					outil.cliquer(Cibles.RADIO_AVEC_ASS_FACELIA);
+					//outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_FACELIA);
+					//outil.cliquer(Cibles.RADIO_AVEC_ASS_FACELIA);
+					outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);	
+					outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_DECES_FACELIA_OUI);
+					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INCAP_FACELIA_NON);
+					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INVALD_FACELIA_NON);
+					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_PERTE_FACELIA_NON);
+					outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_ASS_FACELIA, true, true);
+					outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_FACELIA);
 					break;
 				}
 			} else {
@@ -816,8 +823,11 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 					outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
 				break;
 				case FACELIA :
-					outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_FACELIA);
-					outil.cliquer(Cibles.RADIO_SANS_ASS_FACELIA);
+					//outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_FACELIA);
+					//outil.cliquer(Cibles.RADIO_SANS_ASS_FACELIA);
+					outil.attendre(2);
+					outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
+					outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
 				break;
 				case CREODIS :
 					outil.attendreEtCliquer(Cibles.RADIO_SELECTION_SANS_ASS_CR);
@@ -1001,8 +1011,8 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 		String IUN = null;
 		String typeDos = chaineProduit(this.typeDossier);
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
-		String numBIC = this.numeroBIC;
-		String numIBAN = this.numeroIBAN;
+		String numBIC = scenario.getNumeroBIC();
+		String numIBAN = scenario.getNumeroIBAN();
 		int flg = scenario.getFlag();
 		String chaine = (distrib +";"+ FFI + ";" + idClnt + ";" + IUN + ";"+ typeDos +";"+ flg +";" + sdf.format(date)+ ";" + numBIC +";"+ numIBAN);
 
