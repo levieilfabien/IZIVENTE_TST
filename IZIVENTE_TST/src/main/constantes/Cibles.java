@@ -227,7 +227,7 @@ public class Cibles {
 	/**
 	 * Element indiquant l'état d'avancement final du chargement de la signature electronique.
 	 */
-	public static final CibleBean ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE = new CibleBean("divProgressBarTermine");
+	public static final CibleBean ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE = new CibleBean("progressBarTermine");
 	
 	/**
 	 * Element indiquant la présence du formulaire de complétude (contrôle des confirmités)
@@ -426,6 +426,11 @@ public class Cibles {
 	public static final CibleBean RADIO_AVEC_ASS_FACELIA = new CibleBean("form_ongletSyntheseParticipant:j_id1665:0");
 	
 	/**
+	 * Choix d'une assurance pour un participant à une IZICARTE
+	 */
+	public static final CibleBean RADIO_AVEC_ASS_IZICARTE = new CibleBean("form_ongletSyntheseParticipant:j_id1704:0");
+	
+	/**
 	 * Choix d'une assurance décès pour l'emprunteur d'un FACELIA
 	 */
 	public static final CibleBean RADIO_ASSURANCE_DECES_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1679:0");
@@ -434,6 +439,16 @@ public class Cibles {
 	 * Absence d'une assurance décès pour l'emprunteur d'un FACELIA
 	 */
 	public static final CibleBean RADIO_ASSURANCE_DECES_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1679:1");
+	
+	/**
+	 * Choix d'une assurance décès pour l'emprunteur d'une IZICARTE
+	 */
+	public static final CibleBean RADIO_ASSURANCE_DECES_IZICARTE_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1718:0");
+	
+	/**
+	 * Absence d'une assurance décès pour l'emprunteur d'une IZICARTE
+	 */
+	public static final CibleBean RADIO_ASSURANCE_DECES_IZICARTE_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1718:1");
 	
 	/**
 	 * Choix d'une assurance invalidité pour l'emprunteur d'un FACELIA
@@ -446,6 +461,16 @@ public class Cibles {
 	public static final CibleBean RADIO_ASSURANCE_INVALD_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1687:1");
 	
 	/**
+	 * Choix d'une assurance invalidité pour l'emprunteur d'un IZICARTE
+	 */
+	public static final CibleBean RADIO_ASSURANCE_INVALD_IZICARTE_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1726:0");
+	
+	/**
+	 * Absence d'une assurance invalidité pour l'emprunteur d'un IZICARTE
+	 */
+	public static final CibleBean RADIO_ASSURANCE_INVALD_IZICARTE_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1726:1");
+	
+	/**
 	 * Choix d'une assurance incapacité pour l'emprunteur d'un FACELIA
 	 */
 	public static final CibleBean RADIO_ASSURANCE_INCAP_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1695:0");
@@ -454,6 +479,16 @@ public class Cibles {
 	 * Absence d'une assurance incapacité pour l'emprunteur d'un FACELIA
 	 */
 	public static final CibleBean RADIO_ASSURANCE_INCAP_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1695:1");
+	
+	/**
+	 * Choix d'une assurance maladie pour l'emprunteur d'un IZICARTE
+	 */
+	public static final CibleBean RADIO_ASSURANCE_MALA_IZICARTE_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1734:0");
+	
+	/**
+	 * Absence d'une assurance maladie pour l'emprunteur d'un IZICARTE
+	 */
+	public static final CibleBean RADIO_ASSURANCE_MALA_IZICARTE_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1734:1");
 	
 	/**
 	 * Choix d'une assurance perte d'emploi pour l'emprunteur d'un FACELIA
@@ -466,9 +501,19 @@ public class Cibles {
 	public static final CibleBean RADIO_ASSURANCE_PERTE_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1703:1");
 
 	/**
-	 * Bouton de validation du choix d'une assurance pour un FACELIA
+	 * Choix d'une assurance perte d'emploi pour l'emprunteur d'un IZICARTE
 	 */
-	public static final CibleBean BOUTON_VALIDATION_ASS_FACELIA = new CibleBean("form_ongletSyntheseParticipant:btOuiGARVald");
+	public static final CibleBean RADIO_ASSURANCE_PERTE_IZICARTE_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1742:0");
+	
+	/**
+	 * Choix d'une assurance perte d'emploi pour l'emprunteur d'un IZICARTE
+	 */
+	public static final CibleBean RADIO_ASSURANCE_PERTE_IZICARTE_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1742:1");
+	
+	/**
+	 * Bouton de validation du choix d'une assurance pour un CR (Facelia et IZICARTE)
+	 */
+	public static final CibleBean BOUTON_VALIDATION_ASS_CR = new CibleBean("form_ongletSyntheseParticipant:btOuiGARVald");
 	/**
 	 * Choix "Sans assurance" pour un participant à un CR
 	 */

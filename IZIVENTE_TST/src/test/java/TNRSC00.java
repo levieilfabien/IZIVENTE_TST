@@ -342,7 +342,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 			outil.attendreChargementElement(Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR, true, true);
 			outil.viderEtSaisir(montantCredit,  Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
 			outil.attendreChargementElement(Cibles.SAISIE_MENSUALITE_CR, true, true); 
-			outil.viderEtSaisir("750", Cibles.SAISIE_MENSUALITE_CR);
+			outil.viderEtSaisir(mensualite, Cibles.SAISIE_MENSUALITE_CR);
 		break;
 		case CREODIS :
 			outil.attendrePresenceTexte("INFORMATIONS DU CREDIT");
@@ -354,14 +354,24 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 			outil.viderEtSaisir(mensualite, Cibles.SAISIE_MENSUALITE_CR);
 		break;
 		case IZICARTE : 
-			outil.attendrePresenceTexte("Informations du crédit");
+			outil.attendre(2);
 			CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
 			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
 			outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR, true, true);
-			outil.selectionner("BANC", Cibles.SELECTEUR_SITUATION_VENTE_CR, true);
-			//outil.attendre(2);
+			outil.selectionner("Prêt immobilier", Cibles.SELECTEUR_SITUATION_VENTE_CR);
 			outil.attendreChargementElement(Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR, true, true);
-			outil.viderEtSaisir(montantCredit, Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
+			outil.viderEtSaisir(montantCredit,  Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
+			outil.attendreChargementElement(Cibles.SAISIE_MENSUALITE_CR, true, true); 
+			outil.viderEtSaisir(mensualite, Cibles.SAISIE_MENSUALITE_CR);
+			
+			//outil.attendrePresenceTexte("Informations du crédit");
+			//CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
+			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
+			//outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR, true, true);
+			//outil.selectionner("BANC", Cibles.SELECTEUR_SITUATION_VENTE_CR, true);
+			//outil.attendre(2);
+			//outil.attendreChargementElement(Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR, true, true);
+			//outil.viderEtSaisir(montantCredit, Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
 		break;
 		case CREDIT_AMORT :
 			outil.attendre(1);
@@ -792,8 +802,16 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 					}
 					break;
 				case IZICARTE :
-					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR, true, true);
-					outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
+					//outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR, true, true);
+					//outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
+					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_IZICARTE, true, true);	
+					outil.cliquer(Cibles.RADIO_AVEC_ASS_IZICARTE);
+					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_DECES_IZICARTE_OUI);
+					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INVALD_IZICARTE_NON);
+					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_MALA_IZICARTE_NON);
+					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_PERTE_IZICARTE_NON);
+					outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_ASS_CR, true, true);
+					outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_CR);
 					break;
 				case FACELIA :
 					//outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_FACELIA);
@@ -804,8 +822,8 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INCAP_FACELIA_NON);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INVALD_FACELIA_NON);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_PERTE_FACELIA_NON);
-					outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_ASS_FACELIA, true, true);
-					outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_FACELIA);
+					outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_ASS_CR, true, true);
+					outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_CR);
 					break;
 				}
 			} else {
@@ -819,8 +837,10 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 				break;
 				case IZICARTE :
 					outil.attendre(1);
-					outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_CR);
-					outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
+					//outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_CR);
+					//outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
+					outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
+					outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
 				break;
 				case FACELIA :
 					//outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_FACELIA);

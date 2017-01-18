@@ -31,11 +31,12 @@ public void FT1SCCRBPTestLancement() throws SeleniumException {
 		this.aucunCoEmp = true; 
 		this.assuranceEmp = false;
 		this.montantCredit = "8000";
+		this.mensualite = "240";
 
-		//simulation();
+		simulation();
 		//validation();
 		//miseAEdit();
-		miseEnForce();
+		//miseEnForce();
 		//murissement();
 	}
 }

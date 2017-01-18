@@ -36,7 +36,7 @@ public void fT2SCPPBPTest() throws SeleniumException {
 		
 		//simulation();
 		//validation();
-		miseAEdit();
+		//miseAEdit();
 		//miseEnForce();
 		//murissement();
 	}
