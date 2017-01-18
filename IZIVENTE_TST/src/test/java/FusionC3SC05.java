@@ -9,11 +9,11 @@ import exceptions.SeleniumException;
 
 /**
  * PJNFIEVA11001 Fusion BP MED
- * Chantier 3 Scénario 3 IZIVENTE - Validation Créodis sans co emprunteur avant bascule
+ * Chantier 3 Scénario 5 IZIVENTE - Simulation d'un PP avant bascule
  * @author levieilfa
  * @author bardouma
  */
-public class FusionC3SC03 extends TNRSC00 {
+public class FusionC3SC05 extends TNRSC00 {
 
 	/**
  * Id de sérialisation par défaut.
@@ -21,19 +21,22 @@ public class FusionC3SC03 extends TNRSC00 {
 private static final long serialVersionUID = 1L;
 
 @Test
-public void fusionC3SC03() throws SeleniumException {
-			
+public void fusionC3SC02() throws SeleniumException {
+
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
 		this.etablissement = "056";
 		this.agence = "00009";
-		this.typeDossier = TypeProduit.CREODIS;
-		this.edition = true;
+		this.typeDossier = TypeProduit.CREDIT_AMORT;
 		this.aucunCoEmp = true;
 		this.assuranceEmp = false;
-		this.montantCredit = "8000";
-		this.mensualite = "240";
+		this.typeUnivers = "TRESORERIE";
+		this.typeOffre = "CREDIT TRESORERIE";
+		this.typeObjet = "TRESORERIE";
+		this.coutProjet = "10000";
+		this.mensualite = "300";
+		this.montantCredit = "10000";
 
-		validation();
+		simulation();
 	}
 }

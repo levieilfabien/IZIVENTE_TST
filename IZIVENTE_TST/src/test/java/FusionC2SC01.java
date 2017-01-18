@@ -8,9 +8,10 @@ import org.junit.Test;
 import exceptions.SeleniumException;
 
 /**
- * Scénario 1 des tests automatisés pour IZIVENTE - Projet Fusion
- * Editique FACELIA (BP)
- * @author levieilfa bardouma
+ * PJNFIEVA11001 Fusion BP MED
+ * Chantier 2 Scénario 1 IZIVENTE - Edition Créodis sans co emprunteur avant bascule
+ * @author levieilfa
+ * @author bardouma
  */
 public class FusionC2SC01 extends TNRSC00 {
 

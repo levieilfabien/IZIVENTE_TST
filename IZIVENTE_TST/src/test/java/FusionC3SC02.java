@@ -8,9 +8,10 @@ import org.junit.Test;
 import exceptions.SeleniumException;
 
 /**
- * Scénario 1 des tests automatisés pour IZIVENTE - Projet Fusion
- * Editique FACELIA (BP)
- * @author levieilfa bardouma
+ * PJNFIEVA11001 Fusion BP MED
+ * Chantier 3 Scénario 2 IZIVENTE - Simulation Facélia avec co emprunteur avant bascule
+ * @author levieilfa
+ * @author bardouma
  */
 public class FusionC3SC02 extends TNRSC00 {
 
@@ -24,11 +25,13 @@ public void fusionC3SC02() throws SeleniumException {
 
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
+		this.etablissement = "056";
+		this.agence = "00009";
 		this.typeDossier = TypeProduit.FACELIA;
 		this.aucunCoEmp = true; 
-		this.assuranceEmp = false;
-		this.montantCredit = "8000";
-		this.mensualite = "240";
+		this.assuranceEmp = true;
+		this.montantCredit = "7500";
+		this.mensualite = "300";
 
 		simulation();
 	}

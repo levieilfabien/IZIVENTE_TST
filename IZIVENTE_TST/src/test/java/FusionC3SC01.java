@@ -8,9 +8,10 @@ import org.junit.Test;
 import exceptions.SeleniumException;
 
 /**
- * Scénario 1 des tests automatisés pour IZIVENTE - Projet Fusion
- * Editique FACELIA (BP)
- * @author levieilfa bardouma
+ * PJNFIEVA11001 Fusion BP MED
+ * Chantier 3 Scénario 1 IZIVENTE - Simulation Créodis sans co emprunteur avant bascule
+ * @author levieilfa
+ * @author bardouma
  */
 public class FusionC3SC01 extends TNRSC00 {
 
@@ -25,11 +26,11 @@ public void fusionC3SC01() throws SeleniumException {
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
 		this.etablissement = "056";
-		this.agence = "00001";
+		this.agence = "00009";
 		this.typeDossier = TypeProduit.CREODIS;
 		this.aucunCoEmp = true;
-		this.assuranceEmp = false;
-		this.montantCredit = "8000";
+		this.assuranceEmp = true;
+		this.montantCredit = "3000";
 		this.mensualite = "240";
 		
 		simulation();
