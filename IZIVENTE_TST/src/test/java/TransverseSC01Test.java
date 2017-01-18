@@ -27,14 +27,14 @@ public class TransverseSC01Test extends TNRSC00 {
 		this.assuranceTiers = false;
 		this.montantCredit = "8000";
 		//this.idClient = "942501348";
-		//this.coutProjet = "8000";
-		//this.mensualite = "300";
+		this.coutProjet = "8000";
+		this.mensualite = "300";
 		//this.numPersPhysTiers = "942500502";
 		
 		//simulation();
 		//validation();
-		//miseAEdit();
-		miseEnForce();
+		miseAEdit();
+		//miseEnForce();
 		//murissement();
 		
 	}
