@@ -624,4 +624,9 @@ public class Cibles {
 	 * Element pour la récupération l'IBAN du compte emprunteur
 	 */
 	public static final CibleBean ELEMENT_SPAN_IBAN = new CibleBean(Clefs.XPATH, ".//*[text()='BIC']/../../../../tbody/tr/td[3]");
+	
+	/**
+	 * Bouton de rafraichissement des informations client
+	 */
+	public static final CibleBean BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT = new CibleBean("form_donnees_client:refreshClient1");
 }

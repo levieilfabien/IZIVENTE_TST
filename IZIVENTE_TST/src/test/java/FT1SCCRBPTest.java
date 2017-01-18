@@ -33,9 +33,9 @@ public void FT1SCCRBPTestLancement() throws SeleniumException {
 		this.montantCredit = "8000";
 		this.mensualite = "240";
 
-		simulation();
+		//simulation();
 		//validation();
-		//miseAEdit();
+		miseAEdit();
 		//miseEnForce();
 		//murissement();
 	}

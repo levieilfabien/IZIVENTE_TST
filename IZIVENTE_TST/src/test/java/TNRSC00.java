@@ -299,6 +299,8 @@ public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario0,
 	outil.cliquerSiPossible(Cibles.BOUTON_MENU_NOUVEAU_DOSSIER);
 	outil.cliquer(Cibles.BOUTON_POPUP_FERMER);
 	//Step 4 : Vérifier la cohérence des données du client, du conjoint si existant et du budget. Cliquer sur le bouton 'Suivant'
+	outil.attendreChargementElement(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT);
+	outil.cliquer(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT);
 	outil.attendreEtCliquer(Cibles.BOUTON_SUIVANT);
 	outil.attendrePresenceTexte("Synthèse");
 	CT02.validerObjectif(outil.getDriver(),  "SUIVANT", true);
@@ -332,8 +334,8 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 	scenario0.setFlag(0);
 	switch(typeDossier){
 		case FACELIA : 
-			outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT_CR, true, true);
-			outil.selectionner("FACELIA", Cibles.SELECTEUR_OFFRE_CREDIT_CR, true);
+			//outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT_CR, true, true);
+			//outil.selectionner("FACELIA", Cibles.SELECTEUR_OFFRE_CREDIT_CR, true);
 			outil.attendre(2);
 			CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
 			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
@@ -802,28 +804,28 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 					}
 					break;
 				case IZICARTE :
-					//outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR, true, true);
-					//outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
-					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_IZICARTE, true, true);	
-					outil.cliquer(Cibles.RADIO_AVEC_ASS_IZICARTE);
-					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_DECES_IZICARTE_OUI);
-					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INVALD_IZICARTE_NON);
-					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_MALA_IZICARTE_NON);
-					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_PERTE_IZICARTE_NON);
-					outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_ASS_CR, true, true);
-					outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_CR);
+					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR, true, true);
+					outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
+					//outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_IZICARTE, true, true);	
+					//outil.cliquer(Cibles.RADIO_AVEC_ASS_IZICARTE);
+					//outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_DECES_IZICARTE_OUI);
+					//outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INVALD_IZICARTE_NON);
+					//outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_MALA_IZICARTE_NON);
+					//outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_PERTE_IZICARTE_NON);
+					//outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_ASS_CR, true, true);
+					//outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_CR);
 					break;
 				case FACELIA :
-					//outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_FACELIA);
-					//outil.cliquer(Cibles.RADIO_AVEC_ASS_FACELIA);
-					outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);	
-					outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_DECES_FACELIA_OUI);
-					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INCAP_FACELIA_NON);
-					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INVALD_FACELIA_NON);
-					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_PERTE_FACELIA_NON);
-					outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_ASS_CR, true, true);
-					outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_CR);
+					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR);
+					outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
+					//outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);	
+					//outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+					//outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_DECES_FACELIA_OUI);
+					//outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INCAP_FACELIA_NON);
+					//outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INVALD_FACELIA_NON);
+					//outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_PERTE_FACELIA_NON);
+					//outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_ASS_CR, true, true);
+					//outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_CR);
 					break;
 				}
 			} else {
@@ -837,17 +839,17 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 				break;
 				case IZICARTE :
 					outil.attendre(1);
-					//outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_CR);
-					//outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
-					outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
-					outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
+					outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_CR);
+					outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
+					//outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
+					//outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
 				break;
 				case FACELIA :
-					//outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_FACELIA);
-					//outil.cliquer(Cibles.RADIO_SANS_ASS_FACELIA);
 					outil.attendre(2);
-					outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
-					outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
+					outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_CR);
+					outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
+					//outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
+					//outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
 				break;
 				case CREODIS :
 					outil.attendreEtCliquer(Cibles.RADIO_SELECTION_SANS_ASS_CR);
