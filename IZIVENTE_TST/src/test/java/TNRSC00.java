@@ -645,11 +645,17 @@ public CasEssaiIziventeBean CT06FinalisationInstruction(CasEssaiIziventeBean sce
 
 
 public CasEssaiIziventeBean CT07MiseGestion(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
-	//Paramétrage du CT07
+	//Paramètrage du CT07
 	CasEssaiIziventeBean CT07 = new CasEssaiIziventeBean();
-	//CT07.setAlm(scenario0.getAlm());
-	CT07.setAlm(false);
+	CT07.setAlm(scenario0.getAlm());
+	CT07.setNomCasEssai("CT07 -" + getTime());
+	CT07.setDescriptif("CT07 - Mise en force du dossier");
+	CT07.setNomTestPlan("CT07 - Mise en force du dossier");
 	//Information issues du scénario.
+	CT07.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
+	CT07.setCheminTestLab(scenario0.getCheminTestLab());
+	CT07.setNomTestLab(scenario0.getCheminTestLab());
+	CT07.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
 	//Gestion des steps
 	CT07.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT07.getNomCasEssai() + CT07.getTime()));
 	CT07.ajouterStep("Relancement d'Izivente et retour sur le dossier", "RETOUR", "Affichage de la page d'accueil d'Izivente avec injection du jeton");
@@ -720,16 +726,35 @@ public CasEssaiIziventeBean CT07MiseGestion(CasEssaiIziventeBean scenario0, Sele
 	return CT07;
 }
 
-public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
+public CasEssaiIziventeBean CT08Murissement(CasEssaiIziventeBean scenario0, SeleniumOutils outil) {
+	//Paramètrage du CT08
+	CasEssaiIziventeBean CT08 = new CasEssaiIziventeBean();
+	CT08.setAlm(scenario0.getAlm());
+	CT08.setNomCasEssai("CT08 -" + getTime());
+	CT08.setDescriptif("CT08 - Murissement");
+	CT08.setNomTestPlan("CT08 - Murissement");
+	//Information issues du scénario.
+	CT08.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
+	CT08.setCheminTestLab(scenario0.getCheminTestLab());
+	CT08.setNomTestLab(scenario0.getCheminTestLab());
+	CT08.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
+	//Gestion des objectifs
+	CT08.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT08.getNomCasEssai() + CT08.getTime()));
+	CT08.ajouterStep("Lancement de la fonction murissement", "Lancement de l'étape du murissement", "Fonction lancée");
+	CT08.ajouterStep("Validation du murissement du dossier", "Murissement validé", "Murissement validé");
+	//Lancement de la fonction de murissement d'un dossier
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 	String siocID = IZIVENTEOutils.derniersCaracteres(scenario0.getNumeroFFI(), 8);
 	String date = sdf.format(new Date());
 	Boolean retour = IZIVENTEOutils.murissement(siocID, this.distributeur, typeDossier != TypeProduit.CREDIT_AMORT, date);
+	CT08.validerObjectif(outil.getDriver(), "Lancement de l'étape du murissement", true);
 	if (retour){
 		scenario0.setFlag(Constantes.ETAPE_SUIVANTE_MEG);
+		CT08.validerObjectif(outil.getDriver(), "Murissement validé", true);
 		return scenario0;
 	} else {
 		//TODO Gestion d'erreur non bloquante : permettrai de passer à un autre murissement
+		CT08.validerObjectif(outil.getDriver(), "Murissement validé", false);
 		return scenario0;
 	}
 	
@@ -1218,7 +1243,7 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 	 * Effectue le murissement de dossiers présents dans le fichier de donnée à l'étape de murissement.
 	 * @throws SeleniumException en cas d'erreur.
 	 */
-	public void murissement() throws SeleniumException {
+	public void murissement(SeleniumOutils outil) throws SeleniumException {
 		this.simulation = false;
 		this.validation = false;
 		this.edition = false;
@@ -1241,7 +1266,7 @@ public CasEssaiIziventeBean CT07Murissement(CasEssaiIziventeBean scenario0) {
 					calendar.add(Calendar.DAY_OF_YEAR, 2);
 				}
 				
-				this.ecritureFichierDonnees(CT07Murissement(simulationForc), calendar.getTime());
+				this.ecritureFichierDonnees(CT08Murissement(simulationForc, outil), calendar.getTime());
 			}
 			
 		}
