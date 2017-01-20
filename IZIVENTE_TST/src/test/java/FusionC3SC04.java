@@ -30,7 +30,7 @@ public void fusionC3SC04() throws SeleniumException {
 		this.typeDossier = TypeProduit.FACELIA;
 		this.aucunCoEmp = true; 
 		this.assuranceEmp = false;
-		this.montantCredit = "8000";
+		this.montantCredit = "4000";
 		this.mensualite = "240";
 
 		validation();

@@ -37,6 +37,6 @@ public void fusionC3SC02() throws SeleniumException {
 		this.mensualite = "300";
 		this.montantCredit = "10000";
 
-		simulation();
+		miseAEdit();
 	}
 }

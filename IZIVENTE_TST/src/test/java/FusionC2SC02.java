@@ -25,6 +25,8 @@ public void fusionC2SC02() throws SeleniumException {
 
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
+		this.etablissement = "056";
+		this.agence = "00009";
 		this.typeDossier = TypeProduit.FACELIA;
 		this.aucunCoEmp = true; 
 		this.assuranceEmp = true;
