@@ -11,6 +11,7 @@ import exceptions.SeleniumException;
 import main.bean.CasEssaiIziventeBean;
 import main.constantes.Cibles;
 import main.constantes.Constantes;
+import main.constantes.TypeProduit;
 import moteurs.FirefoxImpl;
 import moteurs.GenericDriver;
 import outils.SeleniumOutils;
@@ -20,12 +21,36 @@ import outils.SeleniumOutils;
  * Editique FACELIA (BP)
  * @author levieilfa bardouma
  */
-public class TNRSC01 extends SC00Test {
+public class TNRSC01 extends TNRSC00 {
 
 	/**
  * Id de sérialisation.
  */
 private static final long serialVersionUID = 1L;
+
+@Test
+public void lancementTNR() throws SeleniumException {
+	// Description du scénario
+	//CasEssaiIziventeBean scenario1 = new CasEssaiIziventeBean();
+	this.setAlm(true);
+	this.setIdUniqueTestLab(54199);
+	this.setNomCasEssai("TNRSC01-" + getTime());
+	this.setDescriptif("TNRSC01 - BP - IZIVENTE_Editique FACELIA CR Debit Credit");
+	this.setNomTestLab("TNRSC01 - BP - IZIVENTE_Editique FACELIA CR Debit Credit");
+	//scenario1.setNomTestPlan("TNRSC01 - BP - IZIVENTE_Editique FACELIA CR Debit Credit");
+	this.setCheminTestLab("POC Selenium\\IZIVENTE");
+	
+	this.distributeur = Constantes.CAS_BP;
+	this.etablissement = "056";
+	this.agence = "00009";
+	this.typeDossier = TypeProduit.FACELIA;
+	this.aucunCoEmp = true;
+	this.assuranceEmp = false;
+	this.montantCredit = "7500";
+	//this.mensualite = "750";
+	
+	miseAEdit();
+}
 
 @Test
 public void accesIzivente() throws SeleniumException {
@@ -64,11 +89,11 @@ public void accesIzivente() throws SeleniumException {
 			//CT03 - Saisie des paramètres relatifs au type de dossier et validation
 			//CT04 - Choix des participants et des assurances associées et validation des participants
 			//CT05 - Validation de l'instruction
-			scenario1.getTests().add(CT01Initialisation(scenario1, outil));
-			scenario1.getTests().add(CT02OuvertureDossier(scenario1, outil));
-			scenario1.getTests().add(CT03SaisieDossier(scenario1, outil));
-			scenario1.getTests().add(CT04Participants(scenario1, outil));
-			scenario1.getTests().add(CT05FinalisationInstruction(scenario1, outil));
+			scenario1.getTests().add(CT01InitialisationOld(scenario1, outil));
+			scenario1.getTests().add(CT02OuvertureDossierOld(scenario1, outil));
+			scenario1.getTests().add(CT03SaisieDossierOld(scenario1, outil));
+			scenario1.getTests().add(CT04ParticipantsOld(scenario1, outil));
+			scenario1.getTests().add(CT05FinalisationInstructionOld(scenario1, outil));
 			
 		} catch (SeleniumException ex) {
 			// Finalisation en erreur du cas de test.
@@ -88,7 +113,7 @@ public void accesIzivente() throws SeleniumException {
  * @return le cas d'essai documenté pour ajout au scénario.
  * @throws SeleniumException en cas d'erreur.
  */
-public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario1, SeleniumOutils outil) throws SeleniumException {
+public CasEssaiIziventeBean CT01InitialisationOld(CasEssaiIziventeBean scenario1, SeleniumOutils outil) throws SeleniumException {
 	//Paramétrage du CT01
 	CasEssaiIziventeBean CT01 = new CasEssaiIziventeBean();
 	CT01.setAlm(true);
@@ -122,7 +147,7 @@ public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario1, S
 	return CT01;
 }
 
-public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario1, SeleniumOutils outil) throws SeleniumException {
+public CasEssaiIziventeBean CT02OuvertureDossierOld(CasEssaiIziventeBean scenario1, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT02
 	CasEssaiIziventeBean CT02 = new CasEssaiIziventeBean();
 	CT02.setAlm(true);
@@ -159,6 +184,8 @@ public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario1,
 	outil.attendrePresenceTexte("ATTENTION");
 	outil.cliquer(Cibles.BOUTON_POPUP_FERMER);
 	CT02.validerObjectif(outil.getDriver(), "CONFIRMATION", true);
+	outil.attendreChargementElement(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT);
+	outil.cliquer(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT);
 	//Step 4 : Vérifier la cohérence des données du client, du conjoint si existant et du budget. Cliquer sur le bouton 'Suivant'
 	outil.attendreEtCliquer(Cibles.BOUTON_SUIVANT);
 	CT02.validerObjectif(outil.getDriver(), "SUIVANT", true);
@@ -169,7 +196,7 @@ public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario1,
 	return CT02;
 }
 	
-public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario1, SeleniumOutils outil) throws SeleniumException {
+public CasEssaiIziventeBean CT03SaisieDossierOld(CasEssaiIziventeBean scenario1, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT03
 	CasEssaiIziventeBean CT03 = new CasEssaiIziventeBean();
 	CT03.setAlm(true);
@@ -190,10 +217,11 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario1, Se
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SAISIE DU DOSSIER
 	/////////////////////////////////////////////////////////////////////////////////////////////////////		
-	//Step 1 : Sélectionner l'offre désirée dans le menu déroulant selon le scénario
-	outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT_CR, true, true);
-	outil.selectionner("FACELIA", Cibles.SELECTEUR_OFFRE_CREDIT_CR, false);
-	outil.attendre(2);
+	//L'offre FACELIA est directement sélectionnée, pas de selecteur d'offre.
+//	//Step 1 : Sélectionner l'offre désirée dans le menu déroulant selon le scénario
+//	outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT_CR, true, true);
+//	outil.selectionner("FACELIA", Cibles.SELECTEUR_OFFRE_CREDIT_CR, false);
+//	outil.attendre(2);
 	CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
 	//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
 	outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR);
@@ -209,7 +237,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario1, Se
 	return CT03;
 }
 	
-public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario1, SeleniumOutils outil) throws SeleniumException {
+public CasEssaiIziventeBean CT04ParticipantsOld(CasEssaiIziventeBean scenario1, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT04
 	CasEssaiIziventeBean CT04 = new CasEssaiIziventeBean();
 	CT04.setAlm(true);
@@ -238,8 +266,8 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario1, Sel
 	//Assurance de l'emprunteur
 	outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
 	outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
-	outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_FACELIA);
-	outil.cliquer(Cibles.RADIO_AVEC_ASS_FACELIA);
+	outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR);
+	outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
 	CT04.validerObjectif(outil.getDriver(), "ASSURANCEROLE", true);
 	//Step 3 : Valider la liste des participants
 	outil.attendreChargementElement(Cibles.BOUTON_VALIDER_LISTE_PARTICIPANT);
@@ -249,7 +277,7 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario1, Sel
 	return CT04;
 }
 	
-public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean scenario1, SeleniumOutils outil) throws SeleniumException {
+public CasEssaiIziventeBean CT05FinalisationInstructionOld(CasEssaiIziventeBean scenario1, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT05
 	CasEssaiIziventeBean CT05 = new CasEssaiIziventeBean();
 	CT05.setAlm(true);

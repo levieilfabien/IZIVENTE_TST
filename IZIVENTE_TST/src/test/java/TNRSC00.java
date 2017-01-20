@@ -151,7 +151,12 @@ public CasEssaiIziventeBean lancement(CasEssaiIziventeBean scenario0) throws Sel
 		//scenario0.setNomTestPlan("TNRSC00 - IZIVENTE_Editique XX");
 		scenario0.setCheminTestLab("POC Selenium\\IZIVENTE");*/
 		scenario0 = new CasEssaiIziventeBean();
-		scenario0.setAlm(false);
+		scenario0.setNomCasEssai(this.getNomCasEssai());
+		scenario0.setAlm(this.getAlm());
+		scenario0.setIdUniqueTestLab(this.getIdUniqueTestLab());
+		scenario0.setDescriptif(this.getDescriptif());
+		scenario0.setNomTestLab(this.getNomTestLab());
+		scenario0.setCheminTestLab(this.getCheminTestLab());
 		// LISTE DES OBJECTIFS DU CAS DE TEST
 		scenario0.ajouterObjectif(new ObjectifBean("Test arrivé à terme", scenario0.getNomCasEssai() + scenario0.getTime()));
 	}
@@ -222,6 +227,8 @@ public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario0, S
 	CT01.ajouterStep("Récupérer numéro de bouchon généré et injecter le jeton (copier/coller du code dans la zone de l'écran de reroutage)", "INJECTION", "Jeton collé dans la zone appropriée");
 	CT01.ajouterStep("Valider le jeton et lancer le reroutage (clic sur bouton 'Reroutage')", "ACCESIZIVENTE", "Affichage d'Izivente (écran d'instruction ou pop up de mode de vente");
 	
+	scenario0.getTests().add(CT01);
+	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// ACCES IZIVENTE ET INITIALISATION
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -255,6 +262,8 @@ public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario0,
 	CT02.ajouterStep("Fermeture des pop ups confirmant l'ouverture du dossier", "CONFIRMATION", "Affichage de l'écran de données client et de liste des dossiers");
 	CT02.ajouterStep("Vérifier la cohérence des données du client, du conjoint si existant et du budget. Cliquer sur le bouton 'Suivant'.", "SUIVANT", "Affichage de la pop un de Synthèse des informations client");
 	CT02.ajouterStep("Valider les données client en cliquant sur le bouton 'Valider' dans la pop up de synthèse des information client.", "VALIDATIONDONNEESCLIENT", "Affichage de l'écran de demande de crédit");
+	
+	scenario0.getTests().add(CT02);
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// OUVERTURE DU DOSSIER
@@ -327,12 +336,14 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 	CT03.ajouterStep("Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)", "PARAMETRES", "Paramètres cohérents avec le scénario");
 	CT03.ajouterStep("Cliquer sur le bouton 'Suivant' pour valider les informations du dossier", "SAISIEDOSSIER", "Affichage de l'écran de sélection des participants");
 	
+	scenario0.getTests().add(CT03);
+	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SAISIE DU DOSSIER
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Step 1 : Sélectionner l'offre désirée dans le menu déroulant selon le scénario
 	scenario0.setFlag(0);
-	switch(typeDossier){
+	switch(this.typeDossier){
 		case FACELIA : 
 			//outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT_CR, true, true);
 			//outil.selectionner("FACELIA", Cibles.SELECTEUR_OFFRE_CREDIT_CR, true);
@@ -425,6 +436,8 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, Sel
     CT04.ajouterStep("Valider la liste des participants (clic sur bouton correspondant)", "VALIDATIONPARTICIPANTS", "Affichage de l'écran de 'Proposition' avec la grille alternative commerciale");
     CT04.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT04.getNomCasEssai() + CT04.getTime()));
 	
+    scenario0.getTests().add(CT04);
+    
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 	// PARTICIPANTS
 	/////////////////////////////////////////////////////////////////////////////////////////////////////		
@@ -516,6 +529,9 @@ public CasEssaiIziventeBean CT05Validation(CasEssaiIziventeBean scenario0, Selen
 	CT05.ajouterStep("Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires (choix oui/non via boutons radio).", "OPTIONS", "Choix effectués conformément au scénario");
 	CT05.ajouterStep("Vérifier les justificatifs et valider (clic bouton radio 'Vérifié' pour chaque justificatif dans la pop up de finalisation de l'instruction' et clic sur bouton 'Valider'", "VERIFICATION", "Retour sur la page de dossier de vente");
 	CT05.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT05.getNomCasEssai() + CT05.getTime()));
+	
+	scenario0.getTests().add(CT05);
+	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// FINALISATION DE L'INSTRUCTION
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -567,6 +583,8 @@ public CasEssaiIziventeBean CT06FinalisationInstruction(CasEssaiIziventeBean sce
 	CT06.ajouterStep("Sélectionner le compte de prélèvement et valider l'offre de crédit (clic sur bouton 'Confirmer contrat de crédit')", "CONFIRMATION", "Affichage de la pop up 'Finalisation de l'instruction'");
 	CT06.ajouterStep("Attendre la fin de la préparation du contrat puis cliquer sur suivant pour envoi à l'octroi", "PREPARATION", "Deconnexion d'Izivente");
 		
+	scenario0.getTests().add(CT06);
+	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// FINALISATION DE L'INSTRUCTION
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -634,6 +652,8 @@ public CasEssaiIziventeBean CT07MiseGestion(CasEssaiIziventeBean scenario0, Sele
 	CT07.ajouterStep("Passage à l'octroi et premières vérification", "OCTROI", "Dossier accepté pour l'octroi ");
 	CT07.ajouterStep("Finalisation de l'octroi et dernières confirmations avant mise en gestion", "FINALISATION", "Affichage des données dossiers et client avec état FORC");
 	CT07.ajouterStep("Vérification des données dossier et client", "MISENFORCE", "Dossier à l'état FORC");
+	
+	scenario0.getTests().add(CT07);
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////// MISE EN GESTION ////////////////////////////////////////////
