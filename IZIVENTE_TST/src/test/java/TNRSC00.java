@@ -594,7 +594,8 @@ public CasEssaiIziventeBean CT06FinalisationInstruction(CasEssaiIziventeBean sce
 
 	// Dans le cas d'un IZICARTE on ne passe pas par les mêmes écrans après l'édition.
 	if (typeDossier == TypeProduit.CREDIT_AMORT) {
-		//Step 7 : Préparation du contrat et envoi à l'octroi		
+		//Step 7 : Préparation du contrat et envoi à l'octroi
+		outil.attendreChargementElement(Cibles.ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE);
 		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT);
 		CT06.validerObjectif(outil.getDriver(), "PREPARATION", true);
 	} else if (typeDossier == TypeProduit.IZICARTE) {

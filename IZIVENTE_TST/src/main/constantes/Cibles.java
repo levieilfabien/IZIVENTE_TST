@@ -227,7 +227,7 @@ public class Cibles {
 	/**
 	 * Element indiquant l'état d'avancement final du chargement de la signature electronique.
 	 */
-	public static final CibleBean ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE = new CibleBean("progressBarTermine");
+	public static final CibleBean ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE = new CibleBean("progressBarTermine:upload");
 	
 	/**
 	 * Element indiquant la présence du formulaire de complétude (contrôle des confirmités)
