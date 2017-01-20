@@ -219,6 +219,7 @@ public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario0, S
 	//Information issues du scénario.
 	CT01.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
 	CT01.setCheminTestLab(scenario0.getCheminTestLab());
+	CT01.setNomTestLab(scenario0.getCheminTestLab());
 	CT01.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());	
 	//Gestion des steps
 	CT01.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT01.getNomCasEssai() + CT01.getTime()));
@@ -226,8 +227,6 @@ public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario0, S
 	CT01.ajouterStep("Lancer l'URL Izivente en fonction du réseau testé", "ACCESREROUTAGE", "Affichage de l'écran de reroutage");
 	CT01.ajouterStep("Récupérer numéro de bouchon généré et injecter le jeton (copier/coller du code dans la zone de l'écran de reroutage)", "INJECTION", "Jeton collé dans la zone appropriée");
 	CT01.ajouterStep("Valider le jeton et lancer le reroutage (clic sur bouton 'Reroutage')", "ACCESIZIVENTE", "Affichage d'Izivente (écran d'instruction ou pop up de mode de vente");
-	
-	scenario0.getTests().add(CT01);
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// ACCES IZIVENTE ET INITIALISATION
@@ -254,6 +253,7 @@ public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario0,
 	//Information issues du scénario.
 	CT02.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
 	CT02.setCheminTestLab(scenario0.getCheminTestLab());
+	CT02.setNomTestLab(scenario0.getCheminTestLab());
 	CT02.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
 	//Gestion des steps
 	CT02.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT02.getNomCasEssai() + CT02.getTime()));
@@ -262,8 +262,6 @@ public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario0,
 	CT02.ajouterStep("Fermeture des pop ups confirmant l'ouverture du dossier", "CONFIRMATION", "Affichage de l'écran de données client et de liste des dossiers");
 	CT02.ajouterStep("Vérifier la cohérence des données du client, du conjoint si existant et du budget. Cliquer sur le bouton 'Suivant'.", "SUIVANT", "Affichage de la pop un de Synthèse des informations client");
 	CT02.ajouterStep("Valider les données client en cliquant sur le bouton 'Valider' dans la pop up de synthèse des information client.", "VALIDATIONDONNEESCLIENT", "Affichage de l'écran de demande de crédit");
-	
-	scenario0.getTests().add(CT02);
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// OUVERTURE DU DOSSIER
@@ -329,14 +327,13 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 	//Information issues du scénario.
 	CT03.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
 	CT03.setCheminTestLab(scenario0.getCheminTestLab());
+	CT03.setNomTestLab(scenario0.getCheminTestLab());
 	CT03.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
 	//Gestion des steps
 	CT03.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT03.getNomCasEssai() + CT03.getTime()));
 	CT03.ajouterStep("Sélectionner l'offre désirée dans le menu déroulant selon le scénario", "OFFRE", "Offre sélectionnée");
 	CT03.ajouterStep("Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)", "PARAMETRES", "Paramètres cohérents avec le scénario");
 	CT03.ajouterStep("Cliquer sur le bouton 'Suivant' pour valider les informations du dossier", "SAISIEDOSSIER", "Affichage de l'écran de sélection des participants");
-	
-	scenario0.getTests().add(CT03);
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SAISIE DU DOSSIER
@@ -428,6 +425,7 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, Sel
 	//Information issues du scénario.
 	CT04.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
 	CT04.setCheminTestLab(scenario0.getCheminTestLab());
+	CT04.setNomTestLab(scenario0.getCheminTestLab());
 	CT04.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
 	//Gestion des steps
 	CT04.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT04.getNomCasEssai() + CT04.getTime()));
@@ -436,8 +434,6 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, Sel
     CT04.ajouterStep("Valider la liste des participants (clic sur bouton correspondant)", "VALIDATIONPARTICIPANTS", "Affichage de l'écran de 'Proposition' avec la grille alternative commerciale");
     CT04.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT04.getNomCasEssai() + CT04.getTime()));
 	
-    scenario0.getTests().add(CT04);
-    
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 	// PARTICIPANTS
 	/////////////////////////////////////////////////////////////////////////////////////////////////////		
@@ -522,6 +518,7 @@ public CasEssaiIziventeBean CT05Validation(CasEssaiIziventeBean scenario0, Selen
 	//Information issues du scénario.
 	CT05.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
 	CT05.setCheminTestLab(scenario0.getCheminTestLab());
+	CT05.setNomTestLab(scenario0.getCheminTestLab());
 	CT05.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
 	//Gestion des steps
 	CT05.ajouterStep("Valider de l'offre contrat de crédit (clic sur le bouton 'Valider en contrat de crédit')", "VALIDATION", "Affichage de la pop up de finalisation de l'instruction ou de la page de dossier de vente");
@@ -529,8 +526,6 @@ public CasEssaiIziventeBean CT05Validation(CasEssaiIziventeBean scenario0, Selen
 	CT05.ajouterStep("Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires (choix oui/non via boutons radio).", "OPTIONS", "Choix effectués conformément au scénario");
 	CT05.ajouterStep("Vérifier les justificatifs et valider (clic bouton radio 'Vérifié' pour chaque justificatif dans la pop up de finalisation de l'instruction' et clic sur bouton 'Valider'", "VERIFICATION", "Retour sur la page de dossier de vente");
 	CT05.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT05.getNomCasEssai() + CT05.getTime()));
-	
-	scenario0.getTests().add(CT05);
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// FINALISATION DE L'INSTRUCTION
@@ -563,6 +558,14 @@ public CasEssaiIziventeBean CT05Validation(CasEssaiIziventeBean scenario0, Selen
 	scenario0.setFlag(Constantes.ETAPE_SUIVANTE_EDITION);
 	return CT05;
 }
+
+/**
+ * Fonction générique traitant la finalisation de l'instruction d'une simulation.
+ * @param scenario0 le scénario devrivant le cas d'essai.
+ * @param outil la boite à outil.
+ * @return le cas de test à ajouter au scénario décrivant les étapes réalisées.
+ * @throws SeleniumException en cas d'erreur.
+ */
 public CasEssaiIziventeBean CT06FinalisationInstruction(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramètrage du CT06
 	CasEssaiIziventeBean CT06 = new CasEssaiIziventeBean();
@@ -573,6 +576,7 @@ public CasEssaiIziventeBean CT06FinalisationInstruction(CasEssaiIziventeBean sce
 	//Information issues du scénario.
 	CT06.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
 	CT06.setCheminTestLab(scenario0.getCheminTestLab());
+	CT06.setNomTestLab(scenario0.getCheminTestLab());
 	CT06.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
 	//Gestion des steps
 	CT06.ajouterStep("Imprimer la liasse de document (clic sur le bouton 'Suivant')", "IMPRESSION", "Affichage de la pop up 'Préparation contrat'");
@@ -583,8 +587,6 @@ public CasEssaiIziventeBean CT06FinalisationInstruction(CasEssaiIziventeBean sce
 	CT06.ajouterStep("Sélectionner le compte de prélèvement et valider l'offre de crédit (clic sur bouton 'Confirmer contrat de crédit')", "CONFIRMATION", "Affichage de la pop up 'Finalisation de l'instruction'");
 	CT06.ajouterStep("Attendre la fin de la préparation du contrat puis cliquer sur suivant pour envoi à l'octroi", "PREPARATION", "Deconnexion d'Izivente");
 		
-	scenario0.getTests().add(CT06);
-	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// FINALISATION DE L'INSTRUCTION
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -640,10 +642,13 @@ public CasEssaiIziventeBean CT06FinalisationInstruction(CasEssaiIziventeBean sce
 	CT06.validerObjectif(outil.getDriver(), CT06.getNomCasEssai() + CT06.getTime(),true);
 	return CT06;
 }
+
+
 public CasEssaiIziventeBean CT07MiseGestion(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 	//Paramétrage du CT07
 	CasEssaiIziventeBean CT07 = new CasEssaiIziventeBean();
-	CT07.setAlm(scenario0.getAlm());
+	//CT07.setAlm(scenario0.getAlm());
+	CT07.setAlm(false);
 	//Information issues du scénario.
 	//Gestion des steps
 	CT07.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT07.getNomCasEssai() + CT07.getTime()));
@@ -652,8 +657,6 @@ public CasEssaiIziventeBean CT07MiseGestion(CasEssaiIziventeBean scenario0, Sele
 	CT07.ajouterStep("Passage à l'octroi et premières vérification", "OCTROI", "Dossier accepté pour l'octroi ");
 	CT07.ajouterStep("Finalisation de l'octroi et dernières confirmations avant mise en gestion", "FINALISATION", "Affichage des données dossiers et client avec état FORC");
 	CT07.ajouterStep("Vérification des données dossier et client", "MISENFORCE", "Dossier à l'état FORC");
-	
-	scenario0.getTests().add(CT07);
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////// MISE EN GESTION ////////////////////////////////////////////
