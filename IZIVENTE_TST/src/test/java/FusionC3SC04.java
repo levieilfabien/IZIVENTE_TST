@@ -29,9 +29,9 @@ public void fusionC3SC04() throws SeleniumException {
 		this.agence = "00009";
 		this.typeDossier = TypeProduit.FACELIA;
 		this.aucunCoEmp = true; 
-		this.assuranceEmp = false;
-		this.montantCredit = "4000";
-		this.mensualite = "240";
+		this.assuranceEmp = true;
+		this.montantCredit = "5000";
+		this.mensualite = "200";
 
 		validation();
 	}

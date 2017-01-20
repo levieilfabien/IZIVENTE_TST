@@ -390,11 +390,11 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 			outil.attendre(1);
 			outil.attendreChargementElement(Cibles.SELECTEUR_UNIVERS_CREDIT, true, true);
 			outil.selectionner(typeUnivers, Cibles.SELECTEUR_UNIVERS_CREDIT, false);
-			//outil.attendre(2); //2 secondes ne suffisent pas
+			outil.attendre(2); //2 secondes ne suffisent pas
 			outil.attendreChargementElement(Cibles.SELECTEUR_UNIVERS_CREDIT, true, true);
 			outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT, true, true);
 			outil.selectionner(typeOffre, Cibles.SELECTEUR_OFFRE_CREDIT, false);
-			//outil.attendre(1);
+			outil.attendre(1);
 			CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
 			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
 			outil.attendreChargementElement(Cibles.SELECTEUR_OBJET_FINANCE, true, true);

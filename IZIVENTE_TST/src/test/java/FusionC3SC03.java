@@ -31,8 +31,8 @@ public void fusionC3SC03() throws SeleniumException {
 		this.edition = true;
 		this.aucunCoEmp = true;
 		this.assuranceEmp = false;
-		this.montantCredit = "8000";
-		this.mensualite = "240";
+		this.montantCredit = "2000";
+		this.mensualite = "100";
 
 		validation();
 	}

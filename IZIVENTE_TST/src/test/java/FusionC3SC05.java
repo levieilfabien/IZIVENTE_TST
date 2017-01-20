@@ -29,14 +29,15 @@ public void fusionC3SC02() throws SeleniumException {
 		this.agence = "00009";
 		this.typeDossier = TypeProduit.CREDIT_AMORT;
 		this.aucunCoEmp = true;
-		this.assuranceEmp = false;
+		this.assuranceEmp = true;
 		this.typeUnivers = "TRESORERIE";
 		this.typeOffre = "CREDIT TRESORERIE";
 		this.typeObjet = "TRESORERIE";
-		this.coutProjet = "10000";
-		this.mensualite = "300";
-		this.montantCredit = "10000";
+		this.coutProjet = "18000";
+		this.mensualite = "500";
+		this.montantCredit = "17000";
 
 		miseAEdit();
+		miseEnForce();
 	}
 }

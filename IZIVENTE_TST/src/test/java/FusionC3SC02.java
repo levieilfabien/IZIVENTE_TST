@@ -29,7 +29,7 @@ public void fusionC3SC02() throws SeleniumException {
 		this.agence = "00009";
 		this.typeDossier = TypeProduit.FACELIA;
 		this.aucunCoEmp = true; 
-		this.assuranceEmp = true;
+		this.assuranceEmp = false;
 		this.montantCredit = "7500";
 		this.mensualite = "300";
 

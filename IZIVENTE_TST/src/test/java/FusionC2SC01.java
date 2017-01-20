@@ -30,9 +30,10 @@ public void fusionC2SC01() throws SeleniumException {
 		this.typeDossier = TypeProduit.CREODIS;
 		this.aucunCoEmp = true;
 		this.assuranceEmp = false;
-		this.montantCredit = "3000";
-		this.mensualite = "200";
+		this.montantCredit = "2500";
+		this.mensualite = "150";
 
 		miseAEdit();
+		miseEnForce();
 	}
 }

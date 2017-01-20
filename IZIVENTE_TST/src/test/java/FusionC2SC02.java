@@ -30,9 +30,10 @@ public void fusionC2SC02() throws SeleniumException {
 		this.typeDossier = TypeProduit.FACELIA;
 		this.aucunCoEmp = true; 
 		this.assuranceEmp = true;
-		this.montantCredit = "3000";
-		this.mensualite = "150";
+		this.montantCredit = "5000";
+		this.mensualite = "100";
 
 		miseAEdit();
+		miseEnForce();
 	}
 }
