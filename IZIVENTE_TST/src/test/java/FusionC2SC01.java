@@ -34,6 +34,5 @@ public void fusionC2SC01() throws SeleniumException {
 		this.mensualite = "150";
 
 		miseAEdit();
-		miseEnForce();
 	}
 }
