@@ -1043,29 +1043,6 @@ public CasEssaiIziventeBean CT08Murissement(CasEssaiIziventeBean scenario0, Sele
 	
 	/**
 	 * Fonction permettant de récupérer une chaîne de caractère (CR ou PP) en fonction du type de dossier
-	 * @param typeDossier2
-	 * @return
-	 */
-	@Deprecated
-	private String chaineProduit(int typeDossier2) {
-		String nomProduit = "";
-		if (typeDossier2 == Constantes.CREDIT_AMORT){
-			nomProduit = "PP";
-		}
-		if (typeDossier2 == Constantes.CREODIS) {
-			nomProduit = "CR";
-		}
-		if (typeDossier2 == Constantes.FACELIA) {
-			nomProduit = "FA";
-		}
-		if (typeDossier2 == Constantes.IZICARTE) {
-			nomProduit = "IZ";
-		}
-		return nomProduit;
-	}
-	
-	/**
-	 * Fonction permettant de récupérer une chaîne de caractère (CR ou PP) en fonction du type de dossier
 	 * @param typeDossier le type de produit choisie.
 	 * @return le code sur deux caractère correspondant au type de dossier.
 	 */
