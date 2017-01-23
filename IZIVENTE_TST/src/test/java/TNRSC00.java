@@ -1139,6 +1139,8 @@ public CasEssaiIziventeBean CT08Murissement(CasEssaiIziventeBean scenario0, Sele
 						typeDossier = TypeProduit.IZICARTE;
 				}
 				scenario.setFlag(Integer.parseInt(instanceDecoupee[5]));
+				scenario.setNumeroBIC(instanceDecoupee[7]);
+				scenario.setNumeroIBAN(instanceDecoupee[8]);
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
