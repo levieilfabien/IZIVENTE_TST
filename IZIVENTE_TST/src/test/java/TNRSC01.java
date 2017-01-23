@@ -52,7 +52,7 @@ public void lancementTNR() throws SeleniumException {
 	miseAEdit();
 }
 
-@Test
+//@Test
 public void accesIzivente() throws SeleniumException {
 	// Description du scénario
 	CasEssaiIziventeBean scenario1 = new CasEssaiIziventeBean();

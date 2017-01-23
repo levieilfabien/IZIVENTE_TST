@@ -56,9 +56,9 @@ public class IZIVENTEOutils {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			Connection connect = null;
 			if (distributeur == Constantes.CAS_BP)  {
-				connect = DriverManager.getConnection("jdbc:sqlserver://SWUDFRSQL2441.child.net:30206", "parc_sisp", "Ana_th3me");
+				connect = DriverManager.getConnection(PropertiesOutil.getInfoEnvConstante("URL_BDD_IZIBOX_BP"), PropertiesOutil.getInfoEnvConstante("USER_BDD_IZIBOX"), PropertiesOutil.getInfoEnvConstante("PWD_BDD_IZIBOX"));
 			} else {
-				connect = DriverManager.getConnection("jdbc:sqlserver://SWUDFRSQL2442.child.net:30208", "parc_sisp", "Ana_th3me");
+				connect = DriverManager.getConnection(PropertiesOutil.getInfoEnvConstante("URL_BDD_IZIBOX_CE"), PropertiesOutil.getInfoEnvConstante("USER_BDD_IZIBOX"), PropertiesOutil.getInfoEnvConstante("PWD_BDD_IZIBOX"));
 			}
 			Statement st = connect.createStatement();
 			

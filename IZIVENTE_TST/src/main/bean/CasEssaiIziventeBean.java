@@ -87,5 +87,7 @@ public class CasEssaiIziventeBean extends CasEssaiBean {
 	public void setFlag(int flag) {
 		this.flag = flag;
 	}
+	
+	
 }
 
