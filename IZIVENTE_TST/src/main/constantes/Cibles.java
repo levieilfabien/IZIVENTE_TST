@@ -75,6 +75,11 @@ public class Cibles {
 	public static final CibleBean SELECTEUR_SITUATION_VENTE_CR = new CibleBean("form_demandeCR:situationVenteField:situationVente");
 	
 	/**
+	 * Case à cocher pour l'absence de financement
+	 */
+	public static final CibleBean CASE_SELECTION_AUCUN_FINANCEMENT = new CibleBean("form_demandeCR:financementLabel:j_id230");
+	
+	/**
 	 * Champ de saisie pour le montant du premier financement CR.
 	 */
 	public static final CibleBean SAISIE_MONTANT_PREMIER_FINANCEMENT_CR = new CibleBean("form_demandeCR:montant1erFinancementFieldRequired:montant1erFinancement");

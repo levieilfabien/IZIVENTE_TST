@@ -552,8 +552,8 @@ public CasEssaiIziventeBean CT05Validation(CasEssaiIziventeBean scenario0, Selen
 		CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);
 	}
 	//Step 4 : Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires
-	outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-	outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+	outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ);
+	outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_NON_MAJ);
 	CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
 	CT05.validerObjectif(outil.getDriver(), CT05.getNomCasEssai() + CT05.getTime(),true);
 	scenario0.setFlag(Constantes.ETAPE_SUIVANTE_EDITION);
@@ -732,8 +732,8 @@ public CasEssaiIziventeBean CT08Murissement(CasEssaiIziventeBean scenario0, Sele
 	CasEssaiIziventeBean CT08 = new CasEssaiIziventeBean();
 	CT08.setAlm(scenario0.getAlm());
 	CT08.setNomCasEssai("CT08 -" + getTime());
-	CT08.setDescriptif("CT08 - Murissement");
-	CT08.setNomTestPlan("CT08 - Murissement");
+	CT08.setDescriptif("CT08 - Murissement du dossier");
+	CT08.setNomTestPlan("CT08 - Murissement du dossier");
 	//Information issues du scénario.
 	CT08.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
 	CT08.setCheminTestLab(scenario0.getCheminTestLab());
@@ -751,13 +751,11 @@ public CasEssaiIziventeBean CT08Murissement(CasEssaiIziventeBean scenario0, Sele
 	CT08.validerObjectif(outil.getDriver(), "Lancement de l'étape du murissement", true);
 	if (retour){
 		scenario0.setFlag(Constantes.ETAPE_SUIVANTE_MEG);
-		System.out.println("C'est OK");
 		CT08.validerObjectif(outil.getDriver(), "Murissement validé", true);
 		return scenario0;
 	} else {
 		//TODO Gestion d'erreur non bloquante : permettrai de passer à un autre murissement
 		CT08.validerObjectif(outil.getDriver(), "Murissement validé", false);
-		System.out.println("C'est KO");
 		return scenario0;
 	}
 	
