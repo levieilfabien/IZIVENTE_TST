@@ -41,11 +41,11 @@ public void lancementTNR() throws SeleniumException {
 	this.setCheminTestLab("POC Selenium\\IZIVENTE");
 	
 	this.distributeur = Constantes.CAS_BP;
-	this.etablissement = "056";
-	this.agence = "00009";
+	//this.etablissement = "056";
+	//this.agence = "00009";
 	this.typeDossier = TypeProduit.FACELIA;
 	this.aucunCoEmp = true;
-	this.assuranceEmp = false;
+	this.assuranceEmp = true;
 	this.montantCredit = "7500";
 	//this.mensualite = "750";
 	

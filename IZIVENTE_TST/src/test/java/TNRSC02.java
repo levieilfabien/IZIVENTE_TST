@@ -5,6 +5,7 @@ import java.io.File;
 import main.bean.CasEssaiIziventeBean;
 import main.constantes.Cibles;
 import main.constantes.Constantes;
+import main.constantes.TypeProduit;
 import moteurs.FirefoxImpl;
 import moteurs.GenericDriver;
 
@@ -21,14 +22,36 @@ import exceptions.SeleniumException;
  * Editique IZICARTE (CE)
  * @author levieilfa bardouma
  */
-public class TNRSC02 extends SC00Test {
+public class TNRSC02 extends TNRSC00 {
 
 	/**
- * Id de sérialisation par défaut.
+ * Id de sérialisation.
  */
 private static final long serialVersionUID = 1L;
 
 @Test
+public void lancementTNR() throws SeleniumException {
+	// Description du scénario
+	//CasEssaiIziventeBean scenario2 = new CasEssaiIziventeBean();
+	this.setAlm(true);
+	this.setIdUniqueTestLab(54199);
+	this.setNomCasEssai("TNRSC02-" + getTime());
+	this.setDescriptif("TNRSC02 - CE - IZIVENTE_Editique Izicarte");
+	this.setNomTestLab("TNRSC02 - CE - IZIVENTE_Editique Izicarte");
+	//scenario2.setNomTestPlan("TNRSC02 - IZIVENTE_Editique Izicarte");
+	this.setCheminTestLab("POC Selenium\\IZIVENTE");
+	
+	this.distributeur = Constantes.CAS_CE;
+	this.typeDossier = TypeProduit.IZICARTE;
+	this.aucunCoEmp = true;
+	this.assuranceEmp = true;
+	this.montantCredit = "8000";
+	this.situationDeVente = "BANC";
+	
+	miseAEdit();
+}
+
+/*@Test
 public void accesIzivente() throws SeleniumException {
 	// Description du scénario
 	CasEssaiIziventeBean scenario2 = new CasEssaiIziventeBean();
@@ -89,6 +112,7 @@ public void accesIzivente() throws SeleniumException {
  * @return le cas d'essai documenté pour ajout au scénario.
  * @throws SeleniumException en cas d'erreur.
  */
+/*
 public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario, SeleniumOutils outil) throws SeleniumException {
 	//Paramétrage du CT01
 	CasEssaiIziventeBean CT01 = new CasEssaiIziventeBean();
@@ -337,4 +361,5 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	CT05.validerObjectif(outil.getDriver(), CT05.getNomCasEssai() + CT05.getTime(),true);
 	return CT05;
 	}
+*/
 }

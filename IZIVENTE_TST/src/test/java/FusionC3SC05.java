@@ -36,8 +36,9 @@ public void fusionC3SC02() throws SeleniumException {
 		this.coutProjet = "18000";
 		this.mensualite = "500";
 		this.montantCredit = "17000";
-
-		miseAEdit();
-		miseEnForce();
+		//simulation();
+		//validation();
+		//miseAEdit();
+		//miseEnForce();
 	}
 }

@@ -57,6 +57,7 @@ public class TNRSC00 extends SC00Test {
 	String mensualite = null;
 	String montantCredit = null;
 	String dureeDiffere = null;
+	String situationDeVente = "Prêt immobilier";
 	//Définir l'absence ou la présence de coemprunteur et leurs rôles.
 	Boolean aucunCoEmp = false;
 	Boolean conjointCoEmp = false;
@@ -348,7 +349,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 			CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
 			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
 			outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR, true, true);
-			outil.selectionner("Prêt immobilier", Cibles.SELECTEUR_SITUATION_VENTE_CR);
+			outil.selectionner(situationDeVente, Cibles.SELECTEUR_SITUATION_VENTE_CR);
 			outil.attendreChargementElement(Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR, true, true);
 			outil.viderEtSaisir(montantCredit,  Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
 			outil.attendreChargementElement(Cibles.SAISIE_MENSUALITE_CR, true, true); 
@@ -368,7 +369,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 			CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
 			//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
 			outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR, true, true);
-			outil.selectionner("Prêt immobilier", Cibles.SELECTEUR_SITUATION_VENTE_CR);
+			outil.selectionner(situationDeVente, Cibles.SELECTEUR_SITUATION_VENTE_CR);
 			outil.attendreChargementElement(Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR, true, true);
 			outil.viderEtSaisir(montantCredit,  Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
 			outil.attendreChargementElement(Cibles.SAISIE_MENSUALITE_CR, true, true); 
@@ -750,11 +751,13 @@ public CasEssaiIziventeBean CT08Murissement(CasEssaiIziventeBean scenario0, Sele
 	CT08.validerObjectif(outil.getDriver(), "Lancement de l'étape du murissement", true);
 	if (retour){
 		scenario0.setFlag(Constantes.ETAPE_SUIVANTE_MEG);
+		System.out.println("C'est OK");
 		CT08.validerObjectif(outil.getDriver(), "Murissement validé", true);
 		return scenario0;
 	} else {
 		//TODO Gestion d'erreur non bloquante : permettrai de passer à un autre murissement
 		CT08.validerObjectif(outil.getDriver(), "Murissement validé", false);
+		System.out.println("C'est KO");
 		return scenario0;
 	}
 	
@@ -857,26 +860,26 @@ public CasEssaiIziventeBean CT08Murissement(CasEssaiIziventeBean scenario0, Sele
 				case IZICARTE :
 					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR, true, true);
 					outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
-					//outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_IZICARTE, true, true);	
-					//outil.cliquer(Cibles.RADIO_AVEC_ASS_IZICARTE);
-					//outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_DECES_IZICARTE_OUI);
-					//outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INVALD_IZICARTE_NON);
-					//outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_MALA_IZICARTE_NON);
-					//outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_PERTE_IZICARTE_NON);
-					//outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_ASS_CR, true, true);
-					//outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_CR);
+					/*outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_IZICARTE, true, true);	
+					outil.cliquer(Cibles.RADIO_AVEC_ASS_IZICARTE);
+					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_DECES_IZICARTE_OUI);
+					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INVALD_IZICARTE_NON);
+					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_MALA_IZICARTE_NON);
+					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_PERTE_IZICARTE_NON);
+					outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_ASS_CR, true, true);
+					outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_CR);*/
 					break;
 				case FACELIA :
 					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR);
 					outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
-					//outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);	
-					//outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-					//outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_DECES_FACELIA_OUI);
-					//outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INCAP_FACELIA_NON);
-					//outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INVALD_FACELIA_NON);
-					//outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_PERTE_FACELIA_NON);
-					//outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_ASS_CR, true, true);
-					//outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_CR);
+					/*outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);	
+					outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_DECES_FACELIA_OUI);
+					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INCAP_FACELIA_NON);
+					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INVALD_FACELIA_NON);
+					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_PERTE_FACELIA_NON);
+					outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_ASS_CR, true, true);
+					outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_CR);*/
 					break;
 				}
 			} else {
