@@ -215,8 +215,8 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario, Sele
 	CasEssaiIziventeBean CT04 = new CasEssaiIziventeBean();
 	CT04.setAlm(true);
 	CT04.setNomCasEssai("CT04 -" + getTime());
-	CT04.setDescriptif("CT04 - Choix des participants");
-	CT04.setNomTestPlan("CT04 - Choix des participants");		
+	CT04.setDescriptif("CT04 - Choix des participants et fin de simulation");
+	CT04.setNomTestPlan("CT04 - Choix des participants et fin de simulation");		
 	//Information issues du scénario.
 	CT04.setIdUniqueTestLab(scenario.getIdUniqueTestLab());
 	CT04.setCheminTestLab(scenario.getCheminTestLab());
