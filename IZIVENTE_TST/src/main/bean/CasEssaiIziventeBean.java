@@ -28,6 +28,9 @@ public class CasEssaiIziventeBean extends CasEssaiBean {
 	
 	private int flag = 0;
 	
+	/**
+	 * Numéro IUN tiré de la synthèse.
+	 */
 	private String numeroIUN = null;
 	
 	private String numeroBIC = null;
