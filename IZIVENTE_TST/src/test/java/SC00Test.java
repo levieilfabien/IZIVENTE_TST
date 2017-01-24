@@ -295,9 +295,9 @@ public class SC00Test extends CasEssaiBean {
 		logger(casEssai.toString());
 
 		//TODO A remettre
-		if (outils != null) {
-			outils.getDriver().quit();
-		}
+//		if (outils != null) {
+//			outils.getDriver().quit();
+//		}
 
 		// On renseigne le rapport d'execution avec les données du cas de test.
 		XLSOutils.renseignerExcel(casEssai);

@@ -66,8 +66,22 @@ public class Foyer {
 	
 	public Foyer(String identifiant, int distributeur) {
 		super();
-		personnePhy = new PersonnePhysique(identifiant, false);
+		personnePhy = new PersonnePhysique(identifiant, false);		
 		personnePhyCjt = new PersonnePhysique((Integer.parseInt(identifiant) + 1) + "", true);
+		
+		// Si on est dans un cas BP, on utilise des civilités en conséquence
+		if (distributeur == CAS_BP || distributeur == CAS_BRED) {
+			personnePhy.signalement.codeCivilite = Civilite.MADAME_BP.getCode();
+			personnePhy.signalement.sexe = "F";
+			personnePhyCjt.signalement.codeCivilite = Civilite.MONSIEUR_BP.getCode();
+			personnePhyCjt.signalement.sexe = "M";
+		} else {
+			personnePhy.signalement.codeCivilite = Civilite.MADAME_CE.getCode();
+			personnePhy.signalement.sexe = "F";
+			personnePhyCjt.signalement.codeCivilite = Civilite.MONSIEUR_CE.getCode();
+			personnePhyCjt.signalement.sexe = "M";
+		}
+		
 		this.distributeur = distributeur;
 		// On s'assure qu'il y a au moins une charge "loyer résidence principale".
 		charges.add(new Charge());

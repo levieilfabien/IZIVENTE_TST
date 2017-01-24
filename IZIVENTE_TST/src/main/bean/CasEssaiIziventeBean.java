@@ -1,7 +1,5 @@
 package main.bean;
 
-import java.sql.Date;
-
 import beans.CasEssaiBean;
 
 /**
