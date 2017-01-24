@@ -635,7 +635,8 @@ public CasEssaiIziventeBean CT06FinalisationInstruction(CasEssaiIziventeBean sce
 		outil.attendrePresenceTexte("Passage vers le choix du mode de signature");
 		outil.attendre(10);
 		outil.attendreChargementElement(Cibles.ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE);
-		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT_FIN);
+		//outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT_FIN);
+		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT);
 		CT06.validerObjectif(outil.getDriver(), "PREPARATION", true);
 	}
 		
@@ -856,32 +857,34 @@ public CasEssaiIziventeBean CT08Murissement(CasEssaiIziventeBean scenario0, Sele
 					}
 					break;
 				case IZICARTE :
-					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR, true, true);
-					outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
-					/*outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_IZICARTE, true, true);	
+					//outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR, true, true);
+					//outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
+					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_IZICARTE, true, true);	
 					outil.cliquer(Cibles.RADIO_AVEC_ASS_IZICARTE);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_DECES_IZICARTE_OUI);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INVALD_IZICARTE_NON);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_MALA_IZICARTE_NON);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_PERTE_IZICARTE_NON);
 					outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_ASS_CR, true, true);
-					outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_CR);*/
+					outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_CR);
 					break;
 				case FACELIA :
-					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR);
-					outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
-					/*outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);	
+					//outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR);
+					//outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
+					outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);	
 					outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_DECES_FACELIA_OUI);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INCAP_FACELIA_NON);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INVALD_FACELIA_NON);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_PERTE_FACELIA_NON);
 					outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_ASS_CR, true, true);
-					outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_CR);*/
+					outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_CR);
 					break;
 				}
 			} else {
-				outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASS_1_CR);
+				//outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASS_1_CR);
+				outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);	
+				outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
 			}	
 		} else {
 			switch (typeDossier) {
@@ -891,20 +894,23 @@ public CasEssaiIziventeBean CT08Murissement(CasEssaiIziventeBean scenario0, Sele
 				break;
 				case IZICARTE :
 					outil.attendre(1);
-					outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_CR);
-					outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
-					//outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
-					//outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
+					//outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_CR);
+					//outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
+					outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
+					outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
 				break;
 				case FACELIA :
 					outil.attendre(2);
-					outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_CR);
-					outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
-					//outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
-					//outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
+					//outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_CR);
+					//outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
+					outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
+					outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
 				break;
 				case CREODIS :
-					outil.attendreEtCliquer(Cibles.RADIO_SELECTION_SANS_ASS_CR);
+					outil.attendre(2);
+					//outil.attendreEtCliquer(Cibles.RADIO_SELECTION_SANS_ASS_CR);
+					outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
+					outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
 				break;
 				case TEOZ:
 					// Le TEOZ n'est pas pris en compte.

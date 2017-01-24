@@ -5,6 +5,7 @@ import java.io.File;
 import main.bean.CasEssaiIziventeBean;
 import main.constantes.Cibles;
 import main.constantes.Constantes;
+import main.constantes.TypeProduit;
 import moteurs.FirefoxImpl;
 import moteurs.GenericDriver;
 
@@ -21,13 +22,37 @@ import exceptions.SeleniumException;
  * Editique CREODIS (BP)
  * @author levieilfa bardouma
  */
-public class TNRSC03 extends SC00Test {
+public class TNRSC03 extends TNRSC00 {
 
 	/**
  * Id de sérialisation.
  */
 private static final long serialVersionUID = 1L;
 
+@Test
+public void lancementTNR() throws SeleniumException {
+	// Description du scénario
+	//CasEssaiIziventeBean scenario3 = new CasEssaiIziventeBean();
+	this.setAlm(true);
+	this.setIdUniqueTestLab(54300);
+	this.setNomCasEssai("TNRSC03-" + getTime());
+	this.setDescriptif("TNRSC03 - BP - IZIVENTE_Editique CREODIS Full Credit");
+	this.setNomTestLab("TNRSC03 - BP - IZIVENTE_Editique CREODIS Full Credit");
+	//this.setNomTestPlan("TNRSC03 - BP - IZIVENTE_Editique CREODIS Full Credit");
+	this.setCheminTestLab("POC Selenium\\IZIVENTE");
+	
+	this.distributeur = Constantes.CAS_BP;
+	this.typeDossier = TypeProduit.CREODIS;
+	this.idClient = null;
+	this.aucunCoEmp = true;
+	this.assuranceEmp = false;
+	this.montantCredit = "2000";
+	this.mensualite = "80,00";
+	this.situationDeVente = "Entrée en relation";
+	
+	miseAEdit();
+}
+/*
 @Test
 public void accesIzivente() throws SeleniumException {
 	// Description du scénario
@@ -89,6 +114,7 @@ public void accesIzivente() throws SeleniumException {
  * @return le cas d'essai documenté pour ajout au scénario.
  * @throws SeleniumException en cas d'erreur.
  */
+/*
 public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario, SeleniumOutils outil) throws SeleniumException {
 	//Paramétrage du CT01
 	CasEssaiIziventeBean CT01 = new CasEssaiIziventeBean();
@@ -288,5 +314,5 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
 	CT05.validerObjectif(outil.getDriver(), CT05.getNomCasEssai() + CT05.getTime(),true);
 	return CT05;
-	}
+	}*/
 }
