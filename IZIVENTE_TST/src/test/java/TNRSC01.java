@@ -45,10 +45,11 @@ public void lancementTNR() throws SeleniumException {
 	//this.etablissement = "056";
 	//this.agence = "00009";
 	this.typeDossier = TypeProduit.FACELIA;
+	this.modificateur.sansConjoint = true;
 	this.aucunCoEmp = true;
 	this.assuranceEmp = false;
 	this.montantCredit = "7500";
-	//this.mensualite = "750";
+	this.mensualite = "225,00";
 	
 	miseAEdit();
 }

@@ -473,6 +473,7 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, Sel
 	outil.cliquer(Cibles.BOUTON_SUIVANT);
 	}
 	CT04.validerObjectif(outil.getDriver(),  "VALIDATIONPARTICIPANTS", true);
+	outil.attendre(1);
 	
 	CibleBean cibleAttenteValidationCredit = null;
 	CibleBean cibleValidationCredit = null;
@@ -621,7 +622,7 @@ public CasEssaiIziventeBean CT06FinalisationInstruction(CasEssaiIziventeBean sce
 	// Dans le cas d'un IZICARTE on ne passe pas par les mêmes écrans après l'édition.
 	if (typeDossier == TypeProduit.CREDIT_AMORT) {
 		//Step 7 : Préparation du contrat et envoi à l'octroi
-		outil.attendre(10);
+		//outil.attendre(8);
 		outil.attendreChargementElement(Cibles.ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE);
 		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT);
 		CT06.validerObjectif(outil.getDriver(), "PREPARATION", true);
@@ -638,10 +639,11 @@ public CasEssaiIziventeBean CT06FinalisationInstruction(CasEssaiIziventeBean sce
 	} else {
 		//Step 7 : Préparation du contrat et envoi à l'octroi	
 		outil.attendrePresenceTexte("Passage vers le choix du mode de signature");
-		outil.attendre(10);
 		outil.attendreChargementElement(Cibles.ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE);
-		//outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT_FIN);
-		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT);
+		outil.attendreChargementElement(Cibles.BOUTON_POPUP_SUIVANT_FIN, true, true);
+		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT_FIN);
+		//outil.attendreChargementElement(Cibles.BOUTON_POPUP_SUIVANT, true, true);
+		//outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT);
 		CT06.validerObjectif(outil.getDriver(), "PREPARATION", true);
 	}
 		

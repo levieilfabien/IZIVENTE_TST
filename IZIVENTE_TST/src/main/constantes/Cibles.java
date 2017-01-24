@@ -232,7 +232,7 @@ public class Cibles {
 	/**
 	 * Element indiquant l'état d'avancement final du chargement de la signature electronique.
 	 */
-	public static final CibleBean ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE = new CibleBean("progressBarTermine:upload");
+	public static final CibleBean ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE = new CibleBean("progressBarTermine");
 	
 	/**
 	 * Element indiquant la présence du formulaire de complétude (contrôle des confirmités)
@@ -548,13 +548,13 @@ public class Cibles {
 	/**
 	 * Bouton de popup de fin de préparation du dossier
 	 */
-	public static final CibleBean BOUTON_POPUP_SUIVANT_FIN = new CibleBean("j_id487:progressBtnSuivant");
+	public static final CibleBean BOUTON_POPUP_SUIVANT_FIN = new CibleBean(Clefs.XPATH, "//div[@text()='Préparation contrat > Interruption du processus']//input[@value='Suivant']");
 
 	/**
 	 * Bouton de formulaire permettant de passer à l'étape suivante (attention présence multiple possible).
 	 */
 	public static final CibleBean BOUTON_SUIVANT = new CibleBean(Clefs.VALEUR, "Suivant");
-	
+
 	/**
 	 * Bouton de formulaire permettant de valider (attention présence multiple possible).
 	 */
