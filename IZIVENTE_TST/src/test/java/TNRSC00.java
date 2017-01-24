@@ -954,6 +954,7 @@ public CasEssaiIziventeBean CT08Murissement(CasEssaiIziventeBean scenario0, Sele
 				outil.cliquer(Cibles.BOUTON_OUI_DES);
 				outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASSURANCE_DIM);
 			}
+			
 
 		}
 	}
