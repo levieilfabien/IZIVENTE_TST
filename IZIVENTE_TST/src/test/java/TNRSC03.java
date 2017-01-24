@@ -44,6 +44,7 @@ public void lancementTNR() throws SeleniumException {
 	this.distributeur = Constantes.CAS_BP;
 	this.typeDossier = TypeProduit.CREODIS;
 	this.idClient = null;
+	this.modificateur.sansConjoint = true;
 	this.aucunCoEmp = true;
 	this.assuranceEmp = false;
 	this.montantCredit = "2000";
