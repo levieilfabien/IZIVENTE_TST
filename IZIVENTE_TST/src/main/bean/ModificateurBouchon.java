@@ -36,8 +36,7 @@ public class ModificateurBouchon {
 	 * Indique que l'emprunteur à l'agrégat CASDEN.
 	 */
 	public Boolean emprunteurCasden = false;
-	
-	
+		
 	/**
 	 * Indique que l'on doit supprimer le conjoint du bouchon.
 	 */

@@ -206,7 +206,10 @@ public class IZIVENTEOutils {
 	
 	public static void main(String[] argv) {
 		//System.out.println(IZIVENTEOutils.lettreFromNumerique("NM_9384464"));
-		murissement("5884749", Constantes.CAS_BP, false, null);
+		//murissement("5884749", Constantes.CAS_BP, false, null);
+		List<String> retour = consultation("12553997", Constantes.CAS_BP);
+		
+		System.out.println(retour.toArray());
 	}
 	/**
 	 * Permet de récupérer les n derniers caractères d'une chaîne

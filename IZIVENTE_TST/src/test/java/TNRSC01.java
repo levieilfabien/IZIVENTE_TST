@@ -39,13 +39,14 @@ public void lancementTNR() throws SeleniumException {
 	this.setNomTestLab("TNRSC01 - BP - IZIVENTE_Editique FACELIA CR Debit Credit");
 	//scenario1.setNomTestPlan("TNRSC01 - BP - IZIVENTE_Editique FACELIA CR Debit Credit");
 	this.setCheminTestLab("POC Selenium\\IZIVENTE");
+	this.setNomTestPlan(null);
 	
 	this.distributeur = Constantes.CAS_BP;
 	//this.etablissement = "056";
 	//this.agence = "00009";
 	this.typeDossier = TypeProduit.FACELIA;
 	this.aucunCoEmp = true;
-	this.assuranceEmp = true;
+	this.assuranceEmp = false;
 	this.montantCredit = "7500";
 	//this.mensualite = "750";
 	

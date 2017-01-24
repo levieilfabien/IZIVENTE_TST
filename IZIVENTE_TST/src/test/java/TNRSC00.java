@@ -220,7 +220,7 @@ public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario0, S
 	//Information issues du scénario.
 	CT01.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
 	CT01.setCheminTestLab(scenario0.getCheminTestLab());
-	CT01.setNomTestLab(scenario0.getCheminTestLab());
+	CT01.setNomTestLab(scenario0.getNomTestLab());
 	CT01.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());	
 	//Gestion des steps
 	CT01.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT01.getNomCasEssai() + CT01.getTime()));
@@ -254,7 +254,7 @@ public CasEssaiIziventeBean CT02OuvertureDossier(CasEssaiIziventeBean scenario0,
 	//Information issues du scénario.
 	CT02.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
 	CT02.setCheminTestLab(scenario0.getCheminTestLab());
-	CT02.setNomTestLab(scenario0.getCheminTestLab());
+	CT02.setNomTestLab(scenario0.getNomTestLab());
 	CT02.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
 	//Gestion des steps
 	CT02.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT02.getNomCasEssai() + CT02.getTime()));
@@ -328,7 +328,7 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 	//Information issues du scénario.
 	CT03.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
 	CT03.setCheminTestLab(scenario0.getCheminTestLab());
-	CT03.setNomTestLab(scenario0.getCheminTestLab());
+	CT03.setNomTestLab(scenario0.getNomTestLab());
 	CT03.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
 	//Gestion des steps
 	CT03.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT03.getNomCasEssai() + CT03.getTime()));
@@ -426,7 +426,7 @@ public CasEssaiIziventeBean CT04Participants(CasEssaiIziventeBean scenario0, Sel
 	//Information issues du scénario.
 	CT04.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
 	CT04.setCheminTestLab(scenario0.getCheminTestLab());
-	CT04.setNomTestLab(scenario0.getCheminTestLab());
+	CT04.setNomTestLab(scenario0.getNomTestLab());
 	CT04.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
 	//Gestion des steps
 	CT04.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT04.getNomCasEssai() + CT04.getTime()));
@@ -519,7 +519,7 @@ public CasEssaiIziventeBean CT05Validation(CasEssaiIziventeBean scenario0, Selen
 	//Information issues du scénario.
 	CT05.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
 	CT05.setCheminTestLab(scenario0.getCheminTestLab());
-	CT05.setNomTestLab(scenario0.getCheminTestLab());
+	CT05.setNomTestLab(scenario0.getNomTestLab());
 	CT05.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
 	//Gestion des steps
 	CT05.ajouterStep("Valider de l'offre contrat de crédit (clic sur le bouton 'Valider en contrat de crédit')", "VALIDATION", "Affichage de la pop up de finalisation de l'instruction ou de la page de dossier de vente");
@@ -552,8 +552,8 @@ public CasEssaiIziventeBean CT05Validation(CasEssaiIziventeBean scenario0, Selen
 		CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);
 	}
 	//Step 4 : Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires
-	outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-	outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+	outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ);
+	outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_NON_MAJ);
 	CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
 	CT05.validerObjectif(outil.getDriver(), CT05.getNomCasEssai() + CT05.getTime(),true);
 	scenario0.setFlag(Constantes.ETAPE_SUIVANTE_EDITION);
@@ -577,7 +577,7 @@ public CasEssaiIziventeBean CT06FinalisationInstruction(CasEssaiIziventeBean sce
 	//Information issues du scénario.
 	CT06.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
 	CT06.setCheminTestLab(scenario0.getCheminTestLab());
-	CT06.setNomTestLab(scenario0.getCheminTestLab());
+	CT06.setNomTestLab(scenario0.getNomTestLab());
 	CT06.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
 	//Gestion des steps
 	CT06.ajouterStep("Imprimer la liasse de document (clic sur le bouton 'Suivant')", "IMPRESSION", "Affichage de la pop up 'Préparation contrat'");
@@ -635,7 +635,8 @@ public CasEssaiIziventeBean CT06FinalisationInstruction(CasEssaiIziventeBean sce
 		outil.attendrePresenceTexte("Passage vers le choix du mode de signature");
 		outil.attendre(10);
 		outil.attendreChargementElement(Cibles.ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE);
-		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT_FIN);
+		//outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT_FIN);
+		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT);
 		CT06.validerObjectif(outil.getDriver(), "PREPARATION", true);
 	}
 		
@@ -655,7 +656,7 @@ public CasEssaiIziventeBean CT07MiseGestion(CasEssaiIziventeBean scenario0, Sele
 	//Information issues du scénario.
 	CT07.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
 	CT07.setCheminTestLab(scenario0.getCheminTestLab());
-	CT07.setNomTestLab(scenario0.getCheminTestLab());
+	CT07.setNomTestLab(scenario0.getNomTestLab());
 	CT07.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
 	//Gestion des steps
 	CT07.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT07.getNomCasEssai() + CT07.getTime()));
@@ -732,12 +733,12 @@ public CasEssaiIziventeBean CT08Murissement(CasEssaiIziventeBean scenario0, Sele
 	CasEssaiIziventeBean CT08 = new CasEssaiIziventeBean();
 	CT08.setAlm(scenario0.getAlm());
 	CT08.setNomCasEssai("CT08 -" + getTime());
-	CT08.setDescriptif("CT08 - Murissement");
-	CT08.setNomTestPlan("CT08 - Murissement");
+	CT08.setDescriptif("CT08 - Murissement du dossier");
+	CT08.setNomTestPlan("CT08 - Murissement du dossier");
 	//Information issues du scénario.
 	CT08.setIdUniqueTestLab(scenario0.getIdUniqueTestLab());
 	CT08.setCheminTestLab(scenario0.getCheminTestLab());
-	CT08.setNomTestLab(scenario0.getCheminTestLab());
+	CT08.setNomTestLab(scenario0.getNomTestLab());
 	CT08.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
 	//Gestion des objectifs
 	CT08.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT08.getNomCasEssai() + CT08.getTime()));
@@ -751,13 +752,11 @@ public CasEssaiIziventeBean CT08Murissement(CasEssaiIziventeBean scenario0, Sele
 	CT08.validerObjectif(outil.getDriver(), "Lancement de l'étape du murissement", true);
 	if (retour){
 		scenario0.setFlag(Constantes.ETAPE_SUIVANTE_MEG);
-		System.out.println("C'est OK");
 		CT08.validerObjectif(outil.getDriver(), "Murissement validé", true);
 		return scenario0;
 	} else {
 		//TODO Gestion d'erreur non bloquante : permettrai de passer à un autre murissement
 		CT08.validerObjectif(outil.getDriver(), "Murissement validé", false);
-		System.out.println("C'est KO");
 		return scenario0;
 	}
 	
@@ -858,32 +857,34 @@ public CasEssaiIziventeBean CT08Murissement(CasEssaiIziventeBean scenario0, Sele
 					}
 					break;
 				case IZICARTE :
-					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR, true, true);
-					outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
-					/*outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_IZICARTE, true, true);	
+					//outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR, true, true);
+					//outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
+					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_IZICARTE, true, true);	
 					outil.cliquer(Cibles.RADIO_AVEC_ASS_IZICARTE);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_DECES_IZICARTE_OUI);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INVALD_IZICARTE_NON);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_MALA_IZICARTE_NON);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_PERTE_IZICARTE_NON);
 					outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_ASS_CR, true, true);
-					outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_CR);*/
+					outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_CR);
 					break;
 				case FACELIA :
-					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR);
-					outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
-					/*outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);	
+					//outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR);
+					//outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
+					outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);	
 					outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_DECES_FACELIA_OUI);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INCAP_FACELIA_NON);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INVALD_FACELIA_NON);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_PERTE_FACELIA_NON);
 					outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_ASS_CR, true, true);
-					outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_CR);*/
+					outil.cliquer(Cibles.BOUTON_VALIDATION_ASS_CR);
 					break;
 				}
 			} else {
-				outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASS_1_CR);
+				//outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASS_1_CR);
+				outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);	
+				outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
 			}	
 		} else {
 			switch (typeDossier) {
@@ -893,20 +894,23 @@ public CasEssaiIziventeBean CT08Murissement(CasEssaiIziventeBean scenario0, Sele
 				break;
 				case IZICARTE :
 					outil.attendre(1);
-					outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_CR);
-					outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
-					//outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
-					//outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
+					//outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_CR);
+					//outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
+					outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
+					outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
 				break;
 				case FACELIA :
 					outil.attendre(2);
-					outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_CR);
-					outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
-					//outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
-					//outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
+					//outil.attendreChargementElement(Cibles.RADIO_SANS_ASS_CR);
+					//outil.cliquer(Cibles.RADIO_SANS_ASS_CR);
+					outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
+					outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
 				break;
 				case CREODIS :
-					outil.attendreEtCliquer(Cibles.RADIO_SELECTION_SANS_ASS_CR);
+					outil.attendre(2);
+					//outil.attendreEtCliquer(Cibles.RADIO_SELECTION_SANS_ASS_CR);
+					outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
+					outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
 				break;
 				case TEOZ:
 					// Le TEOZ n'est pas pris en compte.

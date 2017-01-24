@@ -57,7 +57,7 @@ public class SC01Test extends SC00Test {
 			//CT07 - Validation électronique du contrat
 			//CT11 - Mise en force (signature électronique)
 			//CT11BIS - Contrôle Mise en force
-
+			
 			scenario1.getTests().add(CT01Bis(scenario1, outil));
 			scenario1.getTests().add(CT19(scenario1, outil));
 			scenario1.getTests().add(CT07(scenario1, outil));
