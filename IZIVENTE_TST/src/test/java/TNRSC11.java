@@ -256,8 +256,8 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	CasEssaiIziventeBean CT05 = new CasEssaiIziventeBean();
 	CT05.setAlm(true);
 	CT05.setNomCasEssai("CT05 -" + getTime());
-	CT05.setDescriptif("CT05 - Finalisation de l instruction");
-	CT05.setNomTestPlan("CT05 - Finalisation de l instruction");
+	CT05.setDescriptif("CT05 - Validation du dossier");
+	CT05.setNomTestPlan("CT05 - Validation du dossier");
 	//Information issues du scénario.
 	CT05.setIdUniqueTestLab(scenario.getIdUniqueTestLab());
 	CT05.setCheminTestLab(scenario.getCheminTestLab());
