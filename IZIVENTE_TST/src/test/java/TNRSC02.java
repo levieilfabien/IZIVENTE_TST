@@ -44,7 +44,7 @@ public void lancementTNR() throws SeleniumException {
 	this.distributeur = Constantes.CAS_CE;
 	this.typeDossier = TypeProduit.IZICARTE;
 	this.aucunCoEmp = true;
-	this.assuranceEmp = true;
+	this.assuranceEmp = false;
 	this.montantCredit = "8000";
 	this.situationDeVente = "BANC";
 	
