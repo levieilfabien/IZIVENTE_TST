@@ -11,6 +11,7 @@ import exceptions.SeleniumException;
 import main.bean.CasEssaiIziventeBean;
 import main.constantes.Cibles;
 import main.constantes.Constantes;
+import main.constantes.TypeProduit;
 import moteurs.FirefoxImpl;
 import moteurs.GenericDriver;
 import outils.SeleniumOutils;
@@ -20,13 +21,40 @@ import outils.SeleniumOutils;
  * Editique Prêt travaux echelonné différé partiel (CE)
  * @author levieilfa bardouma
  */
-public class TNRSC05 extends SC00Test {
+public class TNRSC05 extends TNRSC00 {
 
 /**
  * Id de sérialisation par défaut.
  */
 private static final long serialVersionUID = 1L;
-
+@Test
+public void lancementTNR() throws SeleniumException {
+	// Description du scénario
+	//CasEssaiIziventeBean scenario5 = new CasEssaiIziventeBean();
+	this.setAlm(true);
+	this.setIdUniqueTestLab(54392);
+	this.setNomCasEssai("TNRSC05-" + getTime());
+	this.setDescriptif("TNRSC05 - CE - IZIVENTE_Prêt travaux echelonné différé partiel");
+	this.setNomTestLab("TNRSC05 - CE - IZIVENTE_Prêt travaux echelonné différé partiel");
+	//this.setNomTestPlan("TNRSC05 - IZIVENTE_Prêt travaux echelonné différé partiel");
+	this.setCheminTestLab("POC Selenium\\IZIVENTE");
+	
+	this.distributeur = Constantes.CAS_CE;
+	this.typeDossier = TypeProduit.CREDIT_AMORT;
+	this.modificateur.emprunteurJeune = true;
+	this.modificateur.coEmprunteurJeune = true;
+	this.conjointCoEmp = true;
+	this.assuranceEmp = true;
+	this.assuranceConjointCoEmp = false;
+	this.typeUnivers = "TRAVAUX";
+	this.typeOffre = "TRAVAUX ECHELONNE DIFF TOTAL";
+	this.typeObjet = "TRAVAUX RESIDENCE PRINCIPALE";
+	this.coutProjet = "22000";
+	this.montantCredit = "22000";
+	this.mensualite = "367";
+	
+	miseAEdit();
+}
 @Test
 public void accesIzivente() throws SeleniumException {
 	// Description du scénario

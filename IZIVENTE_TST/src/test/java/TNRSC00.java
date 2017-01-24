@@ -943,13 +943,16 @@ public CasEssaiIziventeBean CT08Murissement(CasEssaiIziventeBean scenario0, Sele
 				outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
 			}
 			// On attend que les choix d'assurance soient affichés et clicable.
+			outil.attendre(1);
 			outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true , true);
 			outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
 			// On clique sur le choix d'assurance à oui ou non.
-			outil.cliquer(assuranceConjointCoEmp?Cibles.LIBELLE_CHOIX_OUI_MAJ:Cibles.LIBELLE_CHOIX_NON_MAJ);
-			if (assuranceConjointCoEmp = true && (Integer.parseInt(montantCredit) > 21000)){
+			outil.cliquer(assuranceConjointCoEmp?Cibles.LIBELLE_CHOIX_OUI_MAJ:Cibles.LIBELLE_CHOIX_NON_MAJ);	
+			if (assuranceConjointCoEmp == true && (Integer.parseInt(montantCredit) > 21000)){
 				outil.attendreChargementElement(Cibles.CASE_SELECTION_REPONSE_ASSURANCE_NON);
 				outil.cliquerMultiple(Cibles.CASE_SELECTION_REPONSE_ASSURANCE_NON);
+				outil.cliquer(Cibles.BOUTON_OUI_DES);
+				outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASSURANCE_DIM);
 			}
 
 		}

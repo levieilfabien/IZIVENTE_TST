@@ -46,7 +46,6 @@ public void lancementTNR() throws SeleniumException {
 	this.typeDossier = TypeProduit.CREDIT_AMORT;
 	this.modificateur.emprunteurJeune = true;
 	this.modificateur.coEmprunteurJeune = true;
-	this.aucunCoEmp = false;
 	this.conjointCoEmp = true;
 	this.assuranceEmp = true;
 	this.assuranceConjointCoEmp = false;
