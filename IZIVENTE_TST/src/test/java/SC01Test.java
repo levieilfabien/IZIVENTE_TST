@@ -264,10 +264,11 @@ public class SC01Test extends SC00Test {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		// VALIDATION DE L'INSTRUCTION
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
-		outil.attendrePresenceTexte("Alerte(s)");
-		outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OK_MAJ);
-		outil.attendreEtCliquer(Cibles.BOUTON_VALIDER);
+		//outil.attendrePresenceTexte("Alerte(s)");
+		//outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OK_MAJ);
+		//outil.attendreEtCliquer(Cibles.BOUTON_VALIDER);
 		
+		outil.attendreEtCliquer(Cibles.BOUTON_ACCES_VALIDATION_OPC);
 		outil.attendreEtCliquer(Cibles.BOUTON_VALIDER_OPC);
 		outil.attendreChargementElement(Cibles.ELEMENT_FIN_INSTRUCTION, true, true);
 		outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_VERIFIE);

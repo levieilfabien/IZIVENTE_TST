@@ -304,8 +304,13 @@ public class SC00Test extends CasEssaiBean {
 		
 		// On tente de mettre à jour ALM
 		if (casEssai.getAlm()) {
-			ALMOutils.miseAJourTestSet(casEssai, succes);
-			System.out.println("Mise à jour dans ALM");
+			try {
+				ALMOutils.miseAJourTestSet(casEssai, succes);
+				System.out.println("Mise à jour effectuée dans ALM");
+			} catch (SeleniumException ex) {
+				ex.printStackTrace();
+				System.out.println("Mise à jour impossible à effectuée dans ALM : " + ex.toString());
+			}	
 		}
 	}
 	

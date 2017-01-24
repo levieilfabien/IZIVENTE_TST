@@ -1,10 +1,21 @@
 package test.java;
 
-import org.junit.Test;
+import java.io.File;
 
+import org.junit.Test;
+import org.openqa.selenium.firefox.FirefoxBinary;
+import org.openqa.selenium.firefox.FirefoxProfile;
+
+import beans.ObjectifBean;
 import exceptions.SeleniumException;
+import main.bean.CasEssaiIziventeBean;
+import main.bean.ModificateurBouchon;
+import main.constantes.Cibles;
 import main.constantes.Constantes;
 import main.constantes.TypeProduit;
+import moteurs.FirefoxImpl;
+import moteurs.GenericDriver;
+import outils.SeleniumOutils;
 
 /**
  * Scénario 4 des tests automatisés pour IZIVENTE - 11/2016
@@ -47,4 +58,6 @@ public class TNRSC04 extends TNRSC00 {
 		
 		miseAEdit();
 	}
+
+
 }
