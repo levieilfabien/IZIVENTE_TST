@@ -32,7 +32,7 @@ public void FT1SCCRBPTestLancement() throws SeleniumException {
 		FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
 		FirefoxProfile profile = configurerProfilNatixis();
 		FirefoxImpl driver = new FirefoxImpl(ffBinary, profile);
-		this.setAlm(false);
+		/*this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
 		this.typeDossier = TypeProduit.FACELIA;
 		this.edition = true;
@@ -40,11 +40,11 @@ public void FT1SCCRBPTestLancement() throws SeleniumException {
 		this.aucunCoEmp = true; 
 		this.assuranceEmp = false;
 		this.montantCredit = "8000";
-		this.mensualite = "240";
+		this.mensualite = "240";*/
 		//simulation();
 		//validation();
-		miseAEdit();
-		miseEnForce();
+		//miseAEdit();
+		//miseEnForce();
 		SeleniumOutils outil = new SeleniumOutils(driver);
 		murissement(outil);
 	}

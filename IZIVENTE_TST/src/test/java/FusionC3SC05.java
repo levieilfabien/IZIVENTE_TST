@@ -38,7 +38,7 @@ public void fusionC3SC02() throws SeleniumException {
 		this.montantCredit = "17000";
 		//simulation();
 		//validation();
-		//miseAEdit();
+		miseAEdit();
 		//miseEnForce();
 	}
 }
