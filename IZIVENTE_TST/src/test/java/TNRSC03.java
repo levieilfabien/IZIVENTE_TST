@@ -1,6 +1,5 @@
 package test.java;
 
-import main.bean.ModificateurBouchon;
 import main.constantes.Constantes;
 import main.constantes.TypeProduit;
 
@@ -31,20 +30,16 @@ public class TNRSC03 extends TNRSC00 {
 		this.setNomTestLab("TNRSC03 - BP - IZIVENTE_Editique CREODIS Full Credit");
 		//this.setNomTestPlan("TNRSC03 - BP - IZIVENTE_Editique CREODIS Full Credit");
 		this.setCheminTestLab("POC Selenium\\IZIVENTE");
-		
 		this.distributeur = Constantes.CAS_BP;
 		this.typeDossier = TypeProduit.CREODIS;
 		this.idClient = null;
+		this.modificateur.sansConjoint = true;
 		this.aucunCoEmp = true;
 		this.assuranceEmp = false;
 		this.montantCredit = "2000";
 		this.mensualite = "80,00";
 		this.situationDeVente = "Entrée en relation";
-		
-		// Mesure temporaire pour contrecarrer la QC 15052, on supprime le conjoint non signataire.
-		this.modificateur = new ModificateurBouchon();
-		modificateur.sansConjoint = true;
-		
-		miseAEdit();
-	}
+	
+	miseAEdit();
+}
 }
