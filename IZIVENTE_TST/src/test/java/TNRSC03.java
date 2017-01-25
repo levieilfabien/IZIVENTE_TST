@@ -41,5 +41,5 @@ public class TNRSC03 extends TNRSC00 {
 		this.situationDeVente = "Entrée en relation";
 	
 	miseAEdit();
-}
+	}
 }

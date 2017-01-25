@@ -28,6 +28,7 @@ public class TNRSC06 extends TNRSC00 {
 	 * Id de sérialisation.
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	@Test
 	public void lancementTNR() throws SeleniumException {
 		// Description du scénario
