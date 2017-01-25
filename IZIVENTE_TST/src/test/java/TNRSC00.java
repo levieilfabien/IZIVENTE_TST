@@ -1169,6 +1169,7 @@ public class TNRSC00 extends SC00Test {
 				scenario.setIdClient(instanceDecoupee[2]);
 				scenario.setNumeroIUN(instanceDecoupee[3]);
 				//TODO Attention préciser le type de produit dans le fichier à écrire.
+				//TODO simplifier ce test, l'esporté dans la classe type de produit ??
 				switch (instanceDecoupee[4]) {
 					case "PP" :
 						typeDossier = TypeProduit.CREDIT_AMORT;
