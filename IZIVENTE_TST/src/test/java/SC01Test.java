@@ -3,6 +3,7 @@ package test.java;
 import java.io.File;
 
 import main.bean.CasEssaiIziventeBean;
+import main.constantes.Catalogue;
 import main.constantes.Cibles;
 import main.constantes.Constantes;
 import moteurs.FirefoxImpl;
@@ -30,10 +31,10 @@ public class SC01Test extends SC00Test {
 		scenario1.setAlm(true);
 		scenario1.setIdUniqueTestLab(49506);
 		scenario1.setNomCasEssai("SC01-" + getTime());
-		scenario1.setDescriptif("SC01 - BP - IZIVENTE_Distributeur électronique_Vente couplée");
-		scenario1.setNomTestLab("SC01 - BP - IZIVENTE_Distributeur électronique_Vente couplée");
+		scenario1.setDescriptif(Catalogue.SC01_TITRE);
+		scenario1.setNomTestLab(Catalogue.SC01_TITRE);
 		//scenario2.setNomTestPlan("SC02 - IZIVENTE_Producteur_ Prêt étudiant différé partiel");
-		scenario1.setCheminTestLab("POC Selenium\\IZIVENTE");
+		scenario1.setCheminTestLab(Catalogue.CHEMIN_TEST_LAB_IZIVENTE);
 		
 		// Configuration du driver
 		FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
@@ -142,7 +143,7 @@ public class SC01Test extends SC00Test {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_SYNTHESE);
 		// Pas de demande de financement à 8 jours.
-		outil.cliquer(Cibles.LIBELLE_CHOIX_NON_MAJ);
+		outil.cliquerSiPossible(Cibles.LIBELLE_CHOIX_NON_MAJ);
 		CT19.validerObjectif(outil.getDriver(), "ACCES", true);
 		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////

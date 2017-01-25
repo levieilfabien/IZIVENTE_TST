@@ -1,20 +1,11 @@
 package test.java;
 
-import java.io.File;
-
-import org.junit.Test;
-import org.openqa.selenium.firefox.FirefoxBinary;
-import org.openqa.selenium.firefox.FirefoxProfile;
-
-import beans.ObjectifBean;
-import exceptions.SeleniumException;
-import main.bean.CasEssaiIziventeBean;
-import main.constantes.Cibles;
 import main.constantes.Constantes;
 import main.constantes.TypeProduit;
-import moteurs.FirefoxImpl;
-import moteurs.GenericDriver;
-import outils.SeleniumOutils;
+
+import org.junit.Test;
+
+import exceptions.SeleniumException;
 
 /**
  * Scénario 5 des tests automatisés pour IZIVENTE - 11/2016
