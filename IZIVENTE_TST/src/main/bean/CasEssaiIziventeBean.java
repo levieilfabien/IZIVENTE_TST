@@ -35,7 +35,27 @@ public class CasEssaiIziventeBean extends CasEssaiBean {
 	
 	private String numeroIBAN = null;
 	
+	private String agence = null;
 	
+	private String etablissement = null;
+	
+	
+
+	public String getAgence() {
+		return agence;
+	}
+
+	public void setAgence(String agence) {
+		this.agence = agence;
+	}
+
+	public String getEtablissement() {
+		return etablissement;
+	}
+
+	public void setEtablissement(String etablissement) {
+		this.etablissement = etablissement;
+	}
 
 	public String getNumeroBIC() {
 		return numeroBIC;

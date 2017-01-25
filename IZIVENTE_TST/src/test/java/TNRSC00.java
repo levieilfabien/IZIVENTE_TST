@@ -112,8 +112,8 @@ public class TNRSC00 extends SC00Test {
 		//Configuration du driver
 		FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
 		FirefoxProfile profile = configurerProfilNatixis();
-		if (idClient !=null){
-		scenario0.setIdClient(idClient);}
+		//On déclare les variables relatives au scénario (numéro client/distributeur, 
+		declarationScenario(scenario0);
 		//Création et configuration du repertoire de téléchargement
 		//File repertoireTelechargement = new File(".\\" + scenario0.getNomCasEssai());
 		//repertoireTelechargement.mkdir();
@@ -236,7 +236,7 @@ public class TNRSC00 extends SC00Test {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 		//Steps 1,2,3,4 : Génération du bouchon - Accès à l'écran de reroutage et injection du jeton - Accès à Izivente
-		String idClient = saisieJeton(outil, scenario0.getIdClient(), producteur, distributeur, modificateur, agence, etablissement);
+		String idClient = saisieJeton(outil, scenario0.getIdClient(), producteur, distributeur, modificateur, scenario0.getAgence(), scenario0.getEtablissement());
 		scenario0.setIdClient(idClient);
 		CT01.validerObjectif(outil.getDriver(), "GENERATION", true);
 		CT01.validerObjectif(outil.getDriver(), "ACCESREROUTAGE", true);
@@ -1064,6 +1064,37 @@ public class TNRSC00 extends SC00Test {
 		outil.selectionner(tiersCoEmp?"C":"G", Cibles.SELECTEUR_ROLE_PARTICIPANT);
 		}
 	}
+	
+	/**
+	 * Fonction permettant la déclaration des variables liées au scénario
+	 */
+	public void declarationScenario(CasEssaiIziventeBean scenario){
+		//On déclare le numéro client/distributeur utilisé dans le scénario
+		if (idClient !=null){
+			scenario.setIdClient(idClient);
+			}
+		//On déclare le numéro d'agence utilisé dans le scénario
+		if(etablissement != null){
+			scenario.setEtablissement(etablissement);
+		}
+		else if (distributeur == Constantes.CAS_BP){
+			scenario.setEtablissement("038");
+		}
+		else {
+			scenario.setEtablissement("11315");
+		}
+		//On déclare le numéro d'agence utilisé dans le scénario
+		if (agence != null){
+			scenario.setAgence(agence);
+		}
+		else if (distributeur == Constantes.CAS_BP){
+			scenario.setAgence("00022");
+		}
+		else {
+			scenario.setAgence("1131500030000135");
+		}
+		
+	}
 	/**
 	 * Fonction permettant de récupérer une chaine de caractère (BP ou CE) en fonction du distributeur sélectionné
 	 */
@@ -1097,13 +1128,15 @@ public class TNRSC00 extends SC00Test {
 		String distrib = chaineDistributeur(this.distributeur);
 		String FFI = scenario.getNumeroFFI();
 		String idClnt = scenario.getIdClient();
-		String IUN = null;
+		String IUN = "";
 		String typeDos = chaineProduit(this.typeDossier);
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		String numBIC = scenario.getNumeroBIC();
 		String numIBAN = scenario.getNumeroIBAN();
+		String etab = scenario.getEtablissement();
+		String agce = scenario.getAgence();
 		int flg = scenario.getFlag();
-		String chaine = (distrib +";"+ FFI + ";" + idClnt + ";" + IUN + ";"+ typeDos +";"+ flg +";" + sdf.format(date)+ ";" + numBIC +";"+ numIBAN);
+		String chaine = (distrib +";"+ FFI +";"+ idClnt +";"+ IUN +";"+ typeDos +";"+ flg +";"+ sdf.format(date) +";"+ numBIC +";"+ numIBAN +";"+ etab +";"+ agce);
 
 		try {
 			boolean existence = remplacer(scenario.getNumeroFFI(), chaine);
