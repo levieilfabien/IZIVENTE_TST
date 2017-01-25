@@ -12,6 +12,7 @@ import main.bean.CasEssaiIziventeBean;
 import main.bean.ModificateurBouchon;
 import main.constantes.Cibles;
 import main.constantes.Constantes;
+import main.constantes.TypeProduit;
 import moteurs.FirefoxImpl;
 import moteurs.GenericDriver;
 import outils.SeleniumOutils;
@@ -21,7 +22,7 @@ import outils.SeleniumOutils;
  * Editique Permis 1 Euro (CE)
  * @author levieilfa bardouma
  */
-public class TNRSC07 extends SC00Test {
+public class TNRSC07 extends TNRSC00 {
 
 /**
  * Id de sérialisation par défaut.
@@ -29,6 +30,34 @@ public class TNRSC07 extends SC00Test {
 private static final long serialVersionUID = 1L;
 
 @Test
+public void lancementTNR() throws SeleniumException {
+	// Description du scénario
+	//CasEssaiIziventeBean scenario7 = new CasEssaiIziventeBean();
+	this.setAlm(true);
+	this.setIdUniqueTestLab(54394);
+	this.setNomCasEssai("TNRSC07-" + getTime());
+	this.setDescriptif("TNRSC07 - CE - IZIVENTE_Editique Permis 1 Euro");
+	this.setNomTestLab("TNRSC07 - CE - IZIVENTE_Editique Permis 1 Euro");
+	//this.setNomTestPlan("TNRSC07 - IZIVENTE_Editique Permis 1 Euro");
+	this.setCheminTestLab("POC Selenium\\IZIVENTE");
+	
+	this.distributeur = Constantes.CAS_CE;
+	this.typeDossier = TypeProduit.CREDIT_AMORT;
+	this.modificateur.emprunteurJeune = true;
+	this.aucunCoEmp = false;
+	this.tiersCaution = true;
+	this.assuranceEmp = false;
+	this.assuranceTiers = false;
+	this.numPersPhysTiers = "942500500";
+	this.typeUnivers = "TRESORERIE";
+	this.typeOffre = "PERMIS 1 EURO";
+	this.typeObjet = "DIVERS";
+	this.coutProjet = "800";
+	
+	miseAEdit();
+}
+
+/*@Test
 public void accesIzivente() throws SeleniumException {
 	// Description du scénario
 	CasEssaiIziventeBean scenario7 = new CasEssaiIziventeBean();
@@ -88,6 +117,7 @@ public void accesIzivente() throws SeleniumException {
  * @return le cas d'essai documenté pour ajout au scénario.
  * @throws SeleniumException en cas d'erreur.
  */
+/*
 public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario, SeleniumOutils outil) throws SeleniumException {
 	//Paramétrage du CT01
 	CasEssaiIziventeBean CT01 = new CasEssaiIziventeBean();
@@ -342,5 +372,5 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
 	CT05.validerObjectif(outil.getDriver(), CT05.getNomCasEssai() + CT05.getTime(),true);
 	return CT05;
-	}
+	}*/
 }

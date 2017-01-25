@@ -399,8 +399,12 @@ public CasEssaiIziventeBean CT03SaisieDossier(CasEssaiIziventeBean scenario0, Se
 			outil.selectionner(typeObjet, Cibles.SELECTEUR_OBJET_FINANCE, false);
 			outil.attendreChargementElement(Cibles.SAISIE_COUT_PROJET);
 			outil.viderEtSaisir(coutProjet, Cibles.SAISIE_COUT_PROJET);
+			
+			if (typeOffre != "PERMIS 1 EURO") {
 			outil.viderEtSaisir(montantCredit, Cibles.SAISIE_MONTANT_DEMANDE);
 			outil.viderEtSaisir(mensualite, Cibles.SAISIE_MENSUALITE_PP);
+			}
+			
 			if (dureeDiffere != null){
 				outil.viderEtSaisir(dureeDiffere, Cibles.SAISIE_DUREE_DIFFERE_PARTIEL);
 			}
@@ -856,7 +860,8 @@ public CasEssaiIziventeBean CT08Murissement(CasEssaiIziventeBean scenario0, Sele
 				case CREDIT_AMORT :
 					outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);
 					outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
-					if (Integer.parseInt(montantCredit) > 21000){
+					//TODO Condition sur l'assurance si montant crédit supérieur à 21000 maintenant appliquée à tous les montants en recette future bouchonné.
+					if (Integer.parseInt(montantCredit) > 21000 || modificateur.emprunteurSenior == true){
 						outil.attendreChargementElement(Cibles.CASE_SELECTION_REPONSE_ASSURANCE_NON);
 						outil.cliquerMultiple(Cibles.CASE_SELECTION_REPONSE_ASSURANCE_NON);
 						outil.cliquer(Cibles.BOUTON_OUI_DES);

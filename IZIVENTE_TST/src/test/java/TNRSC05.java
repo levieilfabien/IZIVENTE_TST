@@ -46,8 +46,8 @@ public class TNRSC05 extends TNRSC00 {
 		this.typeUnivers = "TRAVAUX";
 		this.typeOffre = "TRAVAUX DIFFERE 12MOIS PARTIEL";
 		this.typeObjet = "TRAVAUX RESIDENCE PRINCIPALE";
-		this.coutProjet = "20000";
-		this.montantCredit = "20000";
+		this.coutProjet = "22000";
+		this.montantCredit = "22000";
 		this.mensualite = "333";
 		
 		miseAEdit();

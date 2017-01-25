@@ -548,7 +548,7 @@ public class Cibles {
 	/**
 	 * Bouton de popup de fin de préparation du dossier
 	 */
-	public static final CibleBean BOUTON_POPUP_SUIVANT_FIN = new CibleBean(Clefs.XPATH, "//div[@text()='Préparation contrat > Interruption du processus']//input[@value='Suivant']");
+	public static final CibleBean BOUTON_POPUP_SUIVANT_FIN = new CibleBean(Clefs.XPATH, "//*[contains(@id, 'progressBtnSuivant')]");
 
 	/**
 	 * Bouton de formulaire permettant de passer à l'étape suivante (attention présence multiple possible).
