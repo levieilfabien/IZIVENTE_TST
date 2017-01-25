@@ -12,6 +12,7 @@ import main.bean.CasEssaiIziventeBean;
 import main.bean.ModificateurBouchon;
 import main.constantes.Cibles;
 import main.constantes.Constantes;
+import main.constantes.TypeProduit;
 import moteurs.FirefoxImpl;
 import moteurs.GenericDriver;
 import outils.SeleniumOutils;
@@ -21,13 +22,41 @@ import outils.SeleniumOutils;
  * Editique Prêt étudiant différé partiel BPI (BP)
  * @author levieilfa bardouma
  */
-public class TNRSC11 extends SC00Test {
+public class TNRSC11 extends TNRSC00 {
 
 /**
  * Id de sérialisation par défaut.
  */
 private static final long serialVersionUID = 1L;
 
+@Test
+public void lancementTNR() throws SeleniumException {
+	// Description du scénario
+	//CasEssaiIziventeBean scenario11 = new CasEssaiIziventeBean();
+	this.setAlm(true);
+	this.setIdUniqueTestLab(54398);
+	this.setNomCasEssai("TNRSC11-" + getTime());
+	this.setDescriptif("TNRSC11 - BP - IZIVENTE_Editique Prêt étudiant différé partiel BPI");
+	this.setNomTestLab("TNRSC11 - BP - IZIVENTE_Editique Prêt étudiant différé partiel BPI");
+	//this.setNomTestPlan("TNRSC11 - BP - IZIVENTE_Editique Prêt étudiant différé partiel BPI");
+	this.setCheminTestLab("POC Selenium\\IZIVENTE");
+	
+	this.distributeur = Constantes.CAS_BP;
+	this.typeDossier = TypeProduit.CREDIT_AMORT;
+	this.modificateur.emprunteurJeune = true;
+	this.aucunCoEmp = true;
+	this.assuranceEmp = true;
+	this.typeUnivers = "JEUNES";
+	this.typeOffre = "BPI ETUDIANT ECH DIF PART";
+	this.typeObjet = "ECOLE INGENIEURS";
+	this.coutProjet = "4000";
+	this.montantCredit = "4000";
+	this.mensualite = "100";
+	this.dureeDiffere = "12";
+	
+	miseAEdit();
+}
+/*
 @Test
 public void accesIzivente() throws SeleniumException {
 	// Description du scénario
@@ -88,6 +117,7 @@ public void accesIzivente() throws SeleniumException {
  * @return le cas d'essai documenté pour ajout au scénario.
  * @throws SeleniumException en cas d'erreur.
  */
+/*
 public CasEssaiIziventeBean CT01Initialisation(CasEssaiIziventeBean scenario, SeleniumOutils outil) throws SeleniumException {
 	//Paramétrage du CT01
 	CasEssaiIziventeBean CT01 = new CasEssaiIziventeBean();
@@ -310,5 +340,5 @@ public CasEssaiIziventeBean CT05FinalisationInstruction(CasEssaiIziventeBean sce
 	CT05.validerObjectif(outil.getDriver(), "PREPARATION", true);
 	CT05.validerObjectif(outil.getDriver(), CT05.getNomCasEssai() + CT05.getTime(),true);
 	return CT05;
-	}
+	}*/
 }

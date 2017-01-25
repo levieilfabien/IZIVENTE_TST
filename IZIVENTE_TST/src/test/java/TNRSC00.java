@@ -49,6 +49,7 @@ public class TNRSC00 extends SC00Test {
 	//Définir l'établissement et l'agence (1871500030000302) - La valeur null rend des valeurs par défauts qui fonctionnent pour la plupart de nos scénarios
 	String etablissement = null;
 	String agence = null;
+	Boolean producteur = false;
 	//Définir l'univers, l'offre et le type d'objet de financement (échelonné, différé, immédiat).
 	String typeUnivers = "TRESORERIE";
 	String typeOffre = "CREDIT TRESORERIE";
@@ -235,7 +236,7 @@ public class TNRSC00 extends SC00Test {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 		//Steps 1,2,3,4 : Génération du bouchon - Accès à l'écran de reroutage et injection du jeton - Accès à Izivente
-		String idClient = saisieJeton(outil, scenario0.getIdClient(), false, distributeur, modificateur, agence, etablissement);
+		String idClient = saisieJeton(outil, scenario0.getIdClient(), producteur, distributeur, modificateur, agence, etablissement);
 		scenario0.setIdClient(idClient);
 		CT01.validerObjectif(outil.getDriver(), "GENERATION", true);
 		CT01.validerObjectif(outil.getDriver(), "ACCESREROUTAGE", true);
@@ -407,7 +408,7 @@ public class TNRSC00 extends SC00Test {
 				}
 				
 				if (dureeDiffere != null){
-					outil.viderEtSaisir(dureeDiffere, Cibles.SAISIE_DUREE_DIFFERE_PARTIEL);
+				outil.viderEtSaisir(dureeDiffere, Cibles.SAISIE_DUREE_DIFFERE_PARTIEL);
 				}
 			break;
 		}
@@ -473,42 +474,50 @@ public class TNRSC00 extends SC00Test {
 		if(typeDossier != TypeProduit.CREODIS){
 			outil.attendreChargementElement(Cibles.BOUTON_VALIDER_LISTE_PARTICIPANT);
 			outil.cliquer(Cibles.BOUTON_VALIDER_LISTE_PARTICIPANT);
-		} else { 
-			outil.cliquer(Cibles.BOUTON_SUIVANT);
+			}
+		else { 
+		outil.cliquer(Cibles.BOUTON_SUIVANT);
 		}
 		CT04.validerObjectif(outil.getDriver(),  "VALIDATIONPARTICIPANTS", true);
 		outil.attendre(1);
+		if(typeOffre == "PERMIS 1 EURO"){
+			outil.attendreChargementElement(Cibles.LIBELLE_POPUP_ALERTES_);
+			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OK_MAJ);
+			outil.attendreEtCliquer(Cibles.BOUTON_VALIDER_SIMULATION_PP);
+			CT04.validerObjectif(outil.getDriver(), "VALIDATION", true);
+		}
+		else {
+			CibleBean cibleAttenteValidationCredit = null;
+			CibleBean cibleValidationCredit = null;
 		
-		CibleBean cibleAttenteValidationCredit = null;
-		CibleBean cibleValidationCredit = null;
-	
-		if (typeDossier == TypeProduit.FACELIA || typeDossier == TypeProduit.IZICARTE) {
-			cibleAttenteValidationCredit = Cibles.BOUTON_VALIDER_OPC_CR;
-			cibleValidationCredit = Cibles.BOUTON_VALIDER_OPC_CR;
-		}
-		if (typeDossier == TypeProduit.CREODIS) {
-			cibleAttenteValidationCredit = Cibles.ELEMENT_TABLEAU_PRELEVEMENT;
-			cibleValidationCredit = Cibles.BOUTON_VALIDER_CREODIS_CR;
-		}
-		if (typeDossier == TypeProduit.CREDIT_AMORT) {
-			cibleAttenteValidationCredit = Cibles.BOUTON_ACCES_VALIDATION_OPC;
-			cibleValidationCredit = Cibles.BOUTON_ACCES_VALIDATION_OPC;
-		}
-		
-		//Step 1 : Valider de l'offre contrat de crédit
-		//Extraction du BIC et de l'IBAN du compte emprunteur CR
-		if (typeDossier != TypeProduit.CREDIT_AMORT){
-			scenario0.setNumeroBIC(outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC));
-			scenario0.setNumeroIBAN(outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN));
-		}
-		outil.attendreChargementElement(cibleAttenteValidationCredit, true, true);
-		outil.attendreEtCliquer(cibleValidationCredit);
-		CT04.validerObjectif(outil.getDriver(), "VALIDATION", true);
-		//Step 2 : Finalisation de l'instruction : Validation de la popup pour les CR, validation de l'écran pour les PP
-		//Extraction du BIC et de l'IBAN du compte emprunteur PP
-		if (typeDossier == TypeProduit.CREDIT_AMORT){
-			scenario0.setNumeroBIC(outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC));
-			scenario0.setNumeroIBAN(outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN));
+			if (typeDossier == TypeProduit.FACELIA || typeDossier == TypeProduit.IZICARTE) {
+				cibleAttenteValidationCredit = Cibles.BOUTON_VALIDER_OPC_CR;
+				cibleValidationCredit = Cibles.BOUTON_VALIDER_OPC_CR;
+			}
+			if (typeDossier == TypeProduit.CREODIS) {
+				cibleAttenteValidationCredit = Cibles.ELEMENT_TABLEAU_PRELEVEMENT;
+				cibleValidationCredit = Cibles.BOUTON_VALIDER_CREODIS_CR;
+			}
+			if (typeDossier == TypeProduit.CREDIT_AMORT) {
+				cibleAttenteValidationCredit = Cibles.BOUTON_ACCES_VALIDATION_OPC;
+				cibleValidationCredit = Cibles.BOUTON_ACCES_VALIDATION_OPC;
+			}
+			
+			//Step 1 : Valider de l'offre contrat de crédit
+			//Extraction du BIC et de l'IBAN du compte emprunteur CR
+			if (typeDossier != TypeProduit.CREDIT_AMORT){
+				scenario0.setNumeroBIC(outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC));
+				scenario0.setNumeroIBAN(outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN));
+			}
+			outil.attendreChargementElement(cibleAttenteValidationCredit, true, true);
+			outil.attendreEtCliquer(cibleValidationCredit);
+			CT04.validerObjectif(outil.getDriver(), "VALIDATION", true);
+			//Step 2 : Finalisation de l'instruction : Validation de la popup pour les CR, validation de l'écran pour les PP
+			//Extraction du BIC et de l'IBAN du compte emprunteur PP
+			if (typeDossier == TypeProduit.CREDIT_AMORT){
+				scenario0.setNumeroBIC(outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC));
+				scenario0.setNumeroIBAN(outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN));
+			}
 		}
 		CT04.validerObjectif(outil.getDriver(), CT04.getNomCasEssai() + CT04.getTime(),true);
 		scenario0.setFlag(Constantes.ETAPE_SUIVANTE_VALIDATION);
@@ -534,16 +543,17 @@ public class TNRSC00 extends SC00Test {
 		CT05.ajouterStep("Vérifier les justificatifs et valider (clic bouton radio 'Vérifié' pour chaque justificatif dans la pop up de finalisation de l'instruction' et clic sur bouton 'Valider'", "VERIFICATION", "Retour sur la page de dossier de vente");
 		}
 		CT05.ajouterObjectif(new ObjectifBean("Test arrivé à terme", CT05.getNomCasEssai() + CT05.getTime()));
-		
+
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		// FINALISATION DE L'INSTRUCTION
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+		
 		CibleBean cibleConfirmationValidationCredit = null;
-	
+		
 		if (typeDossier != TypeProduit.CREDIT_AMORT) {
 			cibleConfirmationValidationCredit = Cibles.BOUTON_POPUP_OUI_MAJ;
-		} else {
+		}
+		else {
 			cibleConfirmationValidationCredit = Cibles.BOUTON_VALIDER_OPC;
 		}
 		outil.attendreChargementElement(cibleConfirmationValidationCredit);
@@ -563,6 +573,7 @@ public class TNRSC00 extends SC00Test {
 		CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
 		CT05.validerObjectif(outil.getDriver(), CT05.getNomCasEssai() + CT05.getTime(),true);
 		scenario0.setFlag(Constantes.ETAPE_SUIVANTE_EDITION);
+		
 		return CT05;
 	}
 
@@ -600,7 +611,7 @@ public class TNRSC00 extends SC00Test {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		// FINALISATION DE L'INSTRUCTION
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+		
 		CibleBean cibleNumeroFFI = null;
 		if (typeDossier != TypeProduit.CREDIT_AMORT) {
 			cibleNumeroFFI = Cibles.ELEMENT_SPAN_NUMERO_FFI_CR;
@@ -621,14 +632,14 @@ public class TNRSC00 extends SC00Test {
 		outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_LIASSE);
 		outil.attendrePresenceTexte("Préparation contrat");
 		CT06.validerObjectif(outil.getDriver(), "IMPRESSION", true);
-	
+		
 		// Dans le cas d'un IZICARTE on ne passe pas par les mêmes écrans après l'édition.
 		if (typeDossier == TypeProduit.CREDIT_AMORT) {
 			//Step 7 : Préparation du contrat et envoi à l'octroi
 			//outil.attendre(8);
 			outil.attendreChargementElement(Cibles.ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE);
 			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT);
-			CT06.validerObjectif(outil.getDriver(), "PREPARATION", true);
+		CT06.validerObjectif(outil.getDriver(), "PREPARATION", true);
 		} else if (typeDossier == TypeProduit.IZICARTE) {
 			//Step 7 : Accès à l'IHM pour reprise du dossier
 			outil.attendreChargementElement(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
@@ -649,7 +660,7 @@ public class TNRSC00 extends SC00Test {
 			//outil.attendreEtCliquer(Cibles.BOUTON_POPUP_SUIVANT);
 			CT06.validerObjectif(outil.getDriver(), "PREPARATION", true);
 		}
-			
+		
 		scenario0.setFlag(Constantes.ETAPE_SUIVANTE_MEF);
 		CT06.validerObjectif(outil.getDriver(), CT06.getNomCasEssai() + CT06.getTime(),true);
 		return CT06;
