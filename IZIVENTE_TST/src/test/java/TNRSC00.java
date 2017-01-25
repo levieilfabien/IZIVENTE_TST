@@ -1071,31 +1071,25 @@ public class TNRSC00 extends SC00Test {
 	 */
 	public void declarationScenario(CasEssaiIziventeBean scenario){
 		//On déclare le numéro client/distributeur utilisé dans le scénario
-		if (idClient !=null){
+		if (idClient != null){
 			scenario.setIdClient(idClient);
-			}
+		}
 		//On déclare le numéro d'agence utilisé dans le scénario
 		if(etablissement != null){
 			scenario.setEtablissement(etablissement);
-		}
-		else if (distributeur == Constantes.CAS_BP){
-			scenario.setEtablissement("038");
-		}
-		else {
-			scenario.setEtablissement("11315");
+		} else {
+			// Valeurs par défaut en l'absence de paramètrage
+			scenario.setEtablissement(distributeur == Constantes.CAS_BP?"038":"11315");
 		}
 		//On déclare le numéro d'agence utilisé dans le scénario
 		if (agence != null){
 			scenario.setAgence(agence);
+		} else {
+			// Valeurs par défaut en l'absence de paramètrage
+			scenario.setAgence(distributeur == Constantes.CAS_BP?"00022":"1131500030000135");
 		}
-		else if (distributeur == Constantes.CAS_BP){
-			scenario.setAgence("00022");
-		}
-		else {
-			scenario.setAgence("1131500030000135");
-		}
-		
 	}
+	
 	/**
 	 * Fonction permettant de récupérer une chaine de caractère (BP ou CE) en fonction du distributeur sélectionné
 	 */
@@ -1191,6 +1185,8 @@ public class TNRSC00 extends SC00Test {
 				scenario.setFlag(Integer.parseInt(instanceDecoupee[5]));
 				scenario.setNumeroBIC(instanceDecoupee[7]);
 				scenario.setNumeroIBAN(instanceDecoupee[8]);
+				scenario.setEtablissement(instanceDecoupee[9]);
+				scenario.setAgence(instanceDecoupee[10]);
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
