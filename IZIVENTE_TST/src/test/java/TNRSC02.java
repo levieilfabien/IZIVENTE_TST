@@ -1,20 +1,10 @@
 package test.java;
 
-import java.io.File;
-
-import main.bean.CasEssaiIziventeBean;
-import main.constantes.Cibles;
 import main.constantes.Constantes;
 import main.constantes.TypeProduit;
-import moteurs.FirefoxImpl;
-import moteurs.GenericDriver;
 
 import org.junit.Test;
-import org.openqa.selenium.firefox.FirefoxBinary;
-import org.openqa.selenium.firefox.FirefoxProfile;
 
-import outils.SeleniumOutils;
-import beans.ObjectifBean;
 import exceptions.SeleniumException;
 
 /**
@@ -34,7 +24,7 @@ public class TNRSC02 extends TNRSC00 {
 		// Description du scénario
 		//CasEssaiIziventeBean scenario2 = new CasEssaiIziventeBean();
 		this.setAlm(true);
-		this.setIdUniqueTestLab(54199);
+		this.setIdUniqueTestLab(54391);
 		this.setNomCasEssai("TNRSC02-" + getTime());
 		this.setDescriptif("TNRSC02 - CE - IZIVENTE_Editique Izicarte");
 		this.setNomTestLab("TNRSC02 - CE - IZIVENTE_Editique Izicarte");
