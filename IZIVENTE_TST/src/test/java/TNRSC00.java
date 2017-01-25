@@ -112,8 +112,7 @@ public class TNRSC00 extends SC00Test {
 		//Configuration du driver
 		FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
 		FirefoxProfile profile = configurerProfilNatixis();
-		//On déclare les variables relatives au scénario (numéro client/distributeur, 
-		declarationScenario(scenario0);
+		
 		//Création et configuration du repertoire de téléchargement
 		//File repertoireTelechargement = new File(".\\" + scenario0.getNomCasEssai());
 		//repertoireTelechargement.mkdir();
@@ -163,6 +162,8 @@ public class TNRSC00 extends SC00Test {
 			// LISTE DES OBJECTIFS DU CAS DE TEST
 			scenario0.ajouterObjectif(new ObjectifBean("Test arrivé à terme", scenario0.getNomCasEssai() + scenario0.getTime()));
 		}
+		//On déclare les variables relatives au scénario (numéro client/distributeur, 
+		declarationScenario(scenario0);
 	
 		SeleniumOutils outil = obtenirDriver(scenario0);
 	    
