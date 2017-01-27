@@ -15,7 +15,7 @@ public class TransverseSC01Test extends TNRSC00 {
 	private static final long serialVersionUID = -3737267445392145659L;
 
 	@Test
-	public void transverseSC01Test() throws SeleniumException {
+	public void transverseCR() throws SeleniumException {
 		
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
@@ -36,6 +36,39 @@ public class TransverseSC01Test extends TNRSC00 {
 		miseAEdit();
 		//miseEnForce();
 		//murissement();
+		
+	}
+	
+	@Test
+	public void transversePP() throws SeleniumException {
+		
+		this.setAlm(false);
+		this.distributeur = Constantes.CAS_BP;
+		this.etablissement = "056";
+		this.agence = "00009";
+		this.typeDossier = TypeProduit.CREDIT_AMORT;
+		this.aucunCoEmp = true;
+		this.assuranceEmp = true;
+		this.typeUnivers = "TRESORERIE";
+		this.typeOffre = "CREDIT TRESORERIE";
+		this.typeObjet = "TRESORERIE";
+		this.coutProjet = "18000";
+		this.mensualite = "500";
+		this.montantCredit = "17000";
+		//simulation();
+		//validation();
+		miseAEdit();
+		//miseEnForce();
+		
+	}
+	
+	@Test
+	public void TranserveMiseEnForce() throws SeleniumException {
+		
+		//simulation();
+		//validation();
+		//miseAEdit();
+		miseEnForce();
 		
 	}
 }

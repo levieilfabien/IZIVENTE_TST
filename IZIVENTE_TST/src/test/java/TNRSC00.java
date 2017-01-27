@@ -698,11 +698,9 @@ public class TNRSC00 extends SC00Test {
 		//Step 2 : Ouverture du dossier et recherche du numéro FFI
 		if (typeDossier == TypeProduit.FACELIA || typeDossier == TypeProduit.IZICARTE) {
 			outil.cliquer(Cibles.BOUTON_MENU_REPRISE_DOSSIER);
-		}
-		else if(typeDossier == TypeProduit.CREODIS) {
+		} else if(typeDossier == TypeProduit.CREODIS) {
 			outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER_FC);
-		}
-		else if(typeDossier == TypeProduit.CREDIT_AMORT) {
+		} else if(typeDossier == TypeProduit.CREDIT_AMORT) {
 			outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER);
 		}
 		outil.attendrePresenceTexte("Liste des dossiers");
@@ -718,8 +716,7 @@ public class TNRSC00 extends SC00Test {
 		if (typeDossier == TypeProduit.CREDIT_AMORT) {
 			outil.cliquer(Cibles.BOUTON_PASSAGE_OCTROI);
 			outil.attendrePresenceTexte("Demande de confirmation");
-		}
-		else {
+		} else {
 			outil.attendreChargementElement(Cibles.BOUTON_MISE_EN_FORCE_CR, true, true);
 			outil.cliquer(Cibles.BOUTON_MISE_EN_FORCE_CR);
 		}

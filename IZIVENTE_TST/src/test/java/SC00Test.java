@@ -274,10 +274,10 @@ public class SC00Test extends CasEssaiBean {
 	 * @throws SeleniumException en cas d'erreur lors de la génération du fichier excel de rapport.
 	 */
 	private void finaliserTest(SeleniumOutils outils, CasEssaiBean casEssai, final String idObjectif, boolean succes) throws SeleniumException {
-		// On finalise aussi les sous cas.
-		for(CasEssaiBean sousCas : casEssai.getTests()) {
-			finaliserTest(outils, sousCas, casEssai.getNomCasEssai() + casEssai.getTime(), sousCas.getEtatFinal());
-		}
+//		// On finalise aussi les sous cas.
+//		for(CasEssaiBean sousCas : casEssai.getTests()) {
+//			finaliserTest(outils, sousCas, casEssai.getNomCasEssai() + casEssai.getTime(), sousCas.getEtatFinal());
+//		}
 		// Si le driver n'est pas nul on effectue des capture d'écran et on récupère les logs.
 		if (outils != null) {
 			casEssai.setRegistreExecution(outils.getDriver());
