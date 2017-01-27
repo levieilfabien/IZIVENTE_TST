@@ -1184,6 +1184,7 @@ public class TNRSC00 extends SC00Test {
 				scenario.setNumeroIBAN(instanceDecoupee[8]);
 				scenario.setEtablissement(instanceDecoupee[9]);
 				scenario.setAgence(instanceDecoupee[10]);
+				
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
