@@ -978,8 +978,6 @@ public class TNRSC00 extends SC00Test {
 				outil.cliquer(Cibles.BOUTON_OUI_DES);
 				outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASSURANCE_DIM);
 			}
-			
-
 		}
 	}
 	
@@ -1319,5 +1317,9 @@ public class TNRSC00 extends SC00Test {
 			}
 			
 		}
+	}
+	
+	public void consultationIZIGATE() throws SeleniumException {
+		//SC00Izigate scenario = SC00Izigate();
 	}
 }

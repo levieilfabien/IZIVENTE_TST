@@ -40,6 +40,7 @@ public class TNRSC03 extends TNRSC00 {
 		this.mensualite = "80,00";
 		this.situationDeVente = "Entrée en relation";
 	
-	miseAEdit();
+	//miseAEdit();
+	miseEnForce();
 	}
 }
