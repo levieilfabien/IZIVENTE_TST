@@ -1321,7 +1321,7 @@ public class TNRSC00 extends SC00Test {
 	}
 	
 	public void consultationIZIGATE(CasEssaiIziventeBean scenario) throws SeleniumException {
-	//	SCConsultation consultation = SCConsultation();
+		//SCConsultation consultation = SCConsultation();
 		//this.numeroFFI = scenario.getNumeroFFI();
 
 	}
