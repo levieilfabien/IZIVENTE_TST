@@ -36,6 +36,7 @@ import exceptions.SeleniumException;
  * Scénario 00 des tests automatisés pour IZIVENTE - 11/2016
  * Editique 
  * @author levieilfa bardouma
+ * @param <SCConsultation>
  */
 public class TNRSC00 extends SC00Test {
 
@@ -1319,7 +1320,9 @@ public class TNRSC00 extends SC00Test {
 		}
 	}
 	
-	public void consultationIZIGATE() throws SeleniumException {
-		//SC00Izigate scenario = SC00Izigate();
+	public void consultationIZIGATE(CasEssaiIziventeBean scenario) throws SeleniumException {
+	//	SCConsultation consultation = SCConsultation();
+		//this.numeroFFI = scenario.getNumeroFFI();
+
 	}
 }
