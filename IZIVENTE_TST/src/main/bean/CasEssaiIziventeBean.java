@@ -39,7 +39,16 @@ public class CasEssaiIziventeBean extends CasEssaiBean {
 	
 	private String etablissement = null;
 	
-	
+	private String numeroDossierUnited = null;
+
+
+	public String getNumeroDossierUnited() {
+		return numeroDossierUnited;
+	}
+
+	public void setNumeroDossierUnited(String numeroDossierUnited) {
+		this.numeroDossierUnited = numeroDossierUnited;
+	}
 
 	public String getAgence() {
 		return agence;

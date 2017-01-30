@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import main.bean.CasEssaiIzigateBean;
 import main.bean.CasEssaiIziventeBean;
 import main.bean.ModificateurBouchon;
 import main.constantes.Catalogue;
@@ -1127,7 +1128,8 @@ public class TNRSC00 extends SC00Test {
 		String etab = scenario.getEtablissement();
 		String agce = scenario.getAgence();
 		int flg = scenario.getFlag();
-		String chaine = (distrib +";"+ FFI +";"+ idClnt +";"+ IUN +";"+ typeDos +";"+ flg +";"+ sdf.format(date) +";"+ numBIC +";"+ numIBAN +";"+ etab +";"+ agce);
+		String noDossUnited = scenario.getNumeroDossierUnited();
+		String chaine = (distrib +";"+ FFI +";"+ idClnt +";"+ IUN +";"+ typeDos +";"+ flg +";"+ sdf.format(date) +";"+ numBIC +";"+ numIBAN +";"+ etab +";"+ agce+ ";"+ noDossUnited);
 
 		try {
 			boolean existence = remplacer(scenario.getNumeroFFI(), chaine);
@@ -1184,7 +1186,7 @@ public class TNRSC00 extends SC00Test {
 				scenario.setNumeroIBAN(instanceDecoupee[8]);
 				scenario.setEtablissement(instanceDecoupee[9]);
 				scenario.setAgence(instanceDecoupee[10]);
-				
+				scenario.setNumeroDossierUnited(instanceDecoupee[11]);
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -1318,9 +1320,21 @@ public class TNRSC00 extends SC00Test {
 		}
 	}
 	
-	public void consultationIZIGATE(CasEssaiIziventeBean scenario) throws SeleniumException {
-		//SCConsultation consultation = SCConsultation();
-		//this.numeroFFI = scenario.getNumeroFFI();
-
+	public void consultationIZIGATE() throws SeleniumException {
+			
+			List<String> listeInstances = this.renvoyerContenuFichierDonnee(Constantes.ETAPE_SUIVANTE_MEG);
+			CasEssaiIzigateBean consultation = new CasEssaiIzigateBean();
+			GregorianCalendar calendar = new GregorianCalendar();
+			for (String instance : listeInstances) {
+				// On initialise le scénario avec les données de l'instance
+				CasEssaiIziventeBean reference = this.initialiserScenario(instance);
+				SCConsultation scconsultation = new SCConsultation();
+				//TODO récupérer distributeur
+				consultation.setNumeroFFI(reference.getNumeroFFI());
+				CasEssaiIzigateBean simuConsult = scconsultation.lancementTestIzigate(consultation);
+				reference.setNumeroDossierUnited(simuConsult.getNumeroFFI());
+				reference.setFlag(Constantes.ETAPE_SUIVANTE_VERIF_SYNTHESE);
+				this.ecritureFichierDonnees(reference, calendar.getTime());
+			}
 	}
 }
