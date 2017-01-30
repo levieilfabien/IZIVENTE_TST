@@ -124,7 +124,7 @@ public class TNRSC00 extends SC00Test {
 		// Initialisation du driver
 		FirefoxImpl driver = new FirefoxImpl(ffBinary, profile);
 		
-		if (distributeur == Constantes.CAS_CE){
+		if (scenario0.getDistributeur() == Constantes.CAS_CE){
 			driver.get(Constantes.URL_CE_FUTURE_REROUTAGE);
 		}
 		else {
@@ -239,7 +239,7 @@ public class TNRSC00 extends SC00Test {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 		//Steps 1,2,3,4 : Génération du bouchon - Accès à l'écran de reroutage et injection du jeton - Accès à Izivente
-		String idClient = saisieJeton(outil, scenario0.getIdClient(), producteur, distributeur, modificateur, scenario0.getAgence(), scenario0.getEtablissement());
+		String idClient = saisieJeton(outil, scenario0.getIdClient(), producteur, scenario0.getDistributeur(), modificateur, scenario0.getAgence(), scenario0.getEtablissement());
 		scenario0.setIdClient(idClient);
 		CT01.validerObjectif(outil.getDriver(), "GENERATION", true);
 		CT01.validerObjectif(outil.getDriver(), "ACCESREROUTAGE", true);
@@ -301,7 +301,7 @@ public class TNRSC00 extends SC00Test {
 			break;
 		 }
 		CT02.validerObjectif(outil.getDriver(), "OUVERTURE", true);
-		if(distributeur == Constantes.CAS_CE){
+		if(scenario0.getDistributeur() == Constantes.CAS_CE){
 			outil.attendrePresenceTexte("Attention");
 		}
 		else {
@@ -457,13 +457,13 @@ public class TNRSC00 extends SC00Test {
 	    	ajoutConjointCoEmprunteurUnique(outil);
 	    }
 	    else if(tiersCoEmp == true || tiersCaution == true){
-	    	ajoutTiers(outil);
+	    	ajoutTiers(scenario0, outil);
 	    }
 	    
 	    //Définition du rôle du tiers
 	  	roleTiers(outil);
 	    //Définition du rôle du conjoint
-	  	roleConjoint(outil);
+	  	roleConjoint(scenario0, outil);
 		CT04.validerObjectif(outil.getDriver(), "PARTICIPANTS", true);
 		//Step 2 : Pour chaque participant, choisir le rôle et l'assurance en fonction des hypothèses. Valider la listes des participants et confirmer l'assurance
 		//Assurance de l'emprunteur
@@ -775,7 +775,7 @@ public class TNRSC00 extends SC00Test {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		String siocID = IZIVENTEOutils.derniersCaracteres(scenario0.getNumeroFFI(), 8);
 		String date = sdf.format(new Date());
-		Boolean retour = IZIVENTEOutils.murissement(siocID, this.distributeur, typeDossier != TypeProduit.CREDIT_AMORT, date);
+		Boolean retour = IZIVENTEOutils.murissement(siocID, scenario0.getDistributeur(), typeDossier != TypeProduit.CREDIT_AMORT, date);
 		CT08.validerObjectif(outil.getDriver(), "Lancement de l'étape du murissement", true);
 		if (retour){
 			scenario0.setFlag(Constantes.ETAPE_SUIVANTE_MEG);
@@ -827,7 +827,7 @@ public class TNRSC00 extends SC00Test {
 	 * @param outil la boite à outil.
 	 * @throws SeleniumException en cas d'erreur.
 	 */
-	private void ajoutTiers(SeleniumOutils outil) throws SeleniumException {
+	private void ajoutTiers(CasEssaiIziventeBean scenario, SeleniumOutils outil) throws SeleniumException {
 		
 		// Recherche du tiers à partir du numéro paramètre
 		outil.attendreChargementElement(Cibles.SELECTEUR_IDENTIFICATION_PARTICIPANT, true, true);
@@ -841,7 +841,7 @@ public class TNRSC00 extends SC00Test {
 		
 		// On valide la popup relative au tiers ajouté
 		//TODO Amélioration possible sur le bouton de validation pour éviter la différenciation entre les distributeurs
-		if(distributeur == Constantes.CAS_CE) {
+		if(scenario.getDistributeur() == Constantes.CAS_CE) {
 			outil.attendrePresenceTexte("Attention");
 			outil.cliquer(Cibles.BOUTON_POPUP_FERMER);
 			outil.attendreChargementElement(Cibles.BOUTON_VALIDATION_DETAILS_TIERS_1);
@@ -1006,7 +1006,7 @@ public class TNRSC00 extends SC00Test {
 	 * @param outil la boîte à outil
 	 * @throws SeleniumException en cas d'erreur
 	 */
-	private void roleConjoint(SeleniumOutils outil) throws SeleniumException {
+	private void roleConjoint(CasEssaiIziventeBean scenario, SeleniumOutils outil) throws SeleniumException {
 		
 		// Un tiers as t'il un rôle ?
 		Boolean roleTiers = (tiersCoEmp == true || tiersCaution == true);
@@ -1019,7 +1019,7 @@ public class TNRSC00 extends SC00Test {
 		if (roleTiers) {
 			if(conjointCoEmp == false && conjointCaution == false){
 				//S'il n'il n'y a pas d'indication sur le conjoint avec présence de tiers, on supprime le conjoint du dossier
-				boolean CE = (distributeur == Constantes.CAS_CE);
+				boolean CE = (scenario.getDistributeur() == Constantes.CAS_CE);
 				outil.attendre(2);
 				outil.attendreChargementElement(CE?Cibles.BOUTON_SUPP_PARTICIPANT_2_CE:Cibles.BOUTON_SUPP_PARTICIPANT_2_BP);
 				outil.cliquer(CE?Cibles.BOUTON_SUPP_PARTICIPANT_2_CE:Cibles.BOUTON_SUPP_PARTICIPANT_2_BP);
@@ -1071,20 +1071,25 @@ public class TNRSC00 extends SC00Test {
 		if (idClient != null){
 			scenario.setIdClient(idClient);
 		}
+		
+		scenario.setDistributeur(distributeur);
 		//On déclare le numéro d'agence utilisé dans le scénario
 		if(etablissement != null){
 			scenario.setEtablissement(etablissement);
 		} else {
 			// Valeurs par défaut en l'absence de paramètrage
-			scenario.setEtablissement(distributeur == Constantes.CAS_BP?"038":"11315");
+			scenario.setEtablissement(scenario.getDistributeur() == Constantes.CAS_BP?"038":"11315");
 		}
 		//On déclare le numéro d'agence utilisé dans le scénario
 		if (agence != null){
 			scenario.setAgence(agence);
 		} else {
 			// Valeurs par défaut en l'absence de paramètrage
-			scenario.setAgence(distributeur == Constantes.CAS_BP?"00022":"1131500030000135");
+			scenario.setAgence(scenario.getDistributeur() == Constantes.CAS_BP?"00022":"1131500030000135");
 		}
+		
+		
+		
 	}
 	
 	/**
@@ -1117,7 +1122,7 @@ public class TNRSC00 extends SC00Test {
 	 * @throws SeleniumException en cas d'erreur d'accès au fichier.
 	 */
 	public void ecritureFichierDonnees(CasEssaiIziventeBean scenario, Date date) throws SeleniumException {
-		String distrib = chaineDistributeur(this.distributeur);
+		String distrib = chaineDistributeur(scenario.getDistributeur());
 		String FFI = scenario.getNumeroFFI();
 		String idClnt = scenario.getIdClient();
 		String IUN = "";
@@ -1162,7 +1167,7 @@ public class TNRSC00 extends SC00Test {
 			// Si la date est la date du jour, alors on effectue l'action, sinon on passe.
 			if (jourCible.get(GregorianCalendar.DAY_OF_YEAR) <= jour.get(GregorianCalendar.DAY_OF_YEAR)) {
 				scenario = new CasEssaiIziventeBean();
-				distributeur = "CE".equals(instanceDecoupee[0])?Constantes.CAS_CE:Constantes.CAS_BP;
+				scenario.setDistributeur("CE".equals(instanceDecoupee[0])?Constantes.CAS_CE:Constantes.CAS_BP);
 				scenario.setNumeroFFI(instanceDecoupee[1]);
 				scenario.setIdClient(instanceDecoupee[2]);
 				scenario.setNumeroIUN(instanceDecoupee[3]);
@@ -1329,7 +1334,7 @@ public class TNRSC00 extends SC00Test {
 				// On initialise le scénario avec les données de l'instance
 				CasEssaiIziventeBean reference = this.initialiserScenario(instance);
 				SCConsultation scconsultation = new SCConsultation();
-				//TODO récupérer distributeur
+				consultation.setDistributeur(reference.getDistributeur());
 				consultation.setNumeroFFI(reference.getNumeroFFI());
 				CasEssaiIzigateBean simuConsult = scconsultation.lancementTestIzigate(consultation);
 				reference.setNumeroDossierUnited(simuConsult.getNumeroFFI());
