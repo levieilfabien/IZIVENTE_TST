@@ -121,7 +121,8 @@ public class TNRSC00 extends SC00Test {
 		String repertoire = creerRepertoireTelechargement(scenario0, profile);
 		scenario0.setRepertoireTelechargement(repertoire);
 		// Initialisation du driver
-		FirefoxImpl driver = new FirefoxImpl(ffBinary, profile);
+		//FirefoxImpl driver = new FirefoxImpl(ffBinary, profile);
+		FirefoxImpl driver = new FirefoxImpl(profile);
 		
 		if (distributeur == Constantes.CAS_CE){
 			driver.get(Constantes.URL_CE_FUTURE_REROUTAGE);
@@ -312,11 +313,11 @@ public class TNRSC00 extends SC00Test {
 		outil.cliquer(Cibles.BOUTON_POPUP_FERMER);
 		//Step 4 : Vérifier la cohérence des données du client, du conjoint si existant et du budget. Cliquer sur le bouton 'Suivant'
 		outil.attendreChargementElement(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT);
-		outil.cliquer(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT);
+		outil.attendreEtCliquer(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT);
 		outil.attendreEtCliquer(Cibles.BOUTON_SUIVANT);
-		outil.attendrePresenceTexte("Synthèse");
+		//outil.attendrePresenceTexte("Synthèse");
 		CT02.validerObjectif(outil.getDriver(),  "SUIVANT", true);
-		outil.cliquer(Cibles.BOUTON_VALIDER);
+		outil.attendreEtCliquer(Cibles.BOUTON_VALIDER);
 		CT02.validerObjectif(outil.getDriver(), "VALIDATIONDONNEESCLIENT", true);
 		CT02.validerObjectif(outil.getDriver(), CT02.getNomCasEssai() + CT02.getTime(),true);
 		return CT02;
