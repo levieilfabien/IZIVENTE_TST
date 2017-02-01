@@ -412,32 +412,7 @@ public class SC00Test extends CasEssaiBean {
 		
 		return retour;
 	}
-	/**
-	 * 
-	 * @param distributeur le distributeur (CE ou BP)
-	 * @param numFFI le numéro FFI du dossier
-	 * @param idClient le numéro de personne physique de l'emprunteur
-	 * @param numIUN le numéro IUN du client
-	 * @param flag le flag du dossier indiquant son état d'avancée 
-	 * @throws SeleniumException
-	 */
-	public void ecritureFichierDonnees(String distributeur, String numFFI, String numCltDist, String numIUN, String typeDossier, int flag) throws SeleniumException {
-		String distrib = distributeur;
-		String FFI = numFFI;
-		String idClnt = numCltDist;
-		String IUN = numIUN;
-		String typeDos = typeDossier;
-		int flg = flag;
-		String chaine = (distrib +";"+ FFI + ";" + idClnt + ";" + IUN + ";"+ typeDos +";"+ flg +"\r\n");
-		try {
-			//TODO modifier le chemin vers le fichier, il doit être dans le propertie.
-			Files.write(Paths.get("src/test/DonneesClientDossier.txt"),chaine.getBytes(),StandardOpenOption.APPEND);
-		} catch (IOException e1) {
-			e1.printStackTrace();
-			throw new SeleniumException(Erreurs.E020, "Impossible d'écrire dans DonneesClientDossier");
-		} 
-	}
-	
+
 	
 	/**
 	 * Cette fonction à pour objectif de lire le fichier de données.

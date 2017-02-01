@@ -39,7 +39,26 @@ public class CasEssaiIziventeBean extends CasEssaiBean {
 	
 	private String etablissement = null;
 	
+	private String numeroDossierUnited = null;
 	
+	private int distributeur;
+
+
+	public int getDistributeur() {
+		return distributeur;
+	}
+
+	public void setDistributeur(int distributeur) {
+		this.distributeur = distributeur;
+	}
+
+	public String getNumeroDossierUnited() {
+		return numeroDossierUnited;
+	}
+
+	public void setNumeroDossierUnited(String numeroDossierUnited) {
+		this.numeroDossierUnited = numeroDossierUnited;
+	}
 
 	public String getAgence() {
 		return agence;
