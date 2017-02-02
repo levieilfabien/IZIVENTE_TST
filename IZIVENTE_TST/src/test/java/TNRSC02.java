@@ -35,7 +35,8 @@ public class TNRSC02 extends TNRSC00 {
 		this.typeDossier = TypeProduit.IZICARTE;
 		this.aucunCoEmp = true;
 		this.assuranceEmp = false;
-		this.montantCredit = "8000";
+		this.montantCredit = "5000";
+		this.mensualite = "150";
 		this.situationDeVente = "BANC";
 		
 		miseAEdit();

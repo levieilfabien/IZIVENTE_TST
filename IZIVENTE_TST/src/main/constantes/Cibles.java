@@ -554,6 +554,11 @@ public class Cibles {
 	 * Bouton de formulaire permettant de passer à l'étape suivante (attention présence multiple possible).
 	 */
 	public static final CibleBean BOUTON_SUIVANT = new CibleBean(Clefs.VALEUR, "Suivant");
+	
+	/**
+	 * Bouton permettant de passer à l'étape suivante de validation des données client
+	 */
+	public static final CibleBean BOUTON_SUIVANT_CLIENT = new CibleBean("form_donnees_client:goNext");
 
 	/**
 	 * Bouton de formulaire permettant de valider (attention présence multiple possible).

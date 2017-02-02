@@ -32,15 +32,14 @@ public class TNRSC03 extends TNRSC00 {
 		this.setCheminTestLab("POC Selenium\\IZIVENTE");
 		this.distributeur = Constantes.CAS_BP;
 		this.typeDossier = TypeProduit.CREODIS;
-		this.idClient = null;
 		this.modificateur.sansConjoint = true;
 		this.aucunCoEmp = true;
 		this.assuranceEmp = false;
 		this.montantCredit = "2000";
 		this.mensualite = "80,00";
-		this.situationDeVente = "Entrée en relation";
+		this.situationDeVente = "AUTR";
 	
-	//miseAEdit();
-	miseEnForce();
+	miseAEdit();
+	//miseEnForce();
 	}
 }

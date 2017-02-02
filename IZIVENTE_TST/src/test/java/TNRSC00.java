@@ -53,15 +53,15 @@ public class TNRSC00 extends SC00Test {
 	String agence = null;
 	Boolean producteur = false;
 	//Définir l'univers, l'offre et le type d'objet de financement (échelonné, différé, immédiat).
-	String typeUnivers = "TRESORERIE";
-	String typeOffre = "CREDIT TRESORERIE";
-	String typeObjet = "TRESORERIE";
+	String typeUnivers = null;
+	String typeOffre = null;
+	String typeObjet = null;
 	//Définir le cout et la mensualité du crédit
 	String coutProjet = null;
 	String mensualite = null;
 	String montantCredit = null;
 	String dureeDiffere = null;
-	String situationDeVente = "Prêt immobilier";
+	String situationDeVente = null;
 	//Définir l'absence ou la présence de coemprunteur et leurs rôles.
 	Boolean aucunCoEmp = false;
 	Boolean conjointCoEmp = false;
@@ -316,7 +316,8 @@ public class TNRSC00 extends SC00Test {
 		outil.attendreChargementElement(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT, true, true);
 		outil.cliquer(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT);
 		outil.attendre(1);
-		outil.attendreEtCliquer(Cibles.BOUTON_SUIVANT);
+		outil.attendreChargementElement(Cibles.BOUTON_SUIVANT_CLIENT, true, true);
+		outil.cliquer(Cibles.BOUTON_SUIVANT_CLIENT);
 		//outil.attendrePresenceTexte("Synthèse");
 		CT02.validerObjectif(outil.getDriver(),  "SUIVANT", true);
 		outil.attendreEtCliquer(Cibles.BOUTON_VALIDER);
@@ -366,22 +367,24 @@ public class TNRSC00 extends SC00Test {
 				outil.attendrePresenceTexte("INFORMATIONS DU CREDIT");
 				CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
 				//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
+				outil.attendre(1);
 				outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR, true, true);
-				outil.selectionner("Entrée en relation", Cibles.SELECTEUR_SITUATION_VENTE_CR);
+				outil.selectionner(situationDeVente, Cibles.SELECTEUR_SITUATION_VENTE_CR, false);
+				outil.attendreChargementElement(Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
 				outil.viderEtSaisir(montantCredit, Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
 				outil.viderEtSaisir(mensualite, Cibles.SAISIE_MENSUALITE_CR);
 			break;
 			case IZICARTE : 
 				outil.attendre(2);
 				CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
-				//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
+				//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.
 				outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR, true, true);
-				outil.selectionner(situationDeVente, Cibles.SELECTEUR_SITUATION_VENTE_CR);
+				outil.selectionner(situationDeVente, Cibles.SELECTEUR_SITUATION_VENTE_CR, false);
 				outil.attendreChargementElement(Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR, true, true);
 				outil.viderEtSaisir(montantCredit,  Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
 				outil.attendreChargementElement(Cibles.SAISIE_MENSUALITE_CR, true, true); 
 				outil.viderEtSaisir(mensualite, Cibles.SAISIE_MENSUALITE_CR);
-				
+							
 				//outil.attendrePresenceTexte("Informations du crédit");
 				//CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
 				//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
