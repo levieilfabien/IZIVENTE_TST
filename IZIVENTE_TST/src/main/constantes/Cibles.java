@@ -634,4 +634,5 @@ public class Cibles {
 	 * Bouton de rafraichissement des informations client
 	 */
 	public static final CibleBean BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT = new CibleBean("form_donnees_client:refreshClient1");
+	//public static final CibleBean BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT = new CibleBean(Clefs.VALEUR, "Rafraîchir");
 }

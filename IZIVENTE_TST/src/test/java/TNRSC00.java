@@ -282,9 +282,11 @@ public class TNRSC00 extends SC00Test {
 				outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER);
 			break;
 			case FACELIA : 
+				outil.attendreChargementElement(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER_FACELIA, true, true);
 				outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER_FACELIA);
 				//Step 3 : Fermeture des pop ups 'Attention' confirmant l'ouverture du dossier
 				outil.attendrePresenceTexte("INFORMATION");
+				outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ, true, true);
 				outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
 			break;
 			case CREODIS : 
@@ -313,8 +315,9 @@ public class TNRSC00 extends SC00Test {
 		outil.cliquerSiPossible(Cibles.BOUTON_MENU_NOUVEAU_DOSSIER);
 		outil.cliquer(Cibles.BOUTON_POPUP_FERMER);
 		//Step 4 : Vérifier la cohérence des données du client, du conjoint si existant et du budget. Cliquer sur le bouton 'Suivant'
-		outil.attendreChargementElement(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT);
-		outil.attendreEtCliquer(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT);
+		outil.attendreChargementElement(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT, true, true);
+		outil.cliquer(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT);
+		outil.attendre(1);
 		outil.attendreEtCliquer(Cibles.BOUTON_SUIVANT);
 		//outil.attendrePresenceTexte("Synthèse");
 		CT02.validerObjectif(outil.getDriver(),  "SUIVANT", true);
@@ -355,11 +358,11 @@ public class TNRSC00 extends SC00Test {
 				CT03.validerObjectif(outil.getDriver(), "OFFRE", true);
 				//Step 2 : Sélectionner et saisir les paramètres liées au scénario (ex : CMA, différé, mensualité, etc.)
 				outil.attendreChargementElement(Cibles.SELECTEUR_SITUATION_VENTE_CR, true, true);
-				outil.selectionner(situationDeVente, Cibles.SELECTEUR_SITUATION_VENTE_CR);
 				outil.attendreChargementElement(Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR, true, true);
 				outil.viderEtSaisir(montantCredit,  Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
 				outil.attendreChargementElement(Cibles.SAISIE_MENSUALITE_CR, true, true); 
 				outil.viderEtSaisir(mensualite, Cibles.SAISIE_MENSUALITE_CR);
+				outil.selectionner(situationDeVente, Cibles.SELECTEUR_SITUATION_VENTE_CR, false);
 			break;
 			case CREODIS :
 				outil.attendrePresenceTexte("INFORMATIONS DU CREDIT");
@@ -513,7 +516,6 @@ public class TNRSC00 extends SC00Test {
 				scenario0.setNumeroBIC(outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC));
 				scenario0.setNumeroIBAN(outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN));
 			}
-			outil.attendreChargementElement(cibleAttenteValidationCredit, true, true);
 			outil.attendreEtCliquer(cibleValidationCredit);
 			CT04.validerObjectif(outil.getDriver(), "VALIDATION", true);
 			//Step 2 : Finalisation de l'instruction : Validation de la popup pour les CR, validation de l'écran pour les PP

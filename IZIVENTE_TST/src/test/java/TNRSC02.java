@@ -23,7 +23,7 @@ public class TNRSC02 extends TNRSC00 {
 	public void lancementTNR() throws SeleniumException {
 		// Description du scénario
 		//CasEssaiIziventeBean scenario2 = new CasEssaiIziventeBean();
-		this.setAlm(true);
+		this.setAlm(false);
 		this.setIdUniqueTestLab(54391);
 		this.setNomCasEssai("TNRSC02-" + getTime());
 		this.setDescriptif("TNRSC02 - CE - IZIVENTE_Editique Izicarte");

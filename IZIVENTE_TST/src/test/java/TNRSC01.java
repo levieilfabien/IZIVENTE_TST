@@ -45,6 +45,7 @@ public class TNRSC01 extends TNRSC00 {
 		//this.etablissement = "056";
 		//this.agence = "00009";
 		this.typeDossier = TypeProduit.FACELIA;
+		this.situationDeVente = "AUTR";
 		this.modificateur.sansConjoint = true;
 		this.aucunCoEmp = true;
 		this.assuranceEmp = true;

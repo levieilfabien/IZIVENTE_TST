@@ -37,14 +37,14 @@ public class SC01Test extends SC00Test {
 		scenario1.setCheminTestLab(Catalogue.CHEMIN_TEST_LAB_IZIVENTE);
 		
 		// Configuration du driver
-		FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
+		//FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
 		FirefoxProfile profile = configurerProfilNatixis();
 		
 		// Création et configuration du repertoire de téléchargement, ce repertoire est commun pour tous les CT du scénario
 		scenario1.setRepertoireTelechargement(creerRepertoireTelechargement(scenario1, profile));
 		
 		// Initialisation du driver
-		FirefoxImpl driver = new FirefoxImpl(ffBinary, profile);
+		FirefoxImpl driver = new FirefoxImpl(profile);
 		
 		// LISTE DES OBJECTIFS DU CAS DE TEST
 		scenario1.ajouterObjectif(new ObjectifBean("Test arrivé à terme", scenario1.getNomCasEssai() + scenario1.getTime()));
@@ -224,6 +224,8 @@ public class SC01Test extends SC00Test {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		outil.attendrePresenceTexte("ATTENTION");
 		outil.cliquer(Cibles.BOUTON_POPUP_FERMER);
+		// La popup se ferme , mais le bouton suivant n'est pas actif immédiatement, il faut attendre.
+		outil.attendreChargementElement(Cibles.BOUTON_SUIVANT, true, true);
 		outil.attendreEtCliquer(Cibles.BOUTON_SUIVANT);
 		outil.attendreEtCliquer(Cibles.BOUTON_VALIDER);
 		CT01.validerObjectif(outil.getDriver(), "VERIFICATION", true);
@@ -243,8 +245,10 @@ public class SC01Test extends SC00Test {
 		outil.selectionner("TRESORERIE", Cibles.SELECTEUR_OBJET_FINANCE);
 		outil.viderEtSaisir("3000", Cibles.SAISIE_COUT_PROJET);
 		outil.selectionner("Aucun", Cibles.SELECTEUR_REPORT_PREMIERE_MENS, false);
+		outil.attendre(2);
 		outil.viderEtSaisir("3000", Cibles.SAISIE_MONTANT_DEMANDE);
 		outil.viderEtSaisir("12", Cibles.SAISIE_DUREE_DEMANDE);
+		outil.selectionner("Autre", Cibles.SELECTEUR_SITUATION_VENTE_CR, false);
 		outil.cliquer(Cibles.BOUTON_SUIVANT);
 		CT01.validerObjectif(outil.getDriver(), "SAISIEDOSSIER", true);
 		
