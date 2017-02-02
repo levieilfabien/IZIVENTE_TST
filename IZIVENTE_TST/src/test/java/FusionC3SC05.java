@@ -25,17 +25,16 @@ public void fusionC3SC02() throws SeleniumException {
 
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
-		this.etablissement = "056";
-		this.agence = "00009";
 		this.typeDossier = TypeProduit.CREDIT_AMORT;
 		this.aucunCoEmp = true;
-		this.assuranceEmp = true;
+		this.assuranceEmp = false;
 		this.typeUnivers = "TRESORERIE";
 		this.typeOffre = "CREDIT TRESORERIE";
 		this.typeObjet = "TRESORERIE";
-		this.coutProjet = "18000";
-		this.mensualite = "500";
-		this.montantCredit = "17000";
+		this.coutProjet = "10000";
+		this.mensualite = "300";
+		this.montantCredit = "8000";
+		//this.dureeDiffere = "12";
 		//simulation();
 		//validation();
 		miseAEdit();

@@ -56,6 +56,9 @@ public class Constantes {
 	public static final String URL_BP_FUTURE_REROUTAGE = PropertiesOutil.getInfoEnvConstante("DNS_BP_FUTURE");
 	public static final String URL_BP_CURRENT_REROUTAGE = "https://nfi80.rec.intranatixis.com/izivente-bp_recB_current/reroutage.action";
 	
+	public static final String URL_IZIGATE = PropertiesOutil.getInfoConstante("URL_IZIGATE");
+	public static final String TITRE_PAGE_IZIGATE = "IZIGATE - Login";
+	
 	public static final String TITRE_PAGE_IZIVENTE = "izivente";
 	public static final String TITRE_BLOC_SYNTHESE_TIERS = "Synthèse des informations sur le Tiers";
 	

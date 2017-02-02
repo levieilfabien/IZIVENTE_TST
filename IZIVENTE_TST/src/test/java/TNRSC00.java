@@ -42,7 +42,7 @@ import exceptions.SeleniumException;
 public class TNRSC00 extends SC00Test {
 
 	//Définir le distributeur Constantes.CAS_CE pour CE/Constantes.CAS_BP pour BP
-	int distributeur = Constantes.CAS_BP;
+	int distributeur;
 	//Définir le type de dossier FACELIA/CREODIS/IZICARTE/CREDIT_AMORT
 	//int typeDossier = Constantes.CREDIT_AMORT;
 	TypeProduit typeDossier = TypeProduit.CREDIT_AMORT;
@@ -114,7 +114,8 @@ public class TNRSC00 extends SC00Test {
 		//Configuration du driver
 		FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
 		FirefoxProfile profile = configurerProfilNatixis();
-		
+		//On déclare les variables relatives au scénario (numéro client/distributeur etc.)
+		declarationScenario(scenario0);
 		//Création et configuration du repertoire de téléchargement
 		//File repertoireTelechargement = new File(".\\" + scenario0.getNomCasEssai());
 		//repertoireTelechargement.mkdir();
@@ -165,9 +166,6 @@ public class TNRSC00 extends SC00Test {
 			// LISTE DES OBJECTIFS DU CAS DE TEST
 			scenario0.ajouterObjectif(new ObjectifBean("Test arrivé à terme", scenario0.getNomCasEssai() + scenario0.getTime()));
 		}
-		//On déclare les variables relatives au scénario (numéro client/distributeur, 
-		declarationScenario(scenario0);
-	
 		SeleniumOutils outil = obtenirDriver(scenario0);
 	    
 	    try {
@@ -1137,7 +1135,7 @@ public class TNRSC00 extends SC00Test {
 		String agce = scenario.getAgence();
 		int flg = scenario.getFlag();
 		String noDossUnited = scenario.getNumeroDossierUnited();
-		String chaine = (distrib +";"+ FFI +";"+ idClnt +";"+ IUN +";"+ typeDos +";"+ flg +";"+ sdf.format(date) +";"+ numBIC +";"+ numIBAN +";"+ etab +";"+ agce+ ";"+ noDossUnited);
+		String chaine = (distrib +";"+ FFI +";"+ idClnt +";"+ IUN +";"+ typeDos +";"+ flg +";"+ sdf.format(date) +";"+ numBIC +";"+ numIBAN +";"+ etab +";"+ agce+ ";"+ noDossUnited +";");
 
 		try {
 			boolean existence = remplacer(scenario.getNumeroFFI(), chaine);
@@ -1195,10 +1193,16 @@ public class TNRSC00 extends SC00Test {
 				scenario.setEtablissement(instanceDecoupee[9]);
 				scenario.setAgence(instanceDecoupee[10]);
 				scenario.setNumeroDossierUnited(instanceDecoupee[11]);
+				
+			} else {
+				throw new SeleniumException(Erreurs.E030, "Veuillez vérifier la date inscrite pour ce dossier dans le fichier de données");
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		catch (SeleniumException ex){
+			
 		}
 		return scenario;
 	}
@@ -1333,14 +1337,19 @@ public class TNRSC00 extends SC00Test {
 			List<String> listeInstances = this.renvoyerContenuFichierDonnee(Constantes.ETAPE_SUIVANTE_MEG);
 			CasEssaiIzigateBean consultation = new CasEssaiIzigateBean();
 			GregorianCalendar calendar = new GregorianCalendar();
+			CasEssaiIziventeBean reference = new CasEssaiIziventeBean();
 			for (String instance : listeInstances) {
 				// On initialise le scénario avec les données de l'instance
-				CasEssaiIziventeBean reference = this.initialiserScenario(instance);
+				reference = this.initialiserScenario(instance);		
 				SCConsultation scconsultation = new SCConsultation();
-				consultation.setDistributeur(reference.getDistributeur());
 				consultation.setNumeroFFI(reference.getNumeroFFI());
+				consultation.setDistributeur(reference.getDistributeur());
 				CasEssaiIzigateBean simuConsult = scconsultation.lancementTestIzigate(consultation);
-				reference.setNumeroDossierUnited(simuConsult.getNumeroFFI());
+				if (!"".equals(simuConsult.getNumeroDossierUnited())){
+					reference.setNumeroDossierUnited(simuConsult.getNumeroDossierUnited());
+				} else {
+					reference.setNumeroDossierUnited("N/A");
+				}
 				reference.setFlag(Constantes.ETAPE_SUIVANTE_VERIF_SYNTHESE);
 				this.ecritureFichierDonnees(reference, calendar.getTime());
 			}

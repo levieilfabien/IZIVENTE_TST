@@ -25,14 +25,14 @@ public void fusionC2SC01() throws SeleniumException {
 
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
-		this.etablissement = "056";
-		this.agence = "00009";
+		this.etablissement = "046";
+		this.agence = "00110";
 		this.typeDossier = TypeProduit.CREODIS;
 		this.aucunCoEmp = true;
 		this.assuranceEmp = false;
 		this.montantCredit = "2500";
 		this.mensualite = "150";
 
-		miseAEdit();
+		miseEnForce();
 	}
 }

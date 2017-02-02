@@ -2,8 +2,14 @@ package test.java;
 
 import main.constantes.Constantes;
 import main.constantes.TypeProduit;
+import moteurs.FirefoxImpl;
+import outils.SeleniumOutils;
+
+import java.io.File;
 
 import org.junit.Test;
+import org.openqa.selenium.firefox.FirefoxBinary;
+import org.openqa.selenium.firefox.FirefoxProfile;
 
 import exceptions.SeleniumException;
 
@@ -17,6 +23,11 @@ public class TransverseSC01Test extends TNRSC00 {
 	@Test
 	public void transverseCR() throws SeleniumException {
 		
+		FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
+		FirefoxProfile profile = configurerProfilNatixis();
+		FirefoxImpl driver = new FirefoxImpl(ffBinary, profile);
+		SeleniumOutils outil = new SeleniumOutils(driver);
+
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
 		this.typeDossier = TypeProduit.CREODIS;
@@ -31,11 +42,10 @@ public class TransverseSC01Test extends TNRSC00 {
 		this.mensualite = "300";
 		//this.numPersPhysTiers = "942500502";
 		
-		//simulation();
-		//validation();
 		miseAEdit();
-		//miseEnForce();
-		//murissement();
+		miseEnForce();
+		murissement(outil);
+		consultationIZIGATE();
 		
 	}
 	

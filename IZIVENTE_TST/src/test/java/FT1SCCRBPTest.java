@@ -32,9 +32,9 @@ public void FT1SCCRBPTestLancement() throws SeleniumException {
 		FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
 		FirefoxProfile profile = configurerProfilNatixis();
 		FirefoxImpl driver = new FirefoxImpl(ffBinary, profile);
-		/*this.setAlm(false);
-		this.distributeur = Constantes.CAS_BP;
-		this.typeDossier = TypeProduit.FACELIA;
+		this.setAlm(false);
+		//this.distributeur = Constantes.CAS_BP;
+		/*this.typeDossier = TypeProduit.FACELIA;
 		this.edition = true;
 		this.miseEnGestion = false;
 		this.aucunCoEmp = true; 

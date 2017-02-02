@@ -39,10 +39,9 @@ public class CasEssaiIziventeBean extends CasEssaiBean {
 	
 	private String etablissement = null;
 	
-	private String numeroDossierUnited = null;
+	private String numeroDossierUnited = "N/A";
 	
 	private int distributeur;
-
 
 	public int getDistributeur() {
 		return distributeur;

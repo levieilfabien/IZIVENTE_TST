@@ -25,14 +25,14 @@ public void fusionC3SC02() throws SeleniumException {
 
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
-		this.etablissement = "056";
-		this.agence = "00009";
+		this.etablissement = "046";
+		this.agence = "05065";
 		this.typeDossier = TypeProduit.FACELIA;
 		this.aucunCoEmp = true; 
 		this.assuranceEmp = false;
 		this.montantCredit = "7500";
 		this.mensualite = "300";
 
-		simulation();
+		miseAEdit();
 	}
 }
