@@ -702,16 +702,16 @@ public class TNRSC00 extends SC00Test {
 		CT07.validerObjectif(outil.getDriver(), "RETOUR", true);
 		//Step 2 : Ouverture du dossier et recherche du numéro FFI
 		if (typeDossier == TypeProduit.FACELIA || typeDossier == TypeProduit.IZICARTE) {
-			outil.cliquer(Cibles.BOUTON_MENU_REPRISE_DOSSIER);
+			outil.attendreEtCliquer(Cibles.BOUTON_MENU_REPRISE_DOSSIER);
 		} else if(typeDossier == TypeProduit.CREODIS) {
-			outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER_FC);
+			outil.attendreEtCliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER_FC);
 		} else if(typeDossier == TypeProduit.CREDIT_AMORT) {
-			outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER);
+			outil.attendreEtCliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER);
 		}
+		outil.attendre(1);
 		outil.attendrePresenceTexte("Liste des dossiers");
 		for (WebElement coche : outil.obtenirElements(Cibles.COCHES_LISTE_DOSSIER)) {
 			coche.click();
-			outil.attendre(1);
 			if (outil.testerPresenceTexte(scenario0.getNumeroFFI(), true)) {
 				break;
 			}
@@ -1157,8 +1157,9 @@ public class TNRSC00 extends SC00Test {
 	 * Initialise un cas d'essai IZIVENTE à partir d'une instance connue extraite du fichier de donnée client.
 	 * @param instance la ligne issue du fichier de donnée servant à initaliser le cas d'essai IZIVENTE.
 	 * @return le nouveau cas d'essai initialisé.
+	 * @throws SeleniumException 
 	 */
-	public CasEssaiIziventeBean initialiserScenario(String instance) {
+	public CasEssaiIziventeBean initialiserScenario(String instance) throws SeleniumException {
 		CasEssaiIziventeBean scenario = null;
 		try {
 			String[] instanceDecoupee = instance.split(";");		
@@ -1204,10 +1205,7 @@ public class TNRSC00 extends SC00Test {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		catch (SeleniumException ex){
-			
-		}
-		return scenario;
+			return scenario;
 	}
 	
 	/**

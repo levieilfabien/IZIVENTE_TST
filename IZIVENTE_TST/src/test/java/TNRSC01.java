@@ -52,7 +52,7 @@ public class TNRSC01 extends TNRSC00 {
 		this.montantCredit = "7500";
 		this.mensualite = "225,00";
 		
-		miseAEdit();
-		//miseEnForce();
+		//miseAEdit();
+		miseEnForce();
 	}
 }
