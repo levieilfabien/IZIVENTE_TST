@@ -454,8 +454,6 @@ public class SC00Test extends CasEssaiBean {
 				// On vérifie qu'une étape est spécifiée et que c'est bien cette étape qui est requise
 				if (temp.length > 5 && temp[5].equals(Integer.toString(etapeSouhaitee))) {
 					retour.add(ligne);
-					//TODO à virer
-					System.out.println("J'ai trouvé : " + ligne);
 				}
 			}
 			buff.close(); 

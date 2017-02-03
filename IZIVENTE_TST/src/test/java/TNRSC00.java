@@ -488,10 +488,13 @@ public class TNRSC00 extends SC00Test {
 		}
 		CT04.validerObjectif(outil.getDriver(),  "VALIDATIONPARTICIPANTS", true);
 		outil.attendre(1);
-		if(typeOffre == "PERMIS 1 EURO"){
+		if("PERMIS 1 EURO".equals(typeOffre)){
 			outil.attendreChargementElement(Cibles.LIBELLE_POPUP_ALERTES_);
 			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OK_MAJ);
-			outil.attendreEtCliquer(Cibles.BOUTON_VALIDER_SIMULATION_PP);
+			outil.attendrePresenceTexte("Liste des dossiers");
+			outil.attendre(1);
+			outil.attendreChargementElement(Cibles.BOUTON_VALIDER_SIMULATION_PP, true, true);
+			outil.cliquer(Cibles.BOUTON_VALIDER_SIMULATION_PP);
 			CT04.validerObjectif(outil.getDriver(), "VALIDATION", true);
 		}
 		else {
@@ -554,7 +557,7 @@ public class TNRSC00 extends SC00Test {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		// FINALISATION DE L'INSTRUCTION
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
-		
+
 		CibleBean cibleConfirmationValidationCredit = null;
 		
 		if (typeDossier != TypeProduit.CREDIT_AMORT) {
@@ -625,7 +628,7 @@ public class TNRSC00 extends SC00Test {
 		}else {
 			cibleNumeroFFI = Cibles.ELEMENT_SPAN_NUMERO_FFI;
 		}
-		//TODO Fin des tests pour la validation
+		
 		// Pour les PP on effectue l'impression de la synthèse
 		if (typeDossier == TypeProduit.CREDIT_AMORT) {
 			//Step 5 : Imprimer la synthèse de l'offre
@@ -1143,7 +1146,6 @@ public class TNRSC00 extends SC00Test {
 		try {
 			boolean existence = remplacer(scenario.getNumeroFFI(), chaine);
 			if (!existence) {
-				//TODO modifier le chemin vers le fichier, il doit être dans le properties.
 				chaine = chaine + "\r\n";
 				Files.write(Paths.get("src/test/DonneesClientDossier.txt"),chaine.getBytes(),StandardOpenOption.APPEND);
 			}
@@ -1176,8 +1178,7 @@ public class TNRSC00 extends SC00Test {
 				scenario.setNumeroFFI(instanceDecoupee[1]);
 				scenario.setIdClient(instanceDecoupee[2]);
 				scenario.setNumeroIUN(instanceDecoupee[3]);
-				//TODO Attention préciser le type de produit dans le fichier à écrire.
-				//TODO simplifier ce test, l'esporté dans la classe type de produit ??
+				//TODO simplifier ce test, l'exporté dans la classe type de produit ??
 				switch (instanceDecoupee[4]) {
 					case "PP" :
 						typeDossier = TypeProduit.CREDIT_AMORT;
@@ -1198,14 +1199,13 @@ public class TNRSC00 extends SC00Test {
 				scenario.setAgence(instanceDecoupee[10]);
 				scenario.setNumeroDossierUnited(instanceDecoupee[11]);
 				
-			} else {
-				throw new SeleniumException(Erreurs.E030, "Veuillez vérifier la date inscrite pour ce dossier dans le fichier de données");
-			}
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			} 
+		} catch (ParseException ex) {
+			throw new SeleniumException(Erreurs.E030, "Une date du fichier de donnée est incorrecte.");
+		} catch (ArrayIndexOutOfBoundsException ex) {
+			throw new SeleniumException(Erreurs.E030, "L'instance du fichier de donnée ne contient pas les informations nécessaires.");
 		}
-			return scenario;
+		return scenario;
 	}
 	
 	/**
@@ -1311,26 +1311,31 @@ public class TNRSC00 extends SC00Test {
 		this.miseEnGestion = false;
 		this.murissement = true;
 		List<String> listeInstances = this.renvoyerContenuFichierDonnee(Constantes.ETAPE_SUIVANTE_MURIR);
-		
-		for (String instance : listeInstances) {
-			// On initialise le scénario avec les données de l'instance
-			CasEssaiIziventeBean simulationForc = new CasEssaiIziventeBean();
-			simulationForc = this.initialiserScenario(instance);
-			
-			if (simulationForc != null) {
-				//Reprise du dossier pour murissement
-				//CasEssaiIziventeBean simulationMuri = this.lancement(simulationForc);
-				GregorianCalendar calendar = new GregorianCalendar();
-				if (calendar.get(Calendar.DAY_OF_WEEK) >= Calendar.FRIDAY) {
-					calendar.add(Calendar.DAY_OF_YEAR, 4);
-				} else {
-					calendar.add(Calendar.DAY_OF_YEAR, 2);
-				}
+		try {
+			for (String instance : listeInstances) {
+
+				// On initialise le scénario avec les données de l'instance
+				CasEssaiIziventeBean simulationForc = new CasEssaiIziventeBean();
+				simulationForc = this.initialiserScenario(instance);
 				
-				this.ecritureFichierDonnees(CT08Murissement(simulationForc, outil), calendar.getTime());
+				if (simulationForc != null) {
+					//Reprise du dossier pour murissement
+					//CasEssaiIziventeBean simulationMuri = this.lancement(simulationForc);
+					GregorianCalendar calendar = new GregorianCalendar();
+					if (calendar.get(Calendar.DAY_OF_WEEK) >= Calendar.FRIDAY) {
+						calendar.add(Calendar.DAY_OF_YEAR, 4);
+					} else {
+						calendar.add(Calendar.DAY_OF_YEAR, 2);
+					}
+					
+					this.ecritureFichierDonnees(CT08Murissement(simulationForc, outil), calendar.getTime());
+				}
 			}
-			
-		}
+			} catch(SeleniumException ex) {
+				//TODO 
+			}
+		
+		
 	}
 	
 	public void consultationIZIGATE() throws SeleniumException {
@@ -1339,20 +1344,24 @@ public class TNRSC00 extends SC00Test {
 			CasEssaiIzigateBean consultation = new CasEssaiIzigateBean();
 			GregorianCalendar calendar = new GregorianCalendar();
 			CasEssaiIziventeBean reference = new CasEssaiIziventeBean();
-			for (String instance : listeInstances) {
-				// On initialise le scénario avec les données de l'instance
-				reference = this.initialiserScenario(instance);		
-				SCConsultation scconsultation = new SCConsultation();
-				consultation.setNumeroFFI(reference.getNumeroFFI());
-				consultation.setDistributeur(reference.getDistributeur());
-				CasEssaiIzigateBean simuConsult = scconsultation.lancementTestIzigate(consultation);
-				if (!"".equals(simuConsult.getNumeroDossierUnited())){
-					reference.setNumeroDossierUnited(simuConsult.getNumeroDossierUnited());
-				} else {
-					reference.setNumeroDossierUnited("N/A");
+			try {
+				for (String instance : listeInstances) {
+					// On initialise le scénario avec les données de l'instance
+					reference = this.initialiserScenario(instance);		
+					SCConsultation scconsultation = new SCConsultation();
+					consultation.setNumeroFFI(reference.getNumeroFFI());
+					consultation.setDistributeur(reference.getDistributeur());
+					CasEssaiIzigateBean simuConsult = scconsultation.lancementTestIzigate(consultation);
+					if (!"".equals(simuConsult.getNumeroDossierUnited())){
+						reference.setNumeroDossierUnited(simuConsult.getNumeroDossierUnited());
+					} else {
+						reference.setNumeroDossierUnited("N/A");
+					}
+					reference.setFlag(Constantes.ETAPE_SUIVANTE_VERIF_SYNTHESE);
+					this.ecritureFichierDonnees(reference, calendar.getTime());
 				}
-				reference.setFlag(Constantes.ETAPE_SUIVANTE_VERIF_SYNTHESE);
-				this.ecritureFichierDonnees(reference, calendar.getTime());
+			} catch (SeleniumException ex) {
+				//TODO 
 			}
 	}
 }
