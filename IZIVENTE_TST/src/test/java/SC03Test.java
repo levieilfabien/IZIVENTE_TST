@@ -78,8 +78,6 @@ public class SC03Test extends SC00Test {
 			// Attente de l'affichage du titre de la page
 			outil.attendreChargementPage(Constantes.TITRE_PAGE_IZIVENTE);
 			
-			System.out.println("TOTO");
-			
 			// Récupération de l'élément contenant le jeton de reretoutage.
 			String idClient = generationBouchon(Constantes.CAS_CE, "942500364");
 			scenario3.setIdClient(idClient);

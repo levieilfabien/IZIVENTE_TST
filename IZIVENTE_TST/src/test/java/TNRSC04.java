@@ -1,21 +1,10 @@
 package test.java;
 
-import java.io.File;
-
 import org.junit.Test;
-import org.openqa.selenium.firefox.FirefoxBinary;
-import org.openqa.selenium.firefox.FirefoxProfile;
 
-import beans.ObjectifBean;
 import exceptions.SeleniumException;
-import main.bean.CasEssaiIziventeBean;
-import main.bean.ModificateurBouchon;
-import main.constantes.Cibles;
 import main.constantes.Constantes;
 import main.constantes.TypeProduit;
-import moteurs.FirefoxImpl;
-import moteurs.GenericDriver;
-import outils.SeleniumOutils;
 
 /**
  * Scénario 4 des tests automatisés pour IZIVENTE - 11/2016
@@ -33,9 +22,9 @@ public class TNRSC04 extends TNRSC00 {
 	public void lancementTNR() throws SeleniumException {
 		// Description du scénario
 		//CasEssaiIziventeBean scenario3 = new CasEssaiIziventeBean();
-		this.setAlm(true);
-		this.setAlm(true);
+		this.setAlm(Constantes.ACTIVATION_ALM);
 		this.setIdUniqueTestLab(54204);
+		this.setIdUniqueTestPlan(-1);
 		this.setNomCasEssai("TNRSC04-" + getTime());
 		this.setDescriptif("TNRSC04 - CE - IZIVENTE_Editique Travaux Echelonné");
 		this.setNomTestLab("TNRSC04 - CE - IZIVENTE_Editique Travaux Echelonné");

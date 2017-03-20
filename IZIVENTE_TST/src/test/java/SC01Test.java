@@ -143,7 +143,10 @@ public class SC01Test extends SC00Test {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		outil.attendreEtCliquer(Cibles.BOUTON_IMPRIMER_SYNTHESE);
 		// Pas de demande de financement à 8 jours.
-		outil.cliquerSiPossible(Cibles.LIBELLE_CHOIX_NON_MAJ);
+		//Step 4 : Remplir le questionnaire pour la demande de financement à 8 jours et la réception de sollicitations commerciales partenaires
+		outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true , true);
+		outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_NON_MAJ);
+		//outil.cliquerSiPossible(Cibles.LIBELLE_CHOIX_NON_MAJ);
 		CT19.validerObjectif(outil.getDriver(), "ACCES", true);
 		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -248,7 +251,7 @@ public class SC01Test extends SC00Test {
 		outil.attendre(2);
 		outil.viderEtSaisir("3000", Cibles.SAISIE_MONTANT_DEMANDE);
 		outil.viderEtSaisir("12", Cibles.SAISIE_DUREE_DEMANDE);
-		outil.selectionner("Autre", Cibles.SELECTEUR_SITUATION_VENTE_CR, false);
+		//outil.selectionner("Autre", Cibles.SELECTEUR_SITUATION_VENTE_CR, false);
 		outil.cliquer(Cibles.BOUTON_SUIVANT);
 		CT01.validerObjectif(outil.getDriver(), "SAISIEDOSSIER", true);
 		

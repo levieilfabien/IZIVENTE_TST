@@ -1,21 +1,10 @@
 package test.java;
 
-import java.io.File;
-
 import org.junit.Test;
-import org.openqa.selenium.firefox.FirefoxBinary;
-import org.openqa.selenium.firefox.FirefoxProfile;
 
-import beans.ObjectifBean;
 import exceptions.SeleniumException;
-import main.bean.CasEssaiIziventeBean;
-import main.bean.ModificateurBouchon;
-import main.constantes.Cibles;
 import main.constantes.Constantes;
 import main.constantes.TypeProduit;
-import moteurs.FirefoxImpl;
-import moteurs.GenericDriver;
-import outils.SeleniumOutils;
 
 /**
  * Scénario 11 des tests automatisés pour IZIVENTE - 11/2016
@@ -31,29 +20,30 @@ private static final long serialVersionUID = 1L;
 
 @Test
 public void lancementTNR() throws SeleniumException {
-	// Description du scénario
-	//CasEssaiIziventeBean scenario11 = new CasEssaiIziventeBean();
-	this.setAlm(true);
-	this.setIdUniqueTestLab(54398);
-	this.setNomCasEssai("TNRSC11-" + getTime());
-	this.setDescriptif("TNRSC11 - BP - IZIVENTE_Editique Prêt étudiant différé partiel BPI");
-	this.setNomTestLab("TNRSC11 - BP - IZIVENTE_Editique Prêt étudiant différé partiel BPI");
-	//this.setNomTestPlan("TNRSC11 - BP - IZIVENTE_Editique Prêt étudiant différé partiel BPI");
-	this.setCheminTestLab("POC Selenium\\IZIVENTE");
-	
-	this.distributeur = Constantes.CAS_BP;
-	this.typeDossier = TypeProduit.CREDIT_AMORT;
-	this.modificateur.emprunteurJeune = true;
-	this.aucunCoEmp = true;
-	this.assuranceEmp = true;
-	this.typeUnivers = "JEUNES";
-	this.typeOffre = "BPI ETUDIANT ECH DIF PART";
-	this.typeObjet = "ECOLE INGENIEURS";
-	this.coutProjet = "4000";
-	this.montantCredit = "4000";
-	this.mensualite = "100";
-	this.dureeDiffere = "12";
-	
-	miseAEdit();
+		// Description du scénario
+		//CasEssaiIziventeBean scenario11 = new CasEssaiIziventeBean();
+		this.setAlm(Constantes.ACTIVATION_ALM);
+		this.setIdUniqueTestLab(54398);
+		this.setIdUniqueTestPlan(-1);
+		this.setNomCasEssai("TNRSC11-" + getTime());
+		this.setDescriptif("TNRSC11 - BP - IZIVENTE_Editique Prêt étudiant différé partiel BPI");
+		this.setNomTestLab("TNRSC11 - BP - IZIVENTE_Editique Prêt étudiant différé partiel BPI");
+		//this.setNomTestPlan("TNRSC11 - BP - IZIVENTE_Editique Prêt étudiant différé partiel BPI");
+		this.setCheminTestLab("POC Selenium\\IZIVENTE");
+		
+		this.distributeur = Constantes.CAS_BP;
+		this.typeDossier = TypeProduit.CREDIT_AMORT;
+		this.modificateur.emprunteurJeune = true;
+		this.aucunCoEmp = true;
+		this.assuranceEmp = true;
+		this.typeUnivers = "JEUNES";
+		this.typeOffre = "BPI ETUDIANT ECH DIF PART";
+		this.typeObjet = "ECOLE INGENIEURS";
+		this.coutProjet = "4000";
+		this.montantCredit = "4000";
+		this.mensualite = "100";
+		this.dureeDiffere = "12";
+		
+		miseAEdit();
 	}
 }

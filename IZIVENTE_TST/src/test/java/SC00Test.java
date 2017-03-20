@@ -13,6 +13,13 @@ import java.nio.file.StandardOpenOption;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.internal.ProfilesIni;
+
+import beans.CasEssaiBean;
+import constantes.Erreurs;
+import exceptions.SeleniumException;
+import extensions.SeleniumALMRESTWrapper;
 import main.bean.ModificateurBouchon;
 import main.constantes.Cibles;
 import main.constantes.Constantes;
@@ -22,17 +29,9 @@ import main.ihm.IHMGeneration;
 import main.ihm.ListePersonnePhysique;
 import main.ihm.PersonnePhysiqueTiers;
 import main.ihm.Risque;
-
-import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.firefox.internal.ProfilesIni;
-
-import outils.ALMOutils;
 import outils.SeleniumOutils;
 import outils.XLSOutils;
 import outils.XMLOutils;
-import beans.CasEssaiBean;
-import constantes.Erreurs;
-import exceptions.SeleniumException;
 
 /**
  * Classe contenant les fonctions communes entre les différents scenario.
@@ -296,22 +295,27 @@ public class SC00Test extends CasEssaiBean {
 
 		//TODO A remettre
 //		if (outils != null) {
-//			outils.getDriver().quit();
+//			outils.getDriver().close();
+//		    try {
+//		    	outils.getDriver().quit();
+//		    }catch(Exception e){
+//		        System.out.println("Impossible de quitter le driver en raison d'une erreur.");
+//		    }
 //		}
 
 		// On renseigne le rapport d'execution avec les données du cas de test.
 		XLSOutils.renseignerExcel(casEssai);
 		
 		// On tente de mettre à jour ALM
-		if (casEssai.getAlm()) {
-			try {
-				ALMOutils.miseAJourTestSet(casEssai, succes);
-				System.out.println("Mise à jour effectuée dans ALM");
-			} catch (SeleniumException ex) {
-				ex.printStackTrace();
-				System.out.println("Mise à jour impossible à effectuée dans ALM : " + ex.toString());
-			}	
-		}
+		try {
+			//ALMOutils.miseAJourTestSet(casEssai, succes);
+			SeleniumALMRESTWrapper.miseAJourTestSet(casEssai, succes);
+			System.out.println("Mise à jour effectuée dans ALM");
+		} catch (SeleniumException ex) {
+			//ex.printStackTrace();
+			System.out.println("Mise à jour impossible à effectuée dans ALM : " + ex.getMessage());
+		}	
+
 	}
 	
 	/**

@@ -1,11 +1,10 @@
 package test.java;
 
-import main.constantes.Constantes;
-import main.constantes.TypeProduit;
-
 import org.junit.Test;
 
 import exceptions.SeleniumException;
+import main.constantes.Constantes;
+import main.constantes.TypeProduit;
 
 /**
  * Scénario 5 des tests automatisés pour IZIVENTE - 11/2016
@@ -23,8 +22,9 @@ public class TNRSC05 extends TNRSC00 {
 	public void lancementTNR() throws SeleniumException {
 		// Description du scénario
 		//CasEssaiIziventeBean scenario5 = new CasEssaiIziventeBean();
-		this.setAlm(true);
+		this.setAlm(Constantes.ACTIVATION_ALM);
 		this.setIdUniqueTestLab(54392);
+		this.setIdUniqueTestPlan(-1);
 		this.setNomCasEssai("TNRSC05-" + getTime());
 		this.setDescriptif("TNRSC05 - CE - IZIVENTE_Prêt travaux echelonné différé partiel");
 		this.setNomTestLab("TNRSC05 - CE - IZIVENTE_Prêt travaux echelonné différé partiel");

@@ -1,21 +1,10 @@
 package test.java;
 
-import java.io.File;
-
 import org.junit.Test;
-import org.openqa.selenium.firefox.FirefoxBinary;
-import org.openqa.selenium.firefox.FirefoxProfile;
 
-import beans.ObjectifBean;
 import exceptions.SeleniumException;
-import main.bean.CasEssaiIziventeBean;
-import main.bean.ModificateurBouchon;
-import main.constantes.Cibles;
 import main.constantes.Constantes;
 import main.constantes.TypeProduit;
-import moteurs.FirefoxImpl;
-import moteurs.GenericDriver;
-import outils.SeleniumOutils;
 
 /**
  * Scénario 6 des tests automatisés pour IZIVENTE - 11/2016
@@ -33,8 +22,9 @@ public class TNRSC06 extends TNRSC00 {
 	public void lancementTNR() throws SeleniumException {
 		// Description du scénario
 		//CasEssaiIziventeBean scenario6 = new CasEssaiIziventeBean();
-		this.setAlm(true);
+		this.setAlm(Constantes.ACTIVATION_ALM);
 		this.setIdUniqueTestLab(54393);
+		this.setIdUniqueTestPlan(-1);
 		this.setNomCasEssai("TNRSC06-" + getTime());
 		this.setDescriptif("TNRSC06 - BP - IZIVENTE_Editique Trésorerie immédiat CASDEN");
 		this.setNomTestLab("TNRSC06 - BP - IZIVENTE_Editique Trésorerie immédiat CASDEN");

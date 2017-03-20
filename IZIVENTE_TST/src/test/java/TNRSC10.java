@@ -1,21 +1,10 @@
 package test.java;
 
-import java.io.File;
-
 import org.junit.Test;
-import org.openqa.selenium.firefox.FirefoxBinary;
-import org.openqa.selenium.firefox.FirefoxProfile;
 
-import beans.ObjectifBean;
 import exceptions.SeleniumException;
-import main.bean.CasEssaiIziventeBean;
-import main.bean.ModificateurBouchon;
-import main.constantes.Cibles;
 import main.constantes.Constantes;
 import main.constantes.TypeProduit;
-import moteurs.FirefoxImpl;
-import moteurs.GenericDriver;
-import outils.SeleniumOutils;
 
 /**
  * Scénario 10 des tests automatisés pour IZIVENTE - 11/2016
@@ -33,8 +22,9 @@ private static final long serialVersionUID = 1L;
 	public void lancementTNR() throws SeleniumException {
 		// Description du scénario
 		//CasEssaiIziventeBean scenario10 = new CasEssaiIziventeBean();
-		this.setAlm(true);
+		this.setAlm(Constantes.ACTIVATION_ALM);
 		this.setIdUniqueTestLab(54397);
+		this.setIdUniqueTestPlan(-1);
 		this.setNomCasEssai("TNRSC10-" + getTime());
 		this.setDescriptif("TNRSC10 - BP - IZIVENTE_Editique Prêt Etudiant");
 		this.setNomTestLab("TNRSC10 - BP - IZIVENTE_Editique Prêt Etudiant");

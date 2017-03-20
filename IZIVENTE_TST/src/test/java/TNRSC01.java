@@ -1,20 +1,10 @@
 package test.java;
 
-import java.io.File;
-
 import org.junit.Test;
-import org.openqa.selenium.firefox.FirefoxBinary;
-import org.openqa.selenium.firefox.FirefoxProfile;
 
-import beans.ObjectifBean;
 import exceptions.SeleniumException;
-import main.bean.CasEssaiIziventeBean;
-import main.constantes.Cibles;
 import main.constantes.Constantes;
 import main.constantes.TypeProduit;
-import moteurs.FirefoxImpl;
-import moteurs.GenericDriver;
-import outils.SeleniumOutils;
 
 /**
  * Scénario 1 des tests automatisés pour IZIVENTE - 11/2016
@@ -32,8 +22,9 @@ public class TNRSC01 extends TNRSC00 {
 	public void lancementTNR() throws SeleniumException {
 		// Description du scénario
 		//CasEssaiIziventeBean scenario1 = new CasEssaiIziventeBean();
-		this.setAlm(true);
+		this.setAlm(true /*Constantes.ACTIVATION_ALM*/);
 		this.setIdUniqueTestLab(54199);
+		this.setIdUniqueTestPlan(-1);
 		this.setNomCasEssai("TNRSC01-" + getTime());
 		this.setDescriptif("TNRSC01 - BP - IZIVENTE_Editique FACELIA CR Debit Credit");
 		this.setNomTestLab("TNRSC01 - BP - IZIVENTE_Editique FACELIA CR Debit Credit");

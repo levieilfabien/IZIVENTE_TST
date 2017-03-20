@@ -149,6 +149,7 @@ public class Cibles {
 	 * Radio bouton pour la selection du participant 1 au crédit.
 	 */
 	public static final CibleBean RADIO_SELECTION_PARTICIPANT1 = new CibleBean("form_ongletSyntheseParticipant:tableParticipants:1:radio_selection:0");
+	//form_ongletSyntheseParticipant:tableParticipants:1:radio_selection:0
 																				
 	/**
 	 * Radio bouton pour la selection du participant 0 au crédit.
@@ -188,12 +189,12 @@ public class Cibles {
 	 * Cases des réponses pour la saisie d'assurance d'une personne senior (>61 ans) 
 	 * //input[@class="questionnaireerreurIntcheck"]/..[contains(text(),"Non")]
 	 */
-		public static final CibleBean CASE_SELECTION_REPONSE_ASSURANCE_NON = new CibleBean(Clefs.CRITERES_ITERATIF, "*", "text=Non", CibleBean.PERE,  "input", "class=questionnaireerreurIntcheck"); 
+	public static final CibleBean CASE_SELECTION_REPONSE_ASSURANCE_NON = new CibleBean(Clefs.CRITERES_ITERATIF, "*", "text=Non", CibleBean.PERE,  "input", "class=questionnaireerreurIntcheck"); 
 
 	/**
 	 * Radio bouton pour la sélection d'assurance DIM pour un Senior éligible aux assurances
 	 */
-		public static final CibleBean RADIO_SELECTION_ASSURANCE_DIM = new CibleBean("form_ongletSyntheseParticipant:tableChoixAssurance:0:radio_selection_ass:0");
+	public static final CibleBean RADIO_SELECTION_ASSURANCE_DIM = new CibleBean("form_ongletSyntheseParticipant:tableChoixAssurance:0:radio_selection_ass:0");
 		
 	/**
 	 * Selectionner la première assurance proposée
@@ -233,6 +234,7 @@ public class Cibles {
 	 * Element indiquant l'état d'avancement final du chargement de la signature electronique.
 	 */
 	public static final CibleBean ELEMENT_POPUP_BARRE_CHARGEMENT_SIGNATURE_ELECTRONIQUE = new CibleBean("progressBarTermine");
+			//new CibleBean(Clefs.CRITERES_ITERATIF, "*", "id=divProgressBarTermine", "text=terminé");
 	
 	/**
 	 * Element indiquant la présence du formulaire de complétude (contrôle des confirmités)
@@ -438,12 +440,14 @@ public class Cibles {
 	/**
 	 * Choix d'une assurance décès pour l'emprunteur d'un FACELIA
 	 */
-	public static final CibleBean RADIO_ASSURANCE_DECES_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1679:0");
+	//public static final CibleBean RADIO_ASSURANCE_DECES_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1682:0");
+	public static final CibleBean RADIO_ASSURANCE_DECES_FACELIA_OUI = new CibleBean(Clefs.XPATH, ".//*[text()='- Décès :']/../../../td[2]/table/tbody/tr/td[1]/input");
 	
 	/**
 	 * Absence d'une assurance décès pour l'emprunteur d'un FACELIA
 	 */
-	public static final CibleBean RADIO_ASSURANCE_DECES_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1679:1");
+	//public static final CibleBean RADIO_ASSURANCE_DECES_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1682:1");
+	public static final CibleBean RADIO_ASSURANCE_DECES_FACELIA_NON = new CibleBean(Clefs.XPATH, ".//*[text()='- Décès :']/../../../td[2]/table/tbody/tr/td[2]/input");
 	
 	/**
 	 * Choix d'une assurance décès pour l'emprunteur d'une IZICARTE
@@ -458,12 +462,12 @@ public class Cibles {
 	/**
 	 * Choix d'une assurance invalidité pour l'emprunteur d'un FACELIA
 	 */
-	public static final CibleBean RADIO_ASSURANCE_INVALD_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1687:0");
+	public static final CibleBean RADIO_ASSURANCE_INVALD_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1690:0");
 	
 	/**
 	 * Absence d'une assurance invalidité pour l'emprunteur d'un FACELIA
 	 */
-	public static final CibleBean RADIO_ASSURANCE_INVALD_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1687:1");
+	public static final CibleBean RADIO_ASSURANCE_INVALD_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1690:1");
 	
 	/**
 	 * Choix d'une assurance invalidité pour l'emprunteur d'un IZICARTE
@@ -478,12 +482,12 @@ public class Cibles {
 	/**
 	 * Choix d'une assurance incapacité pour l'emprunteur d'un FACELIA
 	 */
-	public static final CibleBean RADIO_ASSURANCE_INCAP_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1695:0");
+	public static final CibleBean RADIO_ASSURANCE_INCAP_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1698:0");
 	
 	/**
 	 * Absence d'une assurance incapacité pour l'emprunteur d'un FACELIA
 	 */
-	public static final CibleBean RADIO_ASSURANCE_INCAP_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1695:1");
+	public static final CibleBean RADIO_ASSURANCE_INCAP_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1698:1");
 	
 	/**
 	 * Choix d'une assurance maladie pour l'emprunteur d'un IZICARTE
@@ -498,12 +502,12 @@ public class Cibles {
 	/**
 	 * Choix d'une assurance perte d'emploi pour l'emprunteur d'un FACELIA
 	 */
-	public static final CibleBean RADIO_ASSURANCE_PERTE_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1703:0");
+	public static final CibleBean RADIO_ASSURANCE_PERTE_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1706:0");
 	
-	/**
+	/**	
 	 * Choix d'une assurance perte d'emploi pour l'emprunteur d'un FACELIA
 	 */
-	public static final CibleBean RADIO_ASSURANCE_PERTE_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1703:1");
+	public static final CibleBean RADIO_ASSURANCE_PERTE_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1706:1");
 
 	/**
 	 * Choix d'une assurance perte d'emploi pour l'emprunteur d'un IZICARTE
@@ -580,6 +584,12 @@ public class Cibles {
 	 *Bouton de suppression du deuxième co emprunteur dans la synthèse de participaant 
 	 */
 	public static final CibleBean BOUTON_SUPP_PARTICIPANT_2_BP = new CibleBean(Clefs.NAME, "form_ongletSyntheseParticipant:tableParticipants:2:j_id1643");
+	
+	/**
+	 * Tableau des participants.
+	 */
+	public static final CibleBean TABLEAU_PARTICIPANTS = new CibleBean("form_ongletSyntheseParticipant:tableParticipants:tb");
+	
 	/**
 	 * Bouton de formulaire permettant la validation d'une recherche.
 	 */
@@ -618,7 +628,8 @@ public class Cibles {
 	/**
 	 * Libelle du choix "Vérifié/Non Vérifié" pourle choix "Vérifié".
 	 */
-	public static final CibleBean LIBELLE_CHOIX_VERIFIE = new CibleBean(Clefs.TEXTE_PARTIEL, "Vérifié");
+	//public static final CibleBean LIBELLE_CHOIX_VERIFIE = new CibleBean(Clefs.TEXTE_PARTIEL, "Vérifié");
+	public static final CibleBean LIBELLE_CHOIX_VERIFIE = new CibleBean(Clefs.VALEUR, "V");
 	
 	/**
 	 * Libelle de la popup d'alerte.

@@ -41,7 +41,7 @@ public class CasEssaiIziventeBean extends CasEssaiBean {
 	
 	private String numeroDossierUnited = "N/A";
 	
-	private int distributeur;
+	private int distributeur = -1;
 
 	public int getDistributeur() {
 		return distributeur;

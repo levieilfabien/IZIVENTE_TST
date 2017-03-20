@@ -23,10 +23,10 @@ public class TransverseSC01Test extends TNRSC00 {
 	@Test
 	public void transverseCR() throws SeleniumException {
 		
-		FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
-		FirefoxProfile profile = configurerProfilNatixis();
-		FirefoxImpl driver = new FirefoxImpl(ffBinary, profile);
-		SeleniumOutils outil = new SeleniumOutils(driver);
+		//FirefoxBinary ffBinary = new FirefoxBinary(new File(Constantes.EMPLACEMENT_FIREFOX));
+//		FirefoxProfile profile = configurerProfilNatixis();
+//		FirefoxImpl driver = new FirefoxImpl(profile);
+//		SeleniumOutils outil = new SeleniumOutils(driver);
 
 		this.setAlm(false);
 		this.distributeur = Constantes.CAS_BP;
@@ -40,11 +40,12 @@ public class TransverseSC01Test extends TNRSC00 {
 		//this.idClient = "942501348";
 		this.coutProjet = "8000";
 		this.mensualite = "300";
+		this.situationDeVente = "Autre";
 		//this.numPersPhysTiers = "942500502";
 		
-		miseAEdit();
+		//miseAEdit();
 		miseEnForce();
-		murissement(outil);
+		murissement(null);
 		consultationIZIGATE();
 		
 	}
