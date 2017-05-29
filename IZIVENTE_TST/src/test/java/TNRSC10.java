@@ -31,6 +31,9 @@ private static final long serialVersionUID = 1L;
 		//this.setNomTestPlan("TNRSC10 - BP - IZIVENTE_Editique Prêt Etudiant");
 		this.setCheminTestLab("POC Selenium\\IZIVENTE");
 		
+		//TODO modifier pour la fusion
+		this.etablissement = "068";
+		this.agence = "00001";
 		this.distributeur = Constantes.CAS_BP;
 		this.typeDossier = TypeProduit.CREDIT_AMORT;
 		this.modificateur.emprunteurJeune = true;

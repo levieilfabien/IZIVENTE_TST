@@ -462,12 +462,14 @@ public class Cibles {
 	/**
 	 * Choix d'une assurance invalidité pour l'emprunteur d'un FACELIA
 	 */
-	public static final CibleBean RADIO_ASSURANCE_INVALD_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1690:0");
+	//public static final CibleBean RADIO_ASSURANCE_INVALD_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1690:0");
+	public static final CibleBean RADIO_ASSURANCE_INVALD_FACELIA_OUI = new CibleBean(Clefs.CRITERES_ITERATIF, "*", CibleBean.CRITERE_TEXTE + "=- Invalidité Permanente et Totale :", CibleBean.PERE, CibleBean.PERE, CibleBean.PERE, "td[2]", CibleBean.RECHERCHE, CibleBean.CRITERE_TEXTE + "=Oui");
 	
 	/**
 	 * Absence d'une assurance invalidité pour l'emprunteur d'un FACELIA
 	 */
-	public static final CibleBean RADIO_ASSURANCE_INVALD_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1690:1");
+	//public static final CibleBean RADIO_ASSURANCE_INVALD_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_ id1690:1");
+	public static final CibleBean RADIO_ASSURANCE_INVALD_FACELIA_NON = new CibleBean(Clefs.CRITERES_ITERATIF, "*", CibleBean.CRITERE_TEXTE + "=- Invalidité Permanente et Totale :", CibleBean.PERE, CibleBean.PERE, CibleBean.PERE, "td[2]", CibleBean.RECHERCHE, CibleBean.CRITERE_TEXTE + "=Non");
 	
 	/**
 	 * Choix d'une assurance invalidité pour l'emprunteur d'un IZICARTE
@@ -482,12 +484,16 @@ public class Cibles {
 	/**
 	 * Choix d'une assurance incapacité pour l'emprunteur d'un FACELIA
 	 */
-	public static final CibleBean RADIO_ASSURANCE_INCAP_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1698:0");
+	//public static final CibleBean RADIO_ASSURANCE_INCAP_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1698:0");
+	public static final CibleBean RADIO_ASSURANCE_INCAP_FACELIA_OUI = new CibleBean(Clefs.CRITERES_ITERATIF, "*", CibleBean.CRITERE_TEXTE + "=- Incapacité temporaire et Totale de travail :", CibleBean.PERE, CibleBean.PERE, CibleBean.PERE, "td[2]", CibleBean.RECHERCHE, CibleBean.CRITERE_TEXTE + "=Oui");
+	
 	
 	/**
 	 * Absence d'une assurance incapacité pour l'emprunteur d'un FACELIA
 	 */
-	public static final CibleBean RADIO_ASSURANCE_INCAP_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1698:1");
+	//public static final CibleBean RADIO_ASSURANCE_INCAP_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1698:1");
+	//*[contains(text(),"- Incapacité temporaire et Totale de travail :")]/../../../td[2]//*[contains(text(),"Oui")]
+	public static final CibleBean RADIO_ASSURANCE_INCAP_FACELIA_NON = new CibleBean(Clefs.CRITERES_ITERATIF, "*", CibleBean.CRITERE_TEXTE + "=- Incapacité temporaire et Totale de travail :", CibleBean.PERE, CibleBean.PERE, CibleBean.PERE, "td[2]", CibleBean.RECHERCHE, CibleBean.CRITERE_TEXTE + "=Non");
 	
 	/**
 	 * Choix d'une assurance maladie pour l'emprunteur d'un IZICARTE
@@ -502,12 +508,14 @@ public class Cibles {
 	/**
 	 * Choix d'une assurance perte d'emploi pour l'emprunteur d'un FACELIA
 	 */
-	public static final CibleBean RADIO_ASSURANCE_PERTE_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1706:0");
+	//public static final CibleBean RADIO_ASSURANCE_PERTE_FACELIA_OUI = new CibleBean("form_ongletSyntheseParticipant:j_id1706:0");
+	public static final CibleBean RADIO_ASSURANCE_PERTE_FACELIA_OUI = new CibleBean(Clefs.CRITERES_ITERATIF, "*", CibleBean.CRITERE_TEXTE + "=- Perte d'emploi :", CibleBean.PERE, CibleBean.PERE, CibleBean.PERE, "td[2]", CibleBean.RECHERCHE, CibleBean.CRITERE_TEXTE + "=Oui");
 	
 	/**	
 	 * Choix d'une assurance perte d'emploi pour l'emprunteur d'un FACELIA
 	 */
-	public static final CibleBean RADIO_ASSURANCE_PERTE_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1706:1");
+	//public static final CibleBean RADIO_ASSURANCE_PERTE_FACELIA_NON = new CibleBean("form_ongletSyntheseParticipant:j_id1706:1");
+	public static final CibleBean RADIO_ASSURANCE_PERTE_FACELIA_NON = new CibleBean(Clefs.CRITERES_ITERATIF, "*", CibleBean.CRITERE_TEXTE + "=- Perte d'emploi :", CibleBean.PERE, CibleBean.PERE, CibleBean.PERE, "td[2]", CibleBean.RECHERCHE, CibleBean.CRITERE_TEXTE + "=Non");
 
 	/**
 	 * Choix d'une assurance perte d'emploi pour l'emprunteur d'un IZICARTE
@@ -601,6 +609,11 @@ public class Cibles {
 	public static final CibleBean BOUTON_POPUP_OUI_MAJ = new CibleBean(Clefs.VALEUR, "Oui");
 	
 	/**
+	 * La popup qui s'affiche pour signifie qu'on va créer un CR_DC.
+	 */
+	public static final CibleBean POPUP_CREATION_CR_DC = new CibleBean("PopupConfCreationDossCRDCContentTable");
+	
+	/**
 	 * Libelle de choix "Ok" pour le choix "Ok".
 	 */
 	public static final CibleBean BOUTON_POPUP_OK_MAJ = new CibleBean(Clefs.VALEUR, "Ok");
@@ -650,5 +663,7 @@ public class Cibles {
 	 * Bouton de rafraichissement des informations client
 	 */
 	public static final CibleBean BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT = new CibleBean("form_donnees_client:refreshClient1");
-	//public static final CibleBean BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT = new CibleBean(Clefs.VALEUR, "Rafraîchir");
+	public static final CibleBean BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT_2 = new CibleBean(Clefs.NAME, "form_donnees_client:refreshClient1");
+	public static final CibleBean CHAMP_NOM_EMPLOYEUR = new CibleBean("form_donnees_client:nomEmployeur:nomEmployeur_Field");
+	//public static final CibleBean BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT = new CibleBean(Clefs.VALEUR, "Rafraîchir");form_donnees_client:refreshClient1
 }

@@ -34,6 +34,7 @@ private static final long serialVersionUID = 1L;
 		this.distributeur = Constantes.CAS_CE;
 		this.typeDossier = TypeProduit.CREDIT_AMORT;
 		this.modificateur.emprunteurJeune = true;
+		this.modificateur.sansConjoint = true;
 		this.aucunCoEmp = false;
 		this.tiersCaution = true;
 		this.assuranceEmp = false;

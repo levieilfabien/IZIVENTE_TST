@@ -30,6 +30,7 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 import outils.SeleniumOutils;
 import beans.CibleBean;
 import beans.ObjectifBean;
+import constantes.Clefs;
 import constantes.Erreurs;
 import exceptions.SeleniumException;
 
@@ -66,6 +67,7 @@ public class TNRSC00 extends SC00Test {
 	Boolean aucunCoEmp = false;
 	Boolean conjointCoEmp = false;
 	Boolean conjointCaution = false;
+	Boolean conjointInterdit = false;
 	Boolean tiersCoEmp = false;
 	Boolean tiersCaution = false;
 	//Renseigner le numero de personne physique pour le coemprunteur tiers (BP : 9500855 P1E CE : 942500400).
@@ -292,7 +294,7 @@ public class TNRSC00 extends SC00Test {
 				outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER_FC);
 			break;
 			case IZICARTE : 
-				outil.cliquer(Cibles.BOUTON_MENU_OUVERTURE_IZICARTE);
+				outil.cliquerJusqua(Cibles.BOUTON_MENU_OUVERTURE_IZICARTE, Cibles.POPUP_CREATION_CR_DC);
 				//Step 3 : Fermeture des pop ups 'Attention' confirmant l'ouverture du dossier
 				outil.attendrePresenceTexte("Information");
 				outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
@@ -303,23 +305,23 @@ public class TNRSC00 extends SC00Test {
 			break;
 		 }
 		CT02.validerObjectif(outil.getDriver(), "OUVERTURE", true);
-		if(scenario0.getDistributeur() == Constantes.CAS_CE){
+		outil.attendre(2);
+		if(scenario0.getDistributeur() == Constantes.CAS_CE) {
 			outil.attendrePresenceTexte("Attention");
-		}
-		else {
+		} else {
 			outil.attendrePresenceTexte("ATTENTION");
 		}
 		CT02.validerObjectif(outil.getDriver(), "CONFIRMATION", true);
 		// Cette etape n'as lieu que si le dossier est deja porteur d'un autre dossier
 		outil.cliquerSiPossible(Cibles.BOUTON_MENU_NOUVEAU_DOSSIER);
 		outil.cliquer(Cibles.BOUTON_POPUP_FERMER);
+		// A ce moment un rechargement de la page entraine l'impossibilité d'intérraction avec les boutons
 		//Step 4 : Verifier la coherence des donnees du client, du conjoint si existant et du budget. Cliquer sur le bouton 'Suivant'
-		outil.attendreChargementElement(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT, true, true);
-		outil.cliquer(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT);
-		outil.attendre(1);
-		outil.attendreChargementElement(Cibles.BOUTON_SUIVANT_CLIENT, true, true);
-		outil.cliquer(Cibles.BOUTON_SUIVANT_CLIENT);
-		//outil.attendrePresenceTexte("Synthese");
+		outil.attendreElement(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT_2);
+		outil.cliquerEtAttendre(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT_2, Cibles.BOUTON_SUIVANT_CLIENT);
+		outil.attendreValorisation(Cibles.CHAMP_NOM_EMPLOYEUR, null);
+		// A ce moment le bouton suivant est visible mais pas encore clicable car la page est encore sous le coup du chargement du rafraichissement
+		outil.cliquerJusqua(Cibles.BOUTON_SUIVANT_CLIENT, Cibles.BOUTON_VALIDER);
 		CT02.validerObjectif(outil.getDriver(),  "SUIVANT", true);
 		outil.attendreEtCliquer(Cibles.BOUTON_VALIDER);
 		CT02.validerObjectif(outil.getDriver(), "VALIDATIONDONNEESCLIENT", true);
@@ -465,6 +467,10 @@ public class TNRSC00 extends SC00Test {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////		
 		//Step 1 : Choisir les participants en fonction de la fiche de prêt et Valider. Aucun co-emprunteur dans ce scenario
 	    
+	    if (outil.testerPresenceTexte("Le crédit choisi ne permet pas de donner un rôle au conjoint.", true)) {
+	    	conjointInterdit = true;
+	    }
+	    
 	    if (aucunCoEmp == true) {
 	    	aucunCoEmprunteur(outil);
 	    }
@@ -504,9 +510,11 @@ public class TNRSC00 extends SC00Test {
 			outil.attendreChargementElement(Cibles.LIBELLE_POPUP_ALERTES_);
 			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_OK_MAJ);
 			outil.attendrePresenceTexte("Liste des dossiers");
-			outil.attendre(1);
-			outil.attendreChargementElement(Cibles.BOUTON_VALIDER_SIMULATION_PP, true, true);
+			//outil.attendre(1);
+			//outil.attendreChargementElement(Cibles.BOUTON_VALIDER_SIMULATION_PP, true, true);
+			outil.attendreElement(Cibles.BOUTON_VALIDER_SIMULATION_PP);
 			outil.cliquer(Cibles.BOUTON_VALIDER_SIMULATION_PP);
+			outil.cliquerJusqua(Cibles.BOUTON_VALIDER_SIMULATION_PP, new CibleBean(Clefs.TEXTE_COMPLET, "Récapitulatif de la demande crédit"));
 			CT04.validerObjectif(outil.getDriver(), "VALIDATION", true);
 		} else {
 			CibleBean cibleAttenteValidationCredit = null;
@@ -526,13 +534,11 @@ public class TNRSC00 extends SC00Test {
 			}
 			
 			//Step 1 : Valider de l'offre contrat de credit
-			//Extraction du BIC et de l'IBAN du compte emprunteur CR
-			if (typeDossier != TypeProduit.CREDIT_AMORT){
-				outil.attendreChargementElement(Cibles.ELEMENT_SPAN_BIC, true, true);			
-				scenario0.setNumeroBIC(outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC));
-				scenario0.setNumeroIBAN(outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN));
+			// Si l'élement d'attente n'est pas présent, on attend l'élément
+			if (!outil.testerVisibiliteElementDiffere(cibleAttenteValidationCredit)) {
+				outil.attendreElement(cibleAttenteValidationCredit);
 			}
-			outil.attendreChargementElement(cibleAttenteValidationCredit);
+			// L'élément de validation du crédit doit être présent
 			if (!outil.testerVisibiliteElementDiffere(cibleValidationCredit)) {
 				CT04.validerObjectif(outil.getDriver(), "VALIDATION", false);
 				throw new SeleniumException(Erreurs.E009, "Impossible de valider en contrat de crédit.");
@@ -540,12 +546,18 @@ public class TNRSC00 extends SC00Test {
 			outil.cliquer(cibleValidationCredit);
 			CT04.validerObjectif(outil.getDriver(), "VALIDATION", true);
 			//Step 2 : Finalisation de l'instruction : Validation de la popup pour les CR, validation de l'ecran pour les PP
-			//Extraction du BIC et de l'IBAN du compte emprunteur PP
-			if (typeDossier == TypeProduit.CREDIT_AMORT){
+			//Extraction du BIC et de l'IBAN du compte emprunteur CR
+//			if (typeDossier != TypeProduit.CREDIT_AMORT){
+//				outil.attendreChargementElement(Cibles.ELEMENT_SPAN_BIC, true, true);			
+//				scenario0.setNumeroBIC(outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC));
+//				scenario0.setNumeroIBAN(outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN));
+//			}
+//			//Extraction du BIC et de l'IBAN du compte emprunteur PP
+//			if (typeDossier == TypeProduit.CREDIT_AMORT){
 				outil.attendreChargementElement(Cibles.ELEMENT_SPAN_BIC, true, true);	
 				scenario0.setNumeroBIC(outil.obtenirValeur(Cibles.ELEMENT_SPAN_BIC));
 				scenario0.setNumeroIBAN(outil.obtenirValeur(Cibles.ELEMENT_SPAN_IBAN));
-			}
+//			}
 		}
 		CT04.validerObjectif(outil.getDriver(), CT04.getNomCasEssai() + CT04.getTime(),true);
 		scenario0.setFlag(Constantes.ETAPE_SUIVANTE_VALIDATION);
@@ -569,7 +581,7 @@ public class TNRSC00 extends SC00Test {
 		CT05.ajouterStep("Finalisation de l'instruction (clic sur le bouton 'Oui' dans la popup de finalisation de l'instruction", "VALIDATIONINSTRUCTION", "Affichage de l'ecran de synthese de l'offre de credit");
 		CT05.ajouterStep("Remplir le questionnaire pour la demande de financement a 8 jours et la reception de sollicitations commerciales partenaires (choix oui/non via boutons radio).", "OPTIONS", "Choix effectues conformement au scenario");
 		if(typeDossier == TypeProduit.CREDIT_AMORT){
-		CT05.ajouterStep("Verifier les justificatifs et valider (clic bouton radio 'Verifie' pour chaque justificatif dans la pop up de finalisation de l'instruction' et clic sur bouton 'Valider'", "VERIFICATION", "Retour sur la page de dossier de vente");
+			CT05.ajouterStep("Verifier les justificatifs et valider (clic bouton radio 'Verifie' pour chaque justificatif dans la pop up de finalisation de l'instruction' et clic sur bouton 'Valider'", "VERIFICATION", "Retour sur la page de dossier de vente");
 		}
 		CT05.ajouterObjectif(new ObjectifBean("Test arrive a terme", CT05.getNomCasEssai() + CT05.getTime()));
 
@@ -596,11 +608,18 @@ public class TNRSC00 extends SC00Test {
 			CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);
 		}
 		//Step 4 : Remplir le questionnaire pour la demande de financement a 8 jours et la reception de sollicitations commerciales partenaires
+		outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
+		// On attend la présence des choix à NON pour les différentes options.
+		outil.attendreElement(Cibles.LIBELLE_CHOIX_NON_MAJ);
+		// Une fois que c'est fait on va cliquer sur les différents checkbox
 		if (!outil.testerVisibiliteElementDiffere(Cibles.LIBELLE_CHOIX_NON_MAJ)) {
 			CT05.validerObjectif(outil.getDriver(), "OPTIONS", false);
-			throw new SeleniumException(Erreurs.E009, "Impossible de valorisation les options à non. Sont elles affichées ?");
+			throw new SeleniumException(Erreurs.E009, "Impossible de visualiser les options à non. Sont elles affichées ?");
 		}
-		outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_NON_MAJ);
+		if (outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_NON_MAJ) < 1) {
+			CT05.validerObjectif(outil.getDriver(), "OPTIONS", false);
+			throw new SeleniumException(Erreurs.E009, "Impossible de cliquer sur les options à non.");
+		}
 		CT05.validerObjectif(outil.getDriver(), "OPTIONS", true);
 		CT05.validerObjectif(outil.getDriver(), CT05.getNomCasEssai() + CT05.getTime(),true);
 		scenario0.setFlag(Constantes.ETAPE_SUIVANTE_EDITION);
@@ -921,7 +940,7 @@ public class TNRSC00 extends SC00Test {
 		//TODO prevoir le choix de type d'assurance
 		outil.attendre(1);
 		
-		if (assuranceEmp == true ) {
+		if (assuranceEmp == true) {
 			if (typeDossier != TypeProduit.CREODIS) {
 				outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT0);
 				outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT0);
@@ -941,8 +960,9 @@ public class TNRSC00 extends SC00Test {
 				case IZICARTE :
 					//outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_CR, true, true);
 					//outil.cliquer(Cibles.RADIO_AVEC_ASS_CR);
-					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_IZICARTE, true, true);	
-					outil.attendreEtCliquer(Cibles.RADIO_AVEC_ASS_IZICARTE);
+//					outil.attendreChargementElement(Cibles.RADIO_AVEC_ASS_IZICARTE, true, true);	
+//					outil.attendreEtCliquer(Cibles.RADIO_AVEC_ASS_IZICARTE);					
+					outil.cliquerJusqua(Cibles.RADIO_AVEC_ASS_IZICARTE, Cibles.RADIO_ASSURANCE_DECES_IZICARTE_OUI);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_DECES_IZICARTE_OUI);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_INVALD_IZICARTE_NON);
 					outil.attendreEtCliquer(Cibles.RADIO_ASSURANCE_MALA_IZICARTE_NON);
@@ -1068,26 +1088,47 @@ public class TNRSC00 extends SC00Test {
 		}
 		// Si le tiers dispose d'un rôle, soit on supprime le conjoint si il n'as pas de rôle, soit on choisit le rôle demande
 		if (roleTiers) {
-			if(conjointCoEmp == false && conjointCaution == false){
-				//S'il n'il n'y a pas d'indication sur le conjoint avec presence de tiers, on supprime le conjoint du dossier
-				boolean CE = (scenario.getDistributeur() == Constantes.CAS_CE);
-				outil.attendreChargementElement(Cibles.TABLEAU_PARTICIPANTS);
-				outil.obtenirElement(Cibles.TABLEAU_PARTICIPANTS, "./tr[2]/td[5]/table").click();			
-				//outil.attendreChargementElement(CE?Cibles.BOUTON_SUPP_PARTICIPANT_2_CE:Cibles.BOUTON_SUPP_PARTICIPANT_2_BP);
-				//outil.cliquer(CE?Cibles.BOUTON_SUPP_PARTICIPANT_2_CE:Cibles.BOUTON_SUPP_PARTICIPANT_2_BP);
-				outil.attendrePresenceTexte("Demande de confirmation de suppression");
-				outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
-				outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
-					
-			} else {
-				//outil.attendre(2);
-				outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT2, true, true);
-				outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT2);
-				outil.attendre(1);
-				outil.attendreChargementElement(Cibles.SELECTEUR_ROLE_PARTICIPANT, true, true);
-				// Si le role du conjoint est co emp ou selectionne "C" sinon "G"
-				outil.selectionner(conjointCoEmp?"C":"G", Cibles.SELECTEUR_ROLE_PARTICIPANT);
+			// On s'assure en premier lieu qu'il y a un conjoint
+			if (!conjointInterdit && !modificateur.sansConjoint) {
+				// Si celui ci existe, il on regarde si il a un rôle
+				if(conjointCoEmp == false && conjointCaution == false) {
+					System.out.println("Le conjoint existe mais n'as pas de rôle : on le supprime");
+					//S'il n'il n'y a pas d'indication sur le conjoint avec presence de tiers, on supprime le conjoint du dossier
+					boolean CE = (scenario.getDistributeur() == Constantes.CAS_CE);
+					outil.attendreChargementElement(Cibles.TABLEAU_PARTICIPANTS);
+					// On supprime le second participant, à savoir le conjoint puiqu'il n'as pas de rôle
+					WebElement boutonSuppression = outil.obtenirElement(Cibles.TABLEAU_PARTICIPANTS, "./tr[2]/td[5]/table");	
+					boutonSuppression.click();
+					outil.attendrePresenceTexte("Demande de confirmation de suppression");
+					outil.attendreElement(Cibles.BOUTON_POPUP_OUI_MAJ);
+					outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
+				} else {
+					//Si en revanche un rôle est préciser, on le donne au conjoint
+					outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT2, true, true);
+					outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT2);
+					outil.attendreElement(Cibles.SELECTEUR_ROLE_PARTICIPANT);
+					// Si le role du conjoint est co emp ou selectionne "C" sinon "G"
+					outil.selectionner(conjointCoEmp?"C":"G", Cibles.SELECTEUR_ROLE_PARTICIPANT);
+				}
 			}
+
+
+			outil.attendreChargementElement(Cibles.TABLEAU_PARTICIPANTS);
+			// On supprime le troisième participant, à savoir le conjoint du tiers puiqu'il n'as pas de rôle
+			// Si un conjoint est présent (il n'as pas été supprimer car il n'avais pas de rôle, alors c'est le quatrième participant qui est supprimer.
+			WebElement boutonSuppression = null;
+			if (modificateur.sansConjoint || (conjointCoEmp == false && conjointCaution == false)) {
+				boutonSuppression = outil.obtenirElement(Cibles.TABLEAU_PARTICIPANTS, "./tr[3]/td[5]/table");	
+			} else {
+				boutonSuppression = outil.obtenirElement(Cibles.TABLEAU_PARTICIPANTS, "./tr[4]/td[5]/table");	
+			}
+			boutonSuppression.click();
+			//outil.attendreChargementElement(CE?Cibles.BOUTON_SUPP_PARTICIPANT_2_CE:Cibles.BOUTON_SUPP_PARTICIPANT_2_BP);
+			//outil.cliquer(CE?Cibles.BOUTON_SUPP_PARTICIPANT_2_CE:Cibles.BOUTON_SUPP_PARTICIPANT_2_BP);
+			outil.attendrePresenceTexte("Demande de confirmation de suppression");
+			outil.attendreChargementElement(Cibles.BOUTON_POPUP_OUI_MAJ);
+			outil.cliquer(Cibles.BOUTON_POPUP_OUI_MAJ);
+
 		}
 	}
 	/**
@@ -1102,15 +1143,17 @@ public class TNRSC00 extends SC00Test {
 		// Si le tiers dispose d'un rôle, on doit soit supprimer le conjoint si il n'as pas de rôle soit choisir son rôle
 		if (roleTiers) {
 			// Quel rôle est reserve au conjoint ?
+			if (tiersCoEmp == true && tiersCaution == true) {
+				throw new SeleniumException(Erreurs.E030, "Impossible d'avoir deux rôles pour le tiers.");
+			}
+			//outil.cliquerEtAttendre(Cibles.RADIO_SELECTION_PARTICIPANT1, Cibles.SELECTEUR_ROLE_PARTICIPANT);
+//			outil.attendreElement(Cibles.RADIO_SELECTION_PARTICIPANT1);
+//			outil.cliquer(Cibles.RADIO_SELECTION_PARTICIPANT1);
+//			outil.attendreElement(Cibles.SELECTEUR_ROLE_PARTICIPANT);
+			outil.cliquerJusqua(Cibles.RADIO_SELECTION_PARTICIPANT1, Cibles.SELECTEUR_ROLE_PARTICIPANT);
 			
-		if (tiersCoEmp == true && tiersCaution == true) {
-			throw new SeleniumException(Erreurs.E030, "Impossible d'avoir deux rôles pour le tiers.");
-		}
-		outil.attendre(1);
-		outil.attendreChargementElement(Cibles.RADIO_SELECTION_PARTICIPANT1, true, true);
-		outil.cliquerEtAttendre(Cibles.RADIO_SELECTION_PARTICIPANT1, Cibles.SELECTEUR_ROLE_PARTICIPANT);
-		// Si le role du tiers est co emp ou selectionne "C" sinon "G"
-		outil.selectionner(tiersCoEmp?"C":"G", Cibles.SELECTEUR_ROLE_PARTICIPANT);
+			// Si le role du tiers est co emp ou selectionne "C" sinon "G"
+			outil.selectionner(tiersCoEmp?"C":"G", Cibles.SELECTEUR_ROLE_PARTICIPANT);
 		}
 	}
 	
