@@ -51,4 +51,12 @@ public enum CodeSituationFamilale {
 	public String toString() {
 		return code + " : " + libelle;
 	}
+	
+	/**
+	 * Renvoie le code officiel de la situation familiale.
+	 * @return le code de la situation familiale.
+	 */
+	public String getCode() {
+		return code;
+	}
 }

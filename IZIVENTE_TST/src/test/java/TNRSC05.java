@@ -24,6 +24,7 @@ public class TNRSC05 extends TNRSC00 {
 		//CasEssaiIziventeBean scenario5 = new CasEssaiIziventeBean();
 		this.setAlm(Constantes.ACTIVATION_ALM);
 		this.setIdUniqueTestLab(54392);
+		this.setIdConfluence("71305119");
 		this.setIdUniqueTestPlan(-1);
 		this.setNomCasEssai("TNRSC05-" + getTime());
 		this.setDescriptif("TNRSC05 - CE - IZIVENTE_Prêt travaux echelonné différé partiel");

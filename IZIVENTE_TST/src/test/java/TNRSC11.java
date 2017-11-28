@@ -25,6 +25,7 @@ public void lancementTNR() throws SeleniumException {
 		this.setAlm(Constantes.ACTIVATION_ALM);
 		this.setIdUniqueTestLab(54398);
 		this.setIdUniqueTestPlan(-1);
+		this.setIdConfluence("71305154");
 		this.setNomCasEssai("TNRSC11-" + getTime());
 		this.setDescriptif("TNRSC11 - BP - IZIVENTE_Editique Prêt étudiant différé partiel BPI");
 		this.setNomTestLab("TNRSC11 - BP - IZIVENTE_Editique Prêt étudiant différé partiel BPI");
@@ -43,7 +44,19 @@ public void lancementTNR() throws SeleniumException {
 		this.montantCredit = "4000";
 		this.mensualite = "100";
 		this.dureeDiffere = "12";
+		this.echelonne = true;
 		
 		miseAEdit();
 	}
+
+@Test
+public void TranserveMiseEnForce() throws SeleniumException {
+	
+	//simulation();
+	//validation();
+	//miseAEdit();
+	miseEnForce();
+	murissement(null);
+}
+
 }

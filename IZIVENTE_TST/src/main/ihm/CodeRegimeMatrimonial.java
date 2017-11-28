@@ -56,4 +56,8 @@ public enum CodeRegimeMatrimonial {
 	public String toString() {
 		return code + " : " + libelle;
 	}
+	
+	public String getCode() {
+		return code;
+	}
 }

@@ -72,7 +72,10 @@ public class IHMBicIban {
 		ihm.etablissement = new JTextField("11315");
 		ihm.etablissement.setPreferredSize(new Dimension(60, 20));
 		ihm.etablissement.setToolTipText("Identifiant de l'établissement");
-		ihm.agence = new JTextField("00001");
+		ihm.agence = new JTextField("");
+		ihm.agence.setEditable(true);
+		ihm.agence.setBorder(null);
+		ihm.agence.setBackground(null);
 		ihm.agence.setPreferredSize(new Dimension(60, 20));
 		ihm.agence.setToolTipText("Identifiant de l'agence");
 		
@@ -108,6 +111,9 @@ public class IHMBicIban {
 					ihm.etablissement.setBackground(Color.RED);
 					lancement = false;
 				} else {
+					if ("".equals(ihm.agence.getText())) {
+						ihm.agence.setText(RIBOutils.genererGuichet(ihm.etablissement.getText()));
+					}
 					ihm.etablissement.setBackground(Color.GREEN);
 				}
 				if ("".equals(ihm.agence.getText())) {
@@ -125,7 +131,8 @@ public class IHMBicIban {
 				// Si les données saisies sont valides on génère.
 				if (lancement) {
 					String numeroCompteIBAN = RIBOutils.genererIbanFR76(ihm.etablissement.getText(), ihm.agence.getText(), ihm.idClient.getText());
-					String codeBIC = RIBOutils.genererBIC(ihm.distributeur.getSelectedIndex() + 1);
+					//String codeBIC = RIBOutils.genererBIC(ihm.distributeur.getSelectedIndex() + 1);
+					String codeBIC = RIBOutils.genererBIC(ihm.etablissement.getText());
 					
 					ihm.iban.setText(numeroCompteIBAN);
 					ihm.bic.setText(codeBIC);

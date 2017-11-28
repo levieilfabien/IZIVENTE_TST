@@ -23,6 +23,7 @@ public class TNRSC02 extends TNRSC00 {
 		// Description du scénario
 		//CasEssaiIziventeBean scenario2 = new CasEssaiIziventeBean();
 		this.setAlm(Constantes.ACTIVATION_ALM);
+		this.setIdConfluence("71303719");
 		this.setIdUniqueTestLab(54391);
 		this.setIdUniqueTestPlan(-1);
 		this.setNomCasEssai("TNRSC02-" + getTime());

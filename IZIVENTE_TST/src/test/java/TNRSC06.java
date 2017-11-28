@@ -25,6 +25,7 @@ public class TNRSC06 extends TNRSC00 {
 		this.setAlm(Constantes.ACTIVATION_ALM);
 		this.setIdUniqueTestLab(54393);
 		this.setIdUniqueTestPlan(-1);
+		this.setIdConfluence("71305128");
 		this.setNomCasEssai("TNRSC06-" + getTime());
 		this.setDescriptif("TNRSC06 - BP - IZIVENTE_Editique Trésorerie immédiat CASDEN");
 		this.setNomTestLab("TNRSC06 - BP - IZIVENTE_Editique Trésorerie immédiat CASDEN");

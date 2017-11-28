@@ -30,7 +30,7 @@ public class Compte {
 	
 	public Compte(String idClient, int distributeur) {
 		super();
-		listeEquipement.add(new Equipement(idClient));
+		listeEquipement.add(new Equipement(idClient, distributeur));
 		this.distributeur = distributeur;
 	}
 	

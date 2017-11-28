@@ -24,6 +24,7 @@ private static final long serialVersionUID = 1L;
 		//CasEssaiIziventeBean scenario10 = new CasEssaiIziventeBean();
 		this.setAlm(Constantes.ACTIVATION_ALM);
 		this.setIdUniqueTestLab(54397);
+		this.setIdConfluence("71305148");
 		this.setIdUniqueTestPlan(-1);
 		this.setNomCasEssai("TNRSC10-" + getTime());
 		this.setDescriptif("TNRSC10 - BP - IZIVENTE_Editique Prêt Etudiant");
@@ -32,8 +33,8 @@ private static final long serialVersionUID = 1L;
 		this.setCheminTestLab("POC Selenium\\IZIVENTE");
 		
 		//TODO modifier pour la fusion
-		this.etablissement = "068";
-		this.agence = "00001";
+		//this.etablissement = "068";
+		//this.agence = "00001";
 		this.distributeur = Constantes.CAS_BP;
 		this.typeDossier = TypeProduit.CREDIT_AMORT;
 		this.modificateur.emprunteurJeune = true;

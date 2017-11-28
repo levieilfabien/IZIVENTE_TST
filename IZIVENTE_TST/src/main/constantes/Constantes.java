@@ -1,5 +1,8 @@
 package main.constantes;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import outils.PropertiesOutil;
 
 /**
@@ -14,6 +17,7 @@ public class Constantes {
 	public static final String EMPLACEMENT_FIREFOX = PropertiesOutil.getInfoConstante("EMPLACEMENT_FIREFOX");
 	public static final String EMPLACEMENT_PROFIL = PropertiesOutil.getInfoConstante("EMPLACEMENT_PROFILE");
 	public static final String EMPLACEMENT_GECKO =  System.setProperty("webdriver.gecko.driver", PropertiesOutil.getInfoConstante("EMPLACEMENT_GECKO"));
+	public static final String EMPLACEMENT_LIASSE = PropertiesOutil.getInfoConstante("EMPLACEMENT_LIASSE");
 	
 	
 	//////////////////////////////////////////////////// INFORMATIONS POUR LES TESTS ////////////////////////////////////////////////////////////
@@ -33,6 +37,9 @@ public class Constantes {
 	public static final int ETAPE_SUIVANTE_MURIR = 3;
 	public static final int ETAPE_SUIVANTE_MEG = 4;
 	public static final int ETAPE_SUIVANTE_VERIF_SYNTHESE = 5;
+	public static final int ETAPE_SUIVANTE_COMPARAISON_LIASSE = 6;
+	public static final int ETAPE_SUIVANTE_SUPPRIMER = 7;
+	public static final int ETAPE_SUIVANTE_VERIFICATIONS_COMPARAISON = 8;
 	
 	public static final Boolean ACTIVATION_ALM = "OUI".equals(PropertiesOutil.getInfoConstante("ALM"));
 	
@@ -50,6 +57,11 @@ public class Constantes {
 	
 	public static final String REPERTOIRE_CE_PERSONNE = PropertiesOutil.getInfoConstante("REPERTOIRE_CE_PERSONNE");
 	public static final String REPERTOIRE_BP_PERSONNE = PropertiesOutil.getInfoConstante("REPERTOIRE_BP_PERSONNE");
+	
+	public static final String SORTIE_EDITIQUE_BP = PropertiesOutil.getInfoConstante("SORTIE_EDITIQUE_BP");
+	public static final String SORTIE_EDITIQUE_CE = PropertiesOutil.getInfoConstante("SORTIE_EDITIQUE_CE");
+	
+	public static final String DATE_JOUR_YYYY_MM_DD = new SimpleDateFormat("yyyy_MM_dd").format(new Date());
 	
 //	public static final String REPERTOIRE_TEST = PropertiesOutil.getInfoConstante("REPERTOIRE_TEST");
 //	public static final String REPERTOIRE_TEST2 = PropertiesOutil.getInfoConstante("REPERTOIRE_TEST2");

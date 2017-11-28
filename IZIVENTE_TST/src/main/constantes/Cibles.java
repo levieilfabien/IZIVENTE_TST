@@ -55,6 +55,16 @@ public class Cibles {
 	public static final CibleBean BOUTON_MENU_REPRISE_DOSSIER = new CibleBean(Clefs.TEXTE_COMPLET, "Reprise d'un dossier en cours");
 	
 	/**
+	 * Bouton permettant l'abandon du dossier selectionné dans l'écran de liste des dossiers.
+	 */
+	public static final CibleBean BOUTON_ABANDONNER_DOSSIER = new CibleBean(Clefs.ID, "resultDossier:btnAbandon");
+	
+	/**
+	 * Bouton permettant la validation de l'abandon d'un dossier.
+	 */
+	public static final CibleBean BOUTON_VALIDER_ABANDON = new CibleBean(Clefs.ID, "goValidateAbandon");
+	
+	/**
 	 * Element du menu pour l'accès aux dossiers amortissables (PP).
 	 */
 	public static final CibleBean ELEMENT_MENU_CREDIT_AMORTISSABLE = new CibleBean(Clefs.TEXTE_PARTIEL, "Crédit amortissable");
@@ -390,7 +400,7 @@ public class Cibles {
 	public static final CibleBean BOUTON_FINALISATION_OCTROI = new CibleBean("finish");
 	
 	/**
-	 * Bouton pour la finalisation de la saisie du dossier pour un CR
+	 * Bouton pour la finalisation de la saisie du dossier pour un CR (ou un PP, il s'agit du même libellé)
 	 */
 	public static final CibleBean BOUTON_FINALISATION_OCTROI_CR = new CibleBean(Clefs.VALEUR, "Terminer");
 	
@@ -436,6 +446,32 @@ public class Cibles {
 	 * Choix d'une assurance pour un participant à une IZICARTE
 	 */
 	public static final CibleBean RADIO_AVEC_ASS_IZICARTE = new CibleBean("form_ongletSyntheseParticipant:j_id1704:0");
+	
+	
+	/**
+	 * Champ de saisie pour le libellé de la société pour le permis 1€
+	 */
+	public static final CibleBean SAISIE_LIBELLE_SOCIETE = new CibleBean(Clefs.XPATH, ".//*[@id='pnlCoordTiersLettreChq_body']/table/tbody/tr/td[1]/div/div/table/tbody/tr/td[2]/span/input");
+	
+	/**
+	 * Champ de saisie pour la rue de la société pour le permis 1€
+	 */
+	public static final CibleBean SAISIE_NUMERO_RUE_SOCIETE = new CibleBean(Clefs.XPATH, ".//*[@id='pnlCoordTiersLettreChq_body']/table/tbody/tr/td[2]/div[3]/div/table/tbody/tr/td[2]/span/input");
+	
+	/**
+	 * Champ de saisie pour le code postal de la société pour le permis 1€
+	 */
+	public static final CibleBean SAISIE_CP_SOCIETE = new CibleBean(Clefs.XPATH, ".//*[@id='pnlCoordTiersLettreChq_body']/table/tbody/tr/td[2]/div[5]/div/table/tbody/tr/td[2]/span/input");
+	
+	/**
+	 * Champ de saisie pour la ville de la société pour le permis 1€
+	 */
+	public static final CibleBean SAISIE_VILLE_SOCIETE = new CibleBean(Clefs.XPATH, ".//*[@id='pnlCoordTiersLettreChq_body']/table/tbody/tr/td[2]/div[6]/div/table/tbody/tr/td[2]/span/input");
+	
+	/**
+	 * Champ pour la saisie du montant de financement (à modifier de la valeur par défaut si on est sur un cas échelonné)
+	 */
+	public static final CibleBean SAISIE_MONTANT_FINANCEMENT = new CibleBean("montant_decisionField:montant_decision");
 	
 	/**
 	 * Choix d'une assurance décès pour l'emprunteur d'un FACELIA

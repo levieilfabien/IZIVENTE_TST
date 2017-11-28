@@ -73,13 +73,19 @@ public class Foyer {
 		if (distributeur == CAS_BP || distributeur == CAS_BRED) {
 			personnePhy.signalement.codeCivilite = Civilite.MADAME_BP.getCode();
 			personnePhy.signalement.sexe = "F";
+			personnePhy.signalement.codeSitFam = CodeSituationFamilale.MARIE_BP.getCode();
+			personnePhy.signalement.regimeMatrimonial = CodeRegimeMatrimonial.AUTRE_BP.getCode();
 			personnePhyCjt.signalement.codeCivilite = Civilite.MONSIEUR_BP.getCode();
 			personnePhyCjt.signalement.sexe = "M";
+			personnePhyCjt.signalement.codeSitFam = CodeSituationFamilale.MARIE_BP.getCode();
+			personnePhyCjt.signalement.regimeMatrimonial = CodeRegimeMatrimonial.AUTRE_BP.getCode();
 		} else {
 			personnePhy.signalement.codeCivilite = Civilite.MADAME_CE.getCode();
 			personnePhy.signalement.sexe = "F";
+			personnePhy.signalement.codeSitFam = CodeSituationFamilale.MARIE_CE.getCode();
 			personnePhyCjt.signalement.codeCivilite = Civilite.MONSIEUR_CE.getCode();
 			personnePhyCjt.signalement.sexe = "M";
+			personnePhyCjt.signalement.codeSitFam = CodeSituationFamilale.MARIE_CE.getCode();
 		}
 		
 		this.distributeur = distributeur;

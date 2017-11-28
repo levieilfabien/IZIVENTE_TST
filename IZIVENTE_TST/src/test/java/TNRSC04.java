@@ -23,6 +23,7 @@ public class TNRSC04 extends TNRSC00 {
 		// Description du scénario
 		//CasEssaiIziventeBean scenario3 = new CasEssaiIziventeBean();
 		this.setAlm(Constantes.ACTIVATION_ALM);
+		this.setIdConfluence("71304319");
 		this.setIdUniqueTestLab(54204);
 		this.setIdUniqueTestPlan(-1);
 		this.setNomCasEssai("TNRSC04-" + getTime());
@@ -46,5 +47,7 @@ public class TNRSC04 extends TNRSC00 {
 		this.mensualite = "367";
 		
 		miseAEdit();
+		//miseEnForce();
+		//murissement(null);
 	}
 }

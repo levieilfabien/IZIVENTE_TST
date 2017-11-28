@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 
 import main.bean.CasEssaiIzigateBean;
@@ -23,13 +24,16 @@ import main.outils.IZIVENTEOutils;
 import moteurs.FirefoxImpl;
 import moteurs.GenericDriver;
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
+import outils.PDFOutils;
 import outils.SeleniumOutils;
 import beans.CibleBean;
 import beans.ObjectifBean;
+import constantes.Actions;
 import constantes.Clefs;
 import constantes.Erreurs;
 import exceptions.SeleniumException;
@@ -76,6 +80,7 @@ public class TNRSC00 extends SC00Test {
 	Boolean assuranceEmp = false;
 	Boolean assuranceConjointCoEmp = false;
 	Boolean assuranceTiers = false;
+	Boolean echelonne = false;
 	//Definir l'etat de fin de saisie (EDIT = false ; FORCE = true)
 	public Boolean simulation = false;
 	public Boolean validation = false;
@@ -83,6 +88,9 @@ public class TNRSC00 extends SC00Test {
 	Boolean miseEnGestion = false;
 	Boolean murissement = false;
 	ModificateurBouchon modificateur = new ModificateurBouchon();
+	//Nouveautés pour le comparaison de liasse
+	Boolean comparaisonLiasse = false;
+	Boolean suppression = false;
 
 	/**
 	 * Id de serialisation par defaut.
@@ -122,8 +130,11 @@ public class TNRSC00 extends SC00Test {
 		//File repertoireTelechargement = new File(".\\" + scenario0.getNomCasEssai());
 		//repertoireTelechargement.mkdir();
 		//profile.setPreference(Constantes.PREF_FIREFOX_REPERTOIRE_TELECHARGEMENT, repertoireTelechargement.getAbsolutePath());
-		String repertoire = creerRepertoireTelechargement(scenario0, profile);
-		scenario0.setRepertoireTelechargement(repertoire);
+		if (scenario0.getRepertoireTelechargement() == null) { 
+			String repertoire = creerRepertoireTelechargement(scenario0, profile);
+			scenario0.setRepertoireTelechargement(repertoire);
+			this.setRepertoireTelechargement(repertoire);
+		}
 		// Initialisation du driver
 		//FirefoxImpl driver = new FirefoxImpl(ffBinary, profile);
 		FirefoxImpl driver = new FirefoxImpl(profile);
@@ -160,11 +171,14 @@ public class TNRSC00 extends SC00Test {
 			scenario0 = new CasEssaiIziventeBean();
 			scenario0.setNomCasEssai(this.getNomCasEssai());
 			scenario0.setAlm(this.getAlm());
+			scenario0.setIdConfluence(this.getIdConfluence());
 			scenario0.setIdUniqueTestLab(this.getIdUniqueTestLab());
 			scenario0.setIdUniqueTestPlan(this.getIdUniqueTestPlan());
 			scenario0.setDescriptif(this.getDescriptif());
 			scenario0.setNomTestLab(this.getNomTestLab());
 			scenario0.setCheminTestLab(this.getCheminTestLab());
+			scenario0.setComparaisonLiasse(this.comparaisonLiasse);
+			scenario0.setIdClient(this.idClient);
 			// LISTE DES OBJECTIFS DU CAS DE TEST
 			scenario0.ajouterObjectif(new ObjectifBean("Test arrive a terme", scenario0.getNomCasEssai() + scenario0.getTime()));
 		}
@@ -174,40 +188,99 @@ public class TNRSC00 extends SC00Test {
 	    	//TODO prévoir le cas d'une erreur pour signifier le failed
 	    	if (simulation){
 	    		scenario0.getTests().add(CT01Initialisation(scenario0, outil));
-				scenario0.getTests().add(CT02OuvertureDossier(scenario0, outil));
-				scenario0.getTests().add(CT03SaisieDossier(scenario0, outil));
+	    		CasEssaiIziventeBean CT02 = CT02OuvertureDossier(scenario0, outil);
+				scenario0.getTests().add(CT02);
+				CT02 = CT02OuvertureDossierExec(CT02, outil);
+				CasEssaiIziventeBean CT03 = CT03SaisieDossier(scenario0, outil);
+				scenario0.getTests().add(CT03);
+				CT03 = CT03SaisieDossierExec(CT03, outil);
 				scenario0.getTests().add(CT04Participants(scenario0, outil));
 	    	}
 	    	if (validation){
 	    		scenario0.getTests().add(CT01Initialisation(scenario0, outil));
-				scenario0.getTests().add(CT02OuvertureDossier(scenario0, outil));
-				scenario0.getTests().add(CT03SaisieDossier(scenario0, outil));
-				scenario0.getTests().add(CT04Participants(scenario0, outil));
+	    		CasEssaiIziventeBean CT02 = CT02OuvertureDossier(scenario0, outil);
+				scenario0.getTests().add(CT02);
+				CT02 = CT02OuvertureDossierExec(CT02, outil);
+				CasEssaiIziventeBean CT03 = CT03SaisieDossier(scenario0, outil);
+				scenario0.getTests().add(CT03);
+				CT03 = CT03SaisieDossierExec(CT03, outil);
+				CasEssaiIziventeBean CT04 = CT04Participants(scenario0, outil);
+				scenario0.getTests().add(CT04);
+				CT04 = CT04ParticipantsExec(scenario0, CT04, outil);
 				scenario0.getTests().add(CT05Validation(scenario0, outil));
 	    	}
 	    	if (edition) {
 				scenario0.getTests().add(CT01Initialisation(scenario0, outil));
-				scenario0.getTests().add(CT02OuvertureDossier(scenario0, outil));
-				scenario0.getTests().add(CT03SaisieDossier(scenario0, outil));
-				scenario0.getTests().add(CT04Participants(scenario0, outil));
-				scenario0.getTests().add(CT05Validation(scenario0, outil));
-				scenario0.getTests().add(CT06FinalisationInstruction(scenario0, outil));
+	    		CasEssaiIziventeBean CT02 = CT02OuvertureDossier(scenario0, outil);
+				scenario0.getTests().add(CT02);
+				CT02 = CT02OuvertureDossierExec(CT02, outil);
+				CasEssaiIziventeBean CT03 = CT03SaisieDossier(scenario0, outil);
+				scenario0.getTests().add(CT03);
+				CT03 = CT03SaisieDossierExec(CT03, outil);
+				CasEssaiIziventeBean CT04 = CT04Participants(scenario0, outil);
+				scenario0.getTests().add(CT04);
+				CT04 = CT04ParticipantsExec(scenario0, CT04, outil);
+				CasEssaiIziventeBean CT05 = CT05Validation(scenario0, outil);
+				scenario0.getTests().add(CT05);
+				CT05 = CT05ValidationExec(scenario0, CT05, outil);
+				CasEssaiIziventeBean CT06 = CT06FinalisationInstruction(scenario0, outil);
+				scenario0.getTests().add(CT06);
+				CT06 = CT06FinalisationInstructionExec(scenario0, CT06, outil);
 	    	}
 			//Condition pour acceder au cas de test de mise en force
 			if (miseEnGestion){
 				scenario0.getTests().add(CT01Initialisation(scenario0, outil));
 				scenario0.getTests().add(CT07MiseGestion(scenario0, outil));
 			}
+			//Condition pour la suppression
+			if (suppression) {
+				CT01Initialisation(scenario0, outil);
+				suppressionSimulation(scenario0, outil);
+			}
 				
 		} catch (SeleniumException ex) {
 			// Finalisation en erreur du cas de test.
-			finaliserTestEnErreur(outil, scenario0, ex, scenario0.getNomCasEssai() + scenario0.getDateCreation().getTime());
+			finaliserTestEnErreur(outil, scenario0, ex, scenario0.getNomCasEssai() + scenario0.getTime());
 			throw ex;
 		}
 		// Finalisation normale du cas de test.
-		finaliserTest(outil, scenario0, scenario0.getNomCasEssai() + scenario0.getDateCreation().getTime());
+		finaliserTest(outil, scenario0, scenario0.getNomCasEssai() + scenario0.getTime());
 		
 		return scenario0;
+	}
+
+	/**
+	 * Fonction ayant pour objectif de supprimer la simulation en cours.
+	 * @param scenario0 le scénario en cours d'éxécution.
+	 * @param outil la boite à outil
+	 */
+	private void suppressionSimulation(CasEssaiIziventeBean scenario0, SeleniumOutils outil) {
+		// TODO Auto-generated method stub
+		try {
+		outil.cliquerSiPossible(Cibles.BOUTON_POPUP_FACE_A_FACE);
+		switch(typeDossier){
+			case CREDIT_AMORT:
+				outil.attendreEtCliquer(Cibles.BOUTON_MENU_OUVERTURE_DOSSIER);
+			break;
+			case FACELIA : 
+				outil.attendreEtCliquer(Cibles.BOUTON_MENU_REPRISE_DOSSIER);
+			break;
+			case CREODIS : 
+				outil.action(Actions.CLIQUER, Cibles.BOUTON_MENU_OUVERTURE_DOSSIER_FC);
+			break;
+			case IZICARTE : 
+				outil.action(Actions.CLIQUER, Cibles.BOUTON_MENU_REPRISE_DOSSIER);
+			break;
+			default :
+			break;
+		 }
+		outil.action(Actions.CLIQUER_JUSQUA, Cibles.BOUTON_ABANDONNER_DOSSIER, Cibles.BOUTON_VALIDER_ABANDON);
+		outil.action(Actions.CLIQUER, Cibles.BOUTON_VALIDER_ABANDON);
+		outil.action(Actions.ATTENDRE, "ABAN");
+		} catch (SeleniumException ex) {
+			// Une suppression n'est jamais bloquante pour la suite du processus même si elle échoue
+		}
+
 	}
 
 	/**
@@ -221,6 +294,7 @@ public class TNRSC00 extends SC00Test {
 		//Parametrage du CT01
 		CasEssaiIziventeBean CT01 = new CasEssaiIziventeBean();
 		CT01.setAlm(scenario0.getAlm());
+		CT01.setComparaisonLiasse(scenario0.getComparaisonLiasse());
 		CT01.setNomCasEssai("CT01 -" + getTime());
 		CT01.setDescriptif(Catalogue.CT01_TITRE);
 		CT01.setNomTestPlan(Catalogue.CT01_TITRE);
@@ -256,6 +330,7 @@ public class TNRSC00 extends SC00Test {
 		//Parametrage du CT02
 		CasEssaiIziventeBean CT02 = new CasEssaiIziventeBean();
 		CT02.setAlm(scenario0.getAlm());
+		CT02.setComparaisonLiasse(scenario0.getComparaisonLiasse());
 		CT02.setNomCasEssai("CT02 -" + getTime());
 		CT02.setDescriptif(Catalogue.CT02_TITRE);
 		CT02.setNomTestPlan(Catalogue.CT02_TITRE);	
@@ -265,6 +340,7 @@ public class TNRSC00 extends SC00Test {
 		CT02.setCheminTestLab(scenario0.getCheminTestLab());
 		CT02.setNomTestLab(scenario0.getNomTestLab());
 		CT02.setRepertoireTelechargement(scenario0.getRepertoireTelechargement());
+		CT02.setDistributeur(scenario0.getDistributeur());
 		//Gestion des steps
 		CT02.ajouterObjectif(new ObjectifBean("Test arrive a terme", CT02.getNomCasEssai() + CT02.getTime()));
 		CT02.ajouterStep("Choisir le mode de vente (Face a face ou Vente a distance)", "MODE", "Affichage de l'ecran d'instruction");
@@ -272,13 +348,19 @@ public class TNRSC00 extends SC00Test {
 		CT02.ajouterStep("Fermeture des pop ups confirmant l'ouverture du dossier", "CONFIRMATION", "Affichage de l'ecran de donnees client et de liste des dossiers");
 		CT02.ajouterStep("Verifier la coherence des donnees du client, du conjoint si existant et du budget. Cliquer sur le bouton 'Suivant'.", "SUIVANT", "Affichage de la pop un de Synthese des informations client");
 		CT02.ajouterStep("Valider les donnees client en cliquant sur le bouton 'Valider' dans la pop up de synthese des information client.", "VALIDATIONDONNEESCLIENT", "Affichage de l'ecran de demande de credit");
-		
+	
+		return CT02;
+	}
+	
+	public CasEssaiIziventeBean CT02OuvertureDossierExec(CasEssaiIziventeBean CT02, SeleniumOutils outil) throws SeleniumException {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		// OUVERTURE DU DOSSIER
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		//Step 1 : Choisir le mode de vente (FaF ou VaD) - Cette etape est optionelle, le "Face a face" ne sera pas toujours visible   
+		CT02.validerObjectif(outil.getDriver(), "MODE", false);
 		outil.cliquerSiPossible(Cibles.BOUTON_POPUP_FACE_A_FACE);
 		CT02.validerObjectif(outil.getDriver(), "MODE", true);
+		CT02.validerObjectif(outil.getDriver(), "OUVERTURE", false);
 		//Step 2 : Selectionner l'option d'ouverture d'un dossier correspondant au type voulu. 
 		switch(typeDossier){
 			case CREDIT_AMORT:
@@ -306,18 +388,26 @@ public class TNRSC00 extends SC00Test {
 		 }
 		CT02.validerObjectif(outil.getDriver(), "OUVERTURE", true);
 		outil.attendre(2);
-		if(scenario0.getDistributeur() == Constantes.CAS_CE) {
-			outil.attendrePresenceTexte("Attention");
-		} else {
-			outil.attendrePresenceTexte("ATTENTION");
+		
+		// A ce moment il est possible que le client dispose déjà d'un dossier à l'état ABAN. Il faut alors procédé par "Nouveau dossier"
+		if (!CT02.getComparaisonLiasse()) {
+			if(CT02.getDistributeur() == Constantes.CAS_CE) {
+				outil.attendrePresenceTexte("Attention");
+			} else {
+				outil.attendrePresenceTexte("ATTENTION");
+			}
 		}
+
 		CT02.validerObjectif(outil.getDriver(), "CONFIRMATION", true);
 		// Cette etape n'as lieu que si le dossier est deja porteur d'un autre dossier
-		outil.cliquerSiPossible(Cibles.BOUTON_MENU_NOUVEAU_DOSSIER);
-		outil.cliquer(Cibles.BOUTON_POPUP_FERMER);
+		if (outil.testerPresenceElementDiffere(Cibles.BOUTON_MENU_NOUVEAU_DOSSIER)) {
+			outil.attendreEtCliquer(Cibles.BOUTON_MENU_NOUVEAU_DOSSIER);
+		}
+		outil.cliquerEtAttendre(Cibles.BOUTON_POPUP_FERMER, Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT_2);
 		// A ce moment un rechargement de la page entraine l'impossibilité d'intérraction avec les boutons
 		//Step 4 : Verifier la coherence des donnees du client, du conjoint si existant et du budget. Cliquer sur le bouton 'Suivant'
-		outil.attendreElement(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT_2);
+		//outil.attendreElement(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT_2);
+		outil.attendre(3);
 		outil.cliquerEtAttendre(Cibles.BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT_2, Cibles.BOUTON_SUIVANT_CLIENT);
 		outil.attendreValorisation(Cibles.CHAMP_NOM_EMPLOYEUR, null);
 		// A ce moment le bouton suivant est visible mais pas encore clicable car la page est encore sous le coup du chargement du rafraichissement
@@ -333,6 +423,7 @@ public class TNRSC00 extends SC00Test {
 		//Parametrage du CT03
 		CasEssaiIziventeBean CT03 = new CasEssaiIziventeBean();
 		CT03.setAlm(scenario0.getAlm());
+		CT03.setComparaisonLiasse(scenario0.getComparaisonLiasse());
 		CT03.setNomCasEssai("CT03 -" + getTime());
 		CT03.setDescriptif(Catalogue.CT03_TITRE);
 		CT03.setNomTestPlan(Catalogue.CT03_TITRE);
@@ -347,12 +438,17 @@ public class TNRSC00 extends SC00Test {
 		CT03.ajouterStep("Selectionner l'offre desiree dans le menu deroulant selon le scenario", "OFFRE", "Offre selectionnee");
 		CT03.ajouterStep("Selectionner et saisir les parametres liees au scenario (ex : CMA, differe, mensualite, etc.)", "PARAMETRES", "Parametres coherents avec le scenario");
 		CT03.ajouterStep("Cliquer sur le bouton 'Suivant' pour valider les informations du dossier", "SAISIEDOSSIER", "Affichage de l'ecran de selection des participants");
+		scenario0.setFlag(0);
 		
+		return CT03;	
+	}
+		
+	public CasEssaiIziventeBean CT03SaisieDossierExec(CasEssaiIziventeBean CT03, SeleniumOutils outil) throws SeleniumException {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		// SAISIE DU DOSSIER
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		//Step 1 : Selectionner l'offre desiree dans le menu deroulant selon le scenario
-		scenario0.setFlag(0);
+		CT03.validerObjectif(outil.getDriver(), "PARAMETRES", false);
 		switch(this.typeDossier){
 			case FACELIA : 
 				//outil.attendreChargementElement(Cibles.SELECTEUR_OFFRE_CREDIT_CR, true, true);
@@ -376,6 +472,7 @@ public class TNRSC00 extends SC00Test {
 				outil.selectionner(situationDeVente, Cibles.SELECTEUR_SITUATION_VENTE_CR, false);
 				outil.attendreChargementElement(Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
 				outil.viderEtSaisir(montantCredit, Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
+				outil.attendreChargementElement(Cibles.SAISIE_MENSUALITE_CR, true, true); 
 				outil.viderEtSaisir(mensualite, Cibles.SAISIE_MENSUALITE_CR);
 			break;
 			case IZICARTE : 
@@ -386,6 +483,7 @@ public class TNRSC00 extends SC00Test {
 				outil.selectionner(situationDeVente, Cibles.SELECTEUR_SITUATION_VENTE_CR, false);
 				outil.attendreChargementElement(Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR, true, true);
 				outil.viderEtSaisir(montantCredit,  Cibles.SAISIE_MONTANT_PREMIER_FINANCEMENT_CR);
+				outil.attendre(1);
 				outil.attendreChargementElement(Cibles.SAISIE_MENSUALITE_CR, true, true); 
 				outil.viderEtSaisir(mensualite, Cibles.SAISIE_MENSUALITE_CR);
 							
@@ -415,19 +513,18 @@ public class TNRSC00 extends SC00Test {
 				outil.viderEtSaisir(coutProjet, Cibles.SAISIE_COUT_PROJET);
 				
 				if (typeOffre != "PERMIS 1 EURO") {
-				outil.viderEtSaisir(montantCredit, Cibles.SAISIE_MONTANT_DEMANDE);
-				outil.viderEtSaisir(mensualite, Cibles.SAISIE_MENSUALITE_PP);
+					outil.viderEtSaisir(montantCredit, Cibles.SAISIE_MONTANT_DEMANDE);
+					outil.viderEtSaisir(mensualite, Cibles.SAISIE_MENSUALITE_PP);
 				}
 				
 				if (dureeDiffere != null){
-				outil.viderEtSaisir(dureeDiffere, Cibles.SAISIE_DUREE_DIFFERE_PARTIEL);
+					outil.viderEtSaisir(dureeDiffere, Cibles.SAISIE_DUREE_DIFFERE_PARTIEL);
 				}
 			break;
 		}
 		CT03.validerObjectif(outil.getDriver(), "PARAMETRES", true);
 		//Step 3 : Cliquer sur le bouton 'Suivant' pour valider les informations du dossier
-		outil.attendre(2);
-		outil.cliquer(Cibles.BOUTON_SUIVANT);
+		outil.attendreEtCliquer(Cibles.BOUTON_SUIVANT);
 		
 		// A ce moment , si une alerte FICP est levee, elle apparais :
 		if (outil.testerPresenceTexte("Resultat FICP", true)) {
@@ -461,7 +558,12 @@ public class TNRSC00 extends SC00Test {
 	    CT04.ajouterStep("Valider la liste des participants (clic sur bouton correspondant)", "VALIDATIONPARTICIPANTS", "Affichage de l'ecran de 'Proposition' avec la grille alternative commerciale");
 	    CT04.ajouterStep("Valider de l'offre contrat de credit (clic sur le bouton 'Valider en contrat de credit')", "VALIDATION", "Affichage de la pop up de finalisation de l'instruction ou de la page de dossier de vente");
 	    CT04.ajouterObjectif(new ObjectifBean("Test arrive a terme", CT04.getNomCasEssai() + CT04.getTime()));
+	    CT04.setDistributeur(scenario0.getDistributeur());
 	    
+	    return CT04;
+	}
+	    
+	public CasEssaiIziventeBean CT04ParticipantsExec(CasEssaiIziventeBean scenario0, CasEssaiIziventeBean CT04, SeleniumOutils outil) throws SeleniumException {
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////
 		// PARTICIPANTS
 		/////////////////////////////////////////////////////////////////////////////////////////////////////		
@@ -473,18 +575,16 @@ public class TNRSC00 extends SC00Test {
 	    
 	    if (aucunCoEmp == true) {
 	    	aucunCoEmprunteur(outil);
-	    }
-	    else if(conjointCoEmp == true && conjointCaution == false && tiersCoEmp == false && tiersCaution == false) {
+	    } else if(conjointCoEmp == true && conjointCaution == false && tiersCoEmp == false && tiersCaution == false) {
 	    	ajoutConjointCoEmprunteurUnique(outil);
-	    }
-	    else if(tiersCoEmp == true || tiersCaution == true){
-	    	ajoutTiers(scenario0, outil);
+	    } else if(tiersCoEmp == true || tiersCaution == true){
+	    	ajoutTiers(CT04, outil);
 	    }
 	    
 	    //Definition du rôle du tiers
 	  	roleTiers(outil);
 	    //Definition du rôle du conjoint
-	  	roleConjoint(scenario0, outil);
+	  	roleConjoint(CT04, outil);
 		CT04.validerObjectif(outil.getDriver(), "PARTICIPANTS", true);
 		//Step 2 : Pour chaque participant, choisir le rôle et l'assurance en fonction des hypotheses. Valider la listes des participants et confirmer l'assurance
 		//Assurance de l'emprunteur
@@ -498,11 +598,14 @@ public class TNRSC00 extends SC00Test {
 		if(typeDossier != TypeProduit.CREODIS){
 			//outil.attendreChargementElement(Cibles.BOUTON_VALIDER_LISTE_PARTICIPANT, true, true);
 			outil.attendreEtCliquer(Cibles.BOUTON_VALIDER_LISTE_PARTICIPANT);
+			outil.attendreNonPresenceElement(Cibles.BOUTON_VALIDER_LISTE_PARTICIPANT);
+			CT04.validerObjectif(outil.getDriver(),  "VALIDATIONPARTICIPANTS", true);
 		} else { 
 			//outil.attendreChargementElement(Cibles.BOUTON_SUIVANT, true, true);
 			outil.attendreEtCliquer(Cibles.BOUTON_SUIVANT);
+			CT04.validerObjectif(outil.getDriver(),  "VALIDATIONPARTICIPANTS", true);
 		}
-		CT04.validerObjectif(outil.getDriver(),  "VALIDATIONPARTICIPANTS", true);
+
 		//TODO Trouver un moyen de temporiser la validation des participants.
 		
 		outil.attendre(1);
@@ -536,7 +639,8 @@ public class TNRSC00 extends SC00Test {
 			//Step 1 : Valider de l'offre contrat de credit
 			// Si l'élement d'attente n'est pas présent, on attend l'élément
 			if (!outil.testerVisibiliteElementDiffere(cibleAttenteValidationCredit)) {
-				outil.attendreElement(cibleAttenteValidationCredit);
+				//outil.attendreElement(cibleAttenteValidationCredit);
+				outil.attendreChargementElement(cibleAttenteValidationCredit, true, false);
 			}
 			// L'élément de validation du crédit doit être présent
 			if (!outil.testerVisibiliteElementDiffere(cibleValidationCredit)) {
@@ -563,7 +667,7 @@ public class TNRSC00 extends SC00Test {
 		scenario0.setFlag(Constantes.ETAPE_SUIVANTE_VALIDATION);
 		return CT04;
 	}
-		
+	
 	public CasEssaiIziventeBean CT05Validation(CasEssaiIziventeBean scenario0, SeleniumOutils outil) throws SeleniumException {
 		//Parametrage du CT05
 		CasEssaiIziventeBean CT05 = new CasEssaiIziventeBean();
@@ -584,7 +688,11 @@ public class TNRSC00 extends SC00Test {
 			CT05.ajouterStep("Verifier les justificatifs et valider (clic bouton radio 'Verifie' pour chaque justificatif dans la pop up de finalisation de l'instruction' et clic sur bouton 'Valider'", "VERIFICATION", "Retour sur la page de dossier de vente");
 		}
 		CT05.ajouterObjectif(new ObjectifBean("Test arrive a terme", CT05.getNomCasEssai() + CT05.getTime()));
-
+		
+		return CT05;	
+	}
+		
+	public CasEssaiIziventeBean CT05ValidationExec(CasEssaiIziventeBean scenario0, CasEssaiIziventeBean CT05, SeleniumOutils outil) throws SeleniumException {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		// FINALISATION DE L'INSTRUCTION
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -604,6 +712,7 @@ public class TNRSC00 extends SC00Test {
 			//Step 3 : Verifier les justificatifs et valider
 			outil.attendreChargementElement(Cibles.ELEMENT_FIN_INSTRUCTION, true, true);
 			outil.cliquerMultiple(Cibles.LIBELLE_CHOIX_VERIFIE);
+			outil.cliquerJusqua(Cibles.LIBELLE_CHOIX_VERIFIE, Cibles.BOUTON_POPUP_VALIDER_JUSTIFICATIFS);
 			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_VALIDER_JUSTIFICATIFS);
 			CT05.validerObjectif(outil.getDriver(), "VERIFICATION", true);
 		}
@@ -657,7 +766,18 @@ public class TNRSC00 extends SC00Test {
 			CT06.ajouterStep("Selectionner le compte de prelevement et valider l'offre de credit (clic sur bouton 'Confirmer contrat de credit')", "CONFIRMATION", "Affichage de la pop up 'Finalisation de l'instruction'");
 		}
 		CT06.ajouterStep("Attendre la fin de la preparation du contrat puis cliquer sur suivant pour envoi a l'octroi", "PREPARATION", "Deconnexion d'Izivente");
-			
+	
+		return CT06;
+	}
+		
+	/**
+	 * Fonction generique traitant la finalisation de l'instruction d'une simulation.
+	 * @param scenario0 le scenario devrivant le cas d'essai.
+	 * @param outil la boite a outil.
+	 * @return le cas de test a ajouter au scenario decrivant les etapes realisees.
+	 * @throws SeleniumException en cas d'erreur.
+	 */
+	public CasEssaiIziventeBean CT06FinalisationInstructionExec(CasEssaiIziventeBean scenario0, CasEssaiIziventeBean CT06, SeleniumOutils outil) throws SeleniumException {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		// FINALISATION DE L'INSTRUCTION
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -714,7 +834,37 @@ public class TNRSC00 extends SC00Test {
 			CT06.validerObjectif(outil.getDriver(), "PREPARATION", true);
 		}
 		
-		scenario0.setFlag(Constantes.ETAPE_SUIVANTE_MEF);
+		// On va tenter de récupérer la liasse au format Electronique
+		String repertoireLiasse = new String();
+		if(scenario0.getDistributeur() == Constantes.CAS_CE) {
+			repertoireLiasse = Constantes.SORTIE_EDITIQUE_CE + File.separator + Constantes.DATE_JOUR_YYYY_MM_DD;
+		} else {
+			repertoireLiasse = Constantes.SORTIE_EDITIQUE_BP + File.separator + Constantes.DATE_JOUR_YYYY_MM_DD;
+		}
+		//System.out.println(repertoireLiasse);
+		
+		File dossierLiasse = new File(repertoireLiasse);
+		if (dossierLiasse != null && dossierLiasse.isDirectory()) {
+			for (File file : dossierLiasse.listFiles()) {
+				if(file.getName().contains(scenario0.getNumeroFFI())) {
+					try {
+						String newname = file.getName().substring(0, 3) + Constantes.DATE_JOUR_YYYY_MM_DD + "_" + scenario0.getNumeroFFI() + ".pdf";
+						//FileUtils.copyFileToDirectory(file, new File(scenario0.getRepertoireTelechargement()));
+						FileUtils.copyFile(file, new File(scenario0.getRepertoireTelechargement() + File.separator + newname));
+					} catch (IOException e) {
+						// Si la copie n'est pas possible cela ne doit pas bloquer le scénario. Mais on en informe la raison à l'utilisateur.
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		
+		if (scenario0.getComparaisonLiasse()) {
+			//scenario0.setFlag(Constantes.ETAPE_SUIVANTE_COMPARAISON_LIASSE);
+			scenario0.setFlag(Constantes.ETAPE_SUIVANTE_SUPPRIMER);
+		} else {
+			scenario0.setFlag(Constantes.ETAPE_SUIVANTE_MEF);
+		}
 		CT06.validerObjectif(outil.getDriver(), CT06.getNomCasEssai() + CT06.getTime(),true);
 		return CT06;
 	}
@@ -797,6 +947,25 @@ public class TNRSC00 extends SC00Test {
 			outil.cliquer(Cibles.LIBELLE_ACCEPTATION);
 			outil.attendre(1);
 			outil.attendreChargementElement(Cibles.BOUTON_FINALISATION_OCTROI_CR, true, true);
+			
+			// Le cas d'echelonnement ! on prend la valeur du champs et on la remet divisé par deux
+			//montant_decisionField:montant_decision
+			if (outil.testerVisibiliteElementDiffere(Cibles.SAISIE_MONTANT_FINANCEMENT)) {
+				String valeur = outil.obtenirValeur(Cibles.SAISIE_MONTANT_FINANCEMENT);
+				if (!"".equals(valeur)) {
+					Integer montantFinancement = Integer.parseInt(valeur);
+					outil.viderEtSaisir(String.valueOf(montantFinancement/2), Cibles.SAISIE_MONTANT_FINANCEMENT);
+				}
+			}
+			
+			// Pour les permis à 1 € il faut saisir les informations.
+			if (outil.testerPresenceElement(Cibles.SAISIE_LIBELLE_SOCIETE)) {
+				outil.viderEtSaisir("TESTAUTO", Cibles.SAISIE_LIBELLE_SOCIETE);
+				outil.viderEtSaisir("5 RUE TEST", Cibles.SAISIE_NUMERO_RUE_SOCIETE);
+				outil.viderEtSaisir("78520", Cibles.SAISIE_CP_SOCIETE);
+				outil.viderEtSaisir("LIMAY", Cibles.SAISIE_VILLE_SOCIETE);
+			}
+			
 			outil.cliquer(Cibles.BOUTON_FINALISATION_OCTROI_CR);
 			CT07.validerObjectif(outil.getDriver(), "OCTROI", true);
 			outil.cliquerEtAttendre(Cibles.BOUTON_POPUP_OUI_MAJ, Cibles.BOUTON_POPUP_TERMINER_CONFIRMATION_OCTROI);
@@ -851,6 +1020,7 @@ public class TNRSC00 extends SC00Test {
 			} else {
 				CT08.validerObjectif("Murissement valide", true);
 			}
+			System.out.println("Le dossier suivi à été muri : " + scenario0.getNumeroFFI());
 			return scenario0;
 		} else {
 			//TODO Gestion d'erreur non bloquante : permettrai de passer a un autre murissement
@@ -859,6 +1029,7 @@ public class TNRSC00 extends SC00Test {
 			} else {
 				CT08.validerObjectif("Murissement valide", false);
 			}
+			System.out.println("Le dossier suivi n'as pas été muri : " + scenario0.getNumeroFFI());
 			return scenario0;
 		}
 		
@@ -874,7 +1045,7 @@ public class TNRSC00 extends SC00Test {
 		// Si le type de dossier est tout sauf CREODIS on clique sur le bouton "Aucun CoEmprunteur"
 		//On passe automatiquement a l'etape de choix d'assurance pour le CREODIS
 		if (typeDossier != TypeProduit.CREODIS) {
-	    	outil.attendreChargementElement(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
+	    	//outil.attendreChargementElement(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
 	    	outil.attendreEtCliquer(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
 		}
 	}
@@ -948,13 +1119,16 @@ public class TNRSC00 extends SC00Test {
 				switch (typeDossier) {
 				case CREDIT_AMORT :
 					outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_OUI_MAJ, true, true);
-					outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
+					
 					//TODO Condition sur l'assurance si montant credit superieur a 21000 maintenant appliquee a tous les montants en recette future bouchonne.
 					if (Integer.parseInt(montantCredit) > 21000 || modificateur.emprunteurSenior == true){
-						outil.attendreChargementElement(Cibles.CASE_SELECTION_REPONSE_ASSURANCE_NON);
+						outil.cliquerJusqua(Cibles.LIBELLE_CHOIX_OUI_MAJ, Cibles.CASE_SELECTION_REPONSE_ASSURANCE_NON);
+						//outil.attendreChargementElement(Cibles.CASE_SELECTION_REPONSE_ASSURANCE_NON);
 						outil.cliquerMultiple(Cibles.CASE_SELECTION_REPONSE_ASSURANCE_NON);
 						outil.cliquer(Cibles.BOUTON_OUI_DES);
 						outil.attendreEtCliquer(Cibles.RADIO_SELECTION_ASSURANCE_DIM);
+					} else {
+						outil.cliquer(Cibles.LIBELLE_CHOIX_OUI_MAJ);
 					}
 					break;
 				case IZICARTE :
@@ -1231,7 +1405,7 @@ public class TNRSC00 extends SC00Test {
 		String agce = scenario.getAgence();
 		int flg = scenario.getFlag();
 		String noDossUnited = scenario.getNumeroDossierUnited();
-		String chaine = (distrib +";"+ FFI +";"+ idClnt +";"+ IUN +";"+ typeDos +";"+ flg +";"+ sdf.format(date) +";"+ numBIC +";"+ numIBAN +";"+ etab +";"+ agce+ ";"+ noDossUnited +";");
+		String chaine = (distrib +";"+ FFI +";"+ idClnt +";"+ IUN +";"+ typeDos +";"+ flg +";"+ sdf.format(date) +";"+ numBIC +";"+ numIBAN +";"+ etab +";"+ agce+ ";"+ noDossUnited +";" + scenario.getNomCasEssai() + ";" + scenario.getRepertoireTelechargement());
 
 		try {
 			boolean existence = remplacer(scenario.getNumeroFFI(), chaine);
@@ -1289,6 +1463,10 @@ public class TNRSC00 extends SC00Test {
 				scenario.setAgence(instanceDecoupee[10]);
 				scenario.setNumeroDossierUnited(instanceDecoupee[11]);
 				
+				if (instanceDecoupee.length > 12) {
+					scenario.setNomCasEssai(instanceDecoupee[12]);
+					scenario.setRepertoireTelechargement(instanceDecoupee[13]);
+				}
 			} 
 		} catch (ParseException ex) {
 			throw new SeleniumException(Erreurs.E030, "Une date du fichier de donnee est incorrecte.");
@@ -1360,6 +1538,37 @@ public class TNRSC00 extends SC00Test {
 		this.ecritureFichierDonnees(simulationEdit, new Date());
 	}
 	
+	
+	/**
+	 * Fonction permettant de supprimer une simulation en cours.
+	 * @throws SeleniumException en cas d'erreur.
+	 */
+	public void suppression() throws SeleniumException {
+		
+		this.simulation = false;
+		this.validation = false;
+		this.edition = false;
+		this.miseEnGestion = false;
+		this.murissement = false;
+		this.suppression = true;
+		
+		
+		// On recupere le contenu du fichier de donnee.
+		List<String> listeInstances = this.renvoyerContenuFichierDonnee(Constantes.ETAPE_SUIVANTE_SUPPRIMER);
+		
+		for (String instance : listeInstances) {
+			// On initialise le scenario avec les donnees de l'instance
+			CasEssaiIziventeBean simulationASupprimer = new CasEssaiIziventeBean();
+			simulationASupprimer = this.initialiserScenario(instance);
+			if (simulationASupprimer != null) {
+				// Reprise de la simulation.
+				CasEssaiIziventeBean simulationSupprimer = this.lancement(simulationASupprimer);
+				simulationSupprimer.setFlag(Constantes.ETAPE_SUIVANTE_COMPARAISON_LIASSE);
+				this.ecritureFichierDonnees(simulationSupprimer, new Date());
+			}
+		}
+
+	}
 	/**
 	 * Fonction permettant la mise en force de dossier identifie dans le fichier de donnee comme devant être mis en force.
 	 * @throws SeleniumException en cas d'erreur.
@@ -1378,16 +1587,28 @@ public class TNRSC00 extends SC00Test {
 		List<String> listeInstances = this.renvoyerContenuFichierDonnee(Constantes.ETAPE_SUIVANTE_MEF);
 		
 		for (String instance : listeInstances) {
+			int compteur = 0;
 			// On initialise le scenario avec les donnees de l'instance
 			CasEssaiIziventeBean simulationEdit = new CasEssaiIziventeBean();
-			simulationEdit = this.initialiserScenario(instance);
-			
-			if (simulationEdit != null) {
-				// Reprise de la simulation.
-				CasEssaiIziventeBean simulationForc = this.lancement(simulationEdit);
-				this.ecritureFichierDonnees(simulationForc, new Date());
-			}
+			try {
+				simulationEdit = this.initialiserScenario(instance);
+				
+				if (simulationEdit != null) {
+					// Reprise de la simulation.
+					CasEssaiIziventeBean simulationForc = this.lancement(simulationEdit);
+					this.ecritureFichierDonnees(simulationForc, new Date());
+//					compteur++;
+				}
+				
+//				if (compteur > 5) {
+//					// Pour l'instant pour éviter les fuite mémoire on les fait 5 par 5.
+//					break;
+//				}
+			}catch(SeleniumException ex) {
+				//TODO 
+			}	
 		}
+			
 	}
 	
 	/**
@@ -1401,33 +1622,109 @@ public class TNRSC00 extends SC00Test {
 		this.miseEnGestion = false;
 		this.murissement = true;
 		List<String> listeInstances = this.renvoyerContenuFichierDonnee(Constantes.ETAPE_SUIVANTE_MURIR);
+
+			for (String instance : listeInstances) {
+				try {
+					// On initialise le scenario avec les donnees de l'instance
+					CasEssaiIziventeBean simulationForc = new CasEssaiIziventeBean();
+					simulationForc = this.initialiserScenario(instance);
+					
+					if (simulationForc != null) {
+						//Reprise du dossier pour murissement
+						//CasEssaiIziventeBean simulationMuri = this.lancement(simulationForc);
+						GregorianCalendar calendar = new GregorianCalendar();
+						if (calendar.get(Calendar.DAY_OF_WEEK) >= Calendar.FRIDAY) {
+							calendar.add(Calendar.DAY_OF_YEAR, 4);
+						} else {
+							calendar.add(Calendar.DAY_OF_YEAR, 2);
+						}
+						
+						this.ecritureFichierDonnees(CT08Murissement(simulationForc, outil), calendar.getTime());
+					}
+				} catch(SeleniumException ex) {
+					//TODO 
+					ex.printStackTrace();
+				}
+			}
+	
+	}
+	
+	/**
+	 * Effectue le murissement de dossiers presents dans le fichier de donnee a l'etape de murissement.
+	 * @throws SeleniumException en cas d'erreur.
+	 */
+	public void comparaisonLiasse() throws SeleniumException {
+		this.simulation = false;
+		this.validation = false;
+		this.edition = false;
+		this.miseEnGestion = false;
+		this.murissement = false;
+		List<String> listeInstances = this.renvoyerContenuFichierDonnee(Constantes.ETAPE_SUIVANTE_COMPARAISON_LIASSE);
 		try {
 			for (String instance : listeInstances) {
 
 				// On initialise le scenario avec les donnees de l'instance
-				CasEssaiIziventeBean simulationForc = new CasEssaiIziventeBean();
-				simulationForc = this.initialiserScenario(instance);
+				CasEssaiIziventeBean simulationEdit = new CasEssaiIziventeBean();
+				simulationEdit = this.initialiserScenario(instance);
 				
-				if (simulationForc != null) {
-					//Reprise du dossier pour murissement
-					//CasEssaiIziventeBean simulationMuri = this.lancement(simulationForc);
-					GregorianCalendar calendar = new GregorianCalendar();
-					if (calendar.get(Calendar.DAY_OF_WEEK) >= Calendar.FRIDAY) {
-						calendar.add(Calendar.DAY_OF_YEAR, 4);
-					} else {
-						calendar.add(Calendar.DAY_OF_YEAR, 2);
+				//Le dossier n'existe plus, mais la liasse associée si, on vérifie qu'il faut bien s'en occuper aujourd'hui
+				if (simulationEdit != null) {
+					//System.out.println("Dossier " + simulationEdit.getNumeroFFI() + " : " + simulationEdit.getNomCasEssai());
+					if (simulationEdit.getNomCasEssai().contains("_")) {
+						// On extrait le nom du scénario et la date de celui ci. Les deux informations doivent coller pour que la comparaison aie lieue.
+						String nomTronque = simulationEdit.getNomCasEssai().substring(0, simulationEdit.getNomCasEssai().lastIndexOf("_"));
+						String dateTronque = nomTronque.substring(nomTronque.indexOf("-")+1);
+						nomTronque = nomTronque.substring(0, nomTronque.indexOf("-"));
+						// On extrait le nom du scénario en cours aussi.
+						String nomScenarioEnCours = this.getNomCasEssai().substring(0, simulationEdit.getNomCasEssai().indexOf("-"));
+						
+						// On vérifie qu'on compare bien deux scénario identique
+						System.out.println("Id des clients : " + simulationEdit.getIdClient() + " : " + this.idClient);
+						System.out.println("Nom scénario : " + nomTronque + " : " + nomScenarioEnCours); 
+						
+						if (nomTronque.equals(nomScenarioEnCours) && simulationEdit.getIdClient().equals(this.idClient)) {
+							// On vérifie que la vérification doit bien avoir lieu aujourd'hui
+							GregorianCalendar calendar = new GregorianCalendar();
+							calendar.add(Calendar.DAY_OF_YEAR, -1);
+							if (new SimpleDateFormat("yyyy_MM_dd").format(calendar.getTime()).equals(dateTronque)) {
+								boolean differences = false;
+								StringBuilder comparatif = new StringBuilder();
+								System.out.println("On compare les impressions de " + simulationEdit.getNomCasEssai() + " au scénario en cours :" + this.getNomCasEssai());
+								System.out.println("On compare les impressions dans " + simulationEdit.getRepertoireTelechargement() + " et " + this.getRepertoireTelechargement());
+								HashMap<String, Boolean> resultats = PDFOutils.comparerListePDF(new File(this.getRepertoireTelechargement()), new File(simulationEdit.getRepertoireTelechargement()), new File(this.getRepertoireTelechargement()), 3);
+								// On analyse le retour.
+								String temp = "";
+								for (String clef : resultats.keySet()) {
+									if (resultats.get(clef)) {
+										temp = "Identiques\n";
+									} else {
+										temp = "Différents\n";
+										differences = true;
+									}
+									comparatif = comparatif.append(clef + ":\t\t" + temp);
+								}
+								
+								System.out.println(comparatif);
+								simulationEdit.setFlag(Constantes.ETAPE_SUIVANTE_VERIFICATIONS_COMPARAISON);
+								this.ecritureFichierDonnees(simulationEdit, new Date());
+							}
+						}
+
+						
+						
 					}
-					
-					this.ecritureFichierDonnees(CT08Murissement(simulationForc, outil), calendar.getTime());
+					//this.ecritureFichierDonnees(CT08Murissement(simulationEdit, outil), new GregorianCalendar().getTime());
 				}
 			}
-			} catch(SeleniumException ex) {
-				//TODO 
-			}
-		
-		
+		} catch(SeleniumException ex) {
+			//TODO 
+		}	
 	}
 	
+	/**
+	 * Effectue une lecture du fichier de référence pour identifier les simulations nécessitant une consultation dans IZIGATE.
+	 * @throws SeleniumException en cas d'erreur.
+	 */
 	public void consultationIZIGATE() throws SeleniumException {
 			
 			List<String> listeInstances = this.renvoyerContenuFichierDonnee(Constantes.ETAPE_SUIVANTE_MEG);
@@ -1438,20 +1735,23 @@ public class TNRSC00 extends SC00Test {
 				for (String instance : listeInstances) {
 					// On initialise le scenario avec les donnees de l'instance
 					reference = this.initialiserScenario(instance);		
-					SCConsultation scconsultation = new SCConsultation();
-					consultation.setNumeroFFI(reference.getNumeroFFI());
-					consultation.setDistributeur(reference.getDistributeur());
-					CasEssaiIzigateBean simuConsult = scconsultation.lancementTestIzigate(consultation);
-					if (!"".equals(simuConsult.getNumeroDossierUnited())){
-						reference.setNumeroDossierUnited(simuConsult.getNumeroDossierUnited());
-					} else {
-						reference.setNumeroDossierUnited("N/A");
+					if (reference != null) {
+						SCConsultation scconsultation = new SCConsultation();
+						consultation.setNumeroFFI(reference.getNumeroFFI());
+						consultation.setDistributeur(reference.getDistributeur());
+						CasEssaiIzigateBean simuConsult = scconsultation.lancementTestIzigate(consultation);
+						if (!"".equals(simuConsult.getNumeroDossierUnited())){
+							reference.setNumeroDossierUnited(simuConsult.getNumeroDossierUnited());
+						} else {
+							reference.setNumeroDossierUnited("N/A");
+						}
+						reference.setFlag(Constantes.ETAPE_SUIVANTE_VERIF_SYNTHESE);
+						this.ecritureFichierDonnees(reference, calendar.getTime());
 					}
-					reference.setFlag(Constantes.ETAPE_SUIVANTE_VERIF_SYNTHESE);
-					this.ecritureFichierDonnees(reference, calendar.getTime());
 				}
 			} catch (SeleniumException ex) {
 				//TODO 
 			}
 	}
+	
 }

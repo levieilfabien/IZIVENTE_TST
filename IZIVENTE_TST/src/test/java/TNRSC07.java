@@ -25,6 +25,7 @@ private static final long serialVersionUID = 1L;
 		this.setAlm(Constantes.ACTIVATION_ALM);
 		this.setIdUniqueTestLab(54394);
 		this.setIdUniqueTestPlan(-1);
+		this.setIdConfluence("71305133");
 		this.setNomCasEssai("TNRSC07-" + getTime());
 		this.setDescriptif("TNRSC07 - CE - IZIVENTE_Editique Permis 1 Euro");
 		this.setNomTestLab("TNRSC07 - CE - IZIVENTE_Editique Permis 1 Euro");

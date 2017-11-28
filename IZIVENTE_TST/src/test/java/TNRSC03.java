@@ -23,6 +23,7 @@ public class TNRSC03 extends TNRSC00 {
 		// Description du scénario
 		//CasEssaiIziventeBean scenario3 = new CasEssaiIziventeBean();
 		this.setAlm(Constantes.ACTIVATION_ALM);
+		this.setIdConfluence("71303877");
 		this.setIdUniqueTestLab(54300);
 		this.setIdUniqueTestPlan(-1);
 		this.setNomCasEssai("TNRSC03-" + getTime());
@@ -39,7 +40,7 @@ public class TNRSC03 extends TNRSC00 {
 		this.mensualite = "80,00";
 		this.situationDeVente = "AUTR";
 	
-	miseAEdit();
-	//miseEnForce();
+		miseAEdit();
+		//miseEnForce();
 	}
 }

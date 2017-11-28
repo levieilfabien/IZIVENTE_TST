@@ -23,6 +23,7 @@ private static final long serialVersionUID = 1L;
 	//CasEssaiIziventeBean scenario9 = new CasEssaiIziventeBean();
 	this.setAlm(Constantes.ACTIVATION_ALM);
 	this.setIdUniqueTestLab(54396);
+	this.setIdConfluence("71305144");
 	this.setIdUniqueTestPlan(-1);
 	this.setNomCasEssai("TNRSC09-" + getTime());
 	this.setDescriptif("TNRSC09 - CE - IZIVENTE_Editique Prêt étudiant echelonné différé total FEI");

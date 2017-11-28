@@ -24,6 +24,7 @@ public class TNRSC08 extends TNRSC00 {
 	//CasEssaiIziventeBean scenario8 = new CasEssaiIziventeBean();
 	this.setAlm(Constantes.ACTIVATION_ALM);
 	this.setIdUniqueTestLab(54395);
+	this.setIdConfluence("71305139");
 	this.setIdUniqueTestPlan(-1);
 	this.setNomCasEssai("TNRSC08-" + getTime());
 	this.setDescriptif("TNRSC08 - CE - IZIVENTE_Editique Prêt étudiant différé total");

@@ -20,6 +20,8 @@ import beans.CasEssaiBean;
 import constantes.Erreurs;
 import exceptions.SeleniumException;
 import extensions.SeleniumALMRESTWrapper;
+import extensions.SeleniumConfluenceRESTWrapper;
+import main.bean.CasEssaiIziventeBean;
 import main.bean.ModificateurBouchon;
 import main.constantes.Cibles;
 import main.constantes.Constantes;
@@ -68,8 +70,11 @@ public class SC00Test extends CasEssaiBean {
 	 * @param casEssai le cas d'essai
 	 * @return le chemin du repertoire.
 	 */
-	public String creerRepertoireTelechargement(CasEssaiBean casEssai, FirefoxProfile profile) {
+	public String creerRepertoireTelechargement(CasEssaiIziventeBean casEssai, FirefoxProfile profile) {
 		File repertoireTelechargement = new File(".\\" + casEssai.getNomCasEssai());
+		if (casEssai.getComparaisonLiasse()) {
+			repertoireTelechargement = new File(Constantes.EMPLACEMENT_LIASSE + "\\" + casEssai.getNomCasEssai());
+		}
 		repertoireTelechargement.mkdir();
 		profile.setPreference(Constantes.PREF_FIREFOX_REPERTOIRE_TELECHARGEMENT, repertoireTelechargement.getAbsolutePath());
 		return repertoireTelechargement.getAbsolutePath();
@@ -141,16 +146,20 @@ public class SC00Test extends CasEssaiBean {
 			}
 			// Ecriture dans les fichier vide avec le charset UTF-8
 			PrintWriter writer = new PrintWriter(fileFoyer, "UTF-8");
-			writer.append(XMLOutils.toXml(foyer));
+			//writer.append(XMLOutils.toXml(foyer));
+			writer.append(foyer.toString());
 			writer.close();
 			writer = new PrintWriter(fileCompte, "UTF-8");
-			writer.append(XMLOutils.toXml(compte));
+			//writer.append(XMLOutils.toXml(compte));
+			writer.append(compte.toString());
 			writer.close();
 			writer = new PrintWriter(fileRisque, "UTF-8");
-			writer.append(XMLOutils.toXml(risque));
+			//writer.append(XMLOutils.toXml(risque));
+			writer.append(risque.toString());
 			writer.close();
 			writer = new PrintWriter(filePersonnePhy, "UTF-8");
-			writer.append(XMLOutils.toXml(new ListePersonnePhysique(new PersonnePhysiqueTiers(foyer, false))));
+			//writer.append(XMLOutils.toXml(new ListePersonnePhysique(new PersonnePhysiqueTiers(foyer, false))));
+			writer.append(new ListePersonnePhysique(new PersonnePhysiqueTiers(foyer, false)).toString());
 			writer.close();
 //			if (fileCreance != null) {
 //				writer = new PrintWriter(fileCreance, "UTF-8");
@@ -278,6 +287,15 @@ public class SC00Test extends CasEssaiBean {
 //			finaliserTest(outils, sousCas, casEssai.getNomCasEssai() + casEssai.getTime(), sousCas.getEtatFinal());
 //		}
 		// Si le driver n'est pas nul on effectue des capture d'écran et on récupère les logs.
+		
+		// On valide l'objectif en fonction du succès du cas de test.
+		casEssai.validerObjectif(outils.getDriver(), idObjectif, succes);
+		
+		if(casEssai.getEtatFinal() == null) {
+			//System.out.println("L'état final est : " + succes);
+			casEssai.setEtatFinal(succes);
+		}
+		
 		if (outils != null) {
 			casEssai.setRegistreExecution(outils.getDriver());
 			logger(casEssai.getRegistreExecution() + "\n" + casEssai.toString());
@@ -287,8 +305,6 @@ public class SC00Test extends CasEssaiBean {
 				outils.captureEcran("captureFinale" + casEssai.getNomCasEssai(), casEssai.getNomCasEssai());
 			}
 		}
-		// On valide l'objectif en fonction du succès du cas de test.
-		casEssai.validerObjectif(outils.getDriver(), idObjectif, succes);
 		//setCasEssai(casEssai);
 
 		logger(casEssai.toString());
@@ -310,9 +326,10 @@ public class SC00Test extends CasEssaiBean {
 		try {
 			//ALMOutils.miseAJourTestSet(casEssai, succes);
 			SeleniumALMRESTWrapper.miseAJourTestSet(casEssai, succes);
+			SeleniumConfluenceRESTWrapper.miseAJourConfluence(casEssai);
 			System.out.println("Mise à jour effectuée dans ALM");
 		} catch (SeleniumException ex) {
-			//ex.printStackTrace();
+			ex.printStackTrace();
 			System.out.println("Mise à jour impossible à effectuée dans ALM : " + ex.getMessage());
 		}	
 
@@ -382,7 +399,7 @@ public class SC00Test extends CasEssaiBean {
 		switch(distributeur) {
 			case Constantes.CAS_CE : 
 				outil.chargerUrl(Constantes.URL_CE_FUTURE_REROUTAGE); 
-				if(etab == null && agce == null){chaineCible = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><fluxreroutage><ListPart><PersPhys><IdntClntDistr>"+ retour +"</IdntClntDistr><CdRole>E</CdRole></PersPhys></ListPart><ListCtx><Ctx><Cd>CD_ETAB</Cd><Val>11315</Val></Ctx><Ctx><Cd>CD_AGENCE_OP</Cd><Val>1131500030000135</Val></Ctx><Ctx><Cd>CD_AGENCE_DOM</Cd><Val>1131500030000135</Val></Ctx><Ctx><Cd>CD_AGENT_OP</Cd><Val>0092139</Val></Ctx><Ctx><Cd>CD_FCN_AGENT_OP</Cd><Val>381508</Val></Ctx><Ctx><Cd>CD_CANAL_DISTR</Cd><Val>AGEN</Val></Ctx><Ctx><Cd>CD_UNIV_PRD</Cd><Val>TRESORERIE</Val></Ctx><Ctx><Cd>CD_OFFRE</Cd><Val></Val></Ctx><Ctx><Cd>CD_BIN</Cd><Val></Val></Ctx><Ctx><Cd>CPTE_SUPP_CARTE</Cd><Val></Val></Ctx><Ctx><Cd>CPTE_SUPP_COMPO</Cd><Val></Val></Ctx><Ctx><Cd>NIV_DLG</Cd><Val>8</Val></Ctx><Ctx><Cd>CODE_TX</Cd><Val>izv</Val></Ctx><Ctx><Cd>MODE_VENTE</Cd><Val></Val></Ctx><Ctx><Cd>PROFIL</Cd><Val>izv.octroi</Val></Ctx><Ctx><Cd>MODE_EDITIQUE</Cd><Val>DISTRIBUTEUR</Val></Ctx><Ctx><Cd>VENTE_COUPLEE</Cd><Val>O</Val></Ctx><Ctx><Cd>URL_MAJ_CLNT</Cd><Val><![CDATA[NOMAPPLI|CEFI|NUMPLAN|1]]></Val></Ctx></ListCtx><ProtocoleTech><CodePrlfAgnt></CodePrlfAgnt><IdntEtabEntt>CE</IdntEtabEntt><IdntInteEdsAgnt></IdntInteEdsAgnt><RefrPosteFoncAgnt></RefrPosteFoncAgnt><IdntAgnt></IdntAgnt><IdntAgntTech>T0092139</IdntAgntTech><TypeCanlAcces></TypeCanlAcces><IdntAgntAcces></IdntAgntAcces><RefrExtnAgnt></RefrExtnAgnt><CodeTypeIdntExtn>W</CodeTypeIdntExtn><IdntExtnConx>T0092139</IdntExtnConx><TypePrflAgnt>1</TypePrflAgnt></ProtocoleTech></fluxreroutage>"; }
+				if(etab == null && agce == null){chaineCible = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><fluxreroutage><ListPart><PersPhys><IdntClntDistr>"+ retour +"</IdntClntDistr><CdRole>E</CdRole></PersPhys></ListPart><ListCtx><Ctx><Cd>CD_ETAB</Cd><Val>11315</Val></Ctx><Ctx><Cd>CD_AGENCE_OP</Cd><Val>1131500030000136</Val></Ctx><Ctx><Cd>CD_AGENCE_DOM</Cd><Val>1131500030000136</Val></Ctx><Ctx><Cd>CD_AGENT_OP</Cd><Val>0092139</Val></Ctx><Ctx><Cd>CD_FCN_AGENT_OP</Cd><Val>381508</Val></Ctx><Ctx><Cd>CD_CANAL_DISTR</Cd><Val>AGEN</Val></Ctx><Ctx><Cd>CD_UNIV_PRD</Cd><Val>TRESORERIE</Val></Ctx><Ctx><Cd>CD_OFFRE</Cd><Val></Val></Ctx><Ctx><Cd>CD_BIN</Cd><Val></Val></Ctx><Ctx><Cd>CPTE_SUPP_CARTE</Cd><Val></Val></Ctx><Ctx><Cd>CPTE_SUPP_COMPO</Cd><Val></Val></Ctx><Ctx><Cd>NIV_DLG</Cd><Val>8</Val></Ctx><Ctx><Cd>CODE_TX</Cd><Val>izv</Val></Ctx><Ctx><Cd>MODE_VENTE</Cd><Val></Val></Ctx><Ctx><Cd>PROFIL</Cd><Val>izv.octroi</Val></Ctx><Ctx><Cd>MODE_EDITIQUE</Cd><Val>DISTRIBUTEUR</Val></Ctx><Ctx><Cd>VENTE_COUPLEE</Cd><Val>O</Val></Ctx><Ctx><Cd>URL_MAJ_CLNT</Cd><Val><![CDATA[NOMAPPLI|CEFI|NUMPLAN|1]]></Val></Ctx></ListCtx><ProtocoleTech><CodePrlfAgnt></CodePrlfAgnt><IdntEtabEntt>CE</IdntEtabEntt><IdntInteEdsAgnt></IdntInteEdsAgnt><RefrPosteFoncAgnt></RefrPosteFoncAgnt><IdntAgnt></IdntAgnt><IdntAgntTech>T0092139</IdntAgntTech><TypeCanlAcces></TypeCanlAcces><IdntAgntAcces></IdntAgntAcces><RefrExtnAgnt></RefrExtnAgnt><CodeTypeIdntExtn>W</CodeTypeIdntExtn><IdntExtnConx>T0092139</IdntExtnConx><TypePrflAgnt>1</TypePrflAgnt></ProtocoleTech></fluxreroutage>"; }
 				else{chaineCible = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><fluxreroutage><ListPart><PersPhys><IdntClntDistr>" + retour + "</IdntClntDistr><CdRole>E</CdRole></PersPhys></ListPart><ListCtx><Ctx><Cd>CD_ETAB</Cd><Val>"+ etab +"</Val></Ctx><Ctx><Cd>CD_AGENCE_OP</Cd><Val>"+ agce +"</Val></Ctx><Ctx><Cd>CD_AGENCE_DOM</Cd><Val>"+ agce +"</Val></Ctx><Ctx><Cd>CD_AGENT_OP</Cd><Val>0092139</Val></Ctx><Ctx><Cd>CD_FCN_AGENT_OP</Cd><Val>381508</Val></Ctx><Ctx><Cd>CD_CANAL_DISTR</Cd><Val>AGEN</Val></Ctx><Ctx><Cd>CD_UNIV_PRD</Cd><Val>TRESORERIE</Val></Ctx><Ctx><Cd>CD_OFFRE</Cd><Val></Val></Ctx><Ctx><Cd>CD_BIN</Cd><Val></Val></Ctx><Ctx><Cd>CPTE_SUPP_CARTE</Cd><Val></Val></Ctx><Ctx><Cd>CPTE_SUPP_COMPO</Cd><Val></Val></Ctx><Ctx><Cd>NIV_DLG</Cd><Val>8</Val></Ctx><Ctx><Cd>CODE_TX</Cd><Val>izv</Val></Ctx><Ctx><Cd>MODE_VENTE</Cd><Val></Val></Ctx><Ctx><Cd>PROFIL</Cd><Val>izv.octroi</Val></Ctx><Ctx><Cd>MODE_EDITIQUE</Cd><Val>" + (producteur?"PRODUCTEUR":"DISTRIBUTEUR") + "</Val></Ctx><Ctx><Cd>VENTE_COUPLEE</Cd><Val>O</Val></Ctx><Ctx><Cd>URL_MAJ_CLNT</Cd><Val><![CDATA[NOMAPPLI|CEFI|NUMPLAN|1]]></Val></Ctx></ListCtx><ProtocoleTech><CodePrlfAgnt></CodePrlfAgnt><IdntEtabEntt>CE</IdntEtabEntt><IdntInteEdsAgnt></IdntInteEdsAgnt><RefrPosteFoncAgnt></RefrPosteFoncAgnt><IdntAgnt></IdntAgnt><IdntAgntTech>T0092139</IdntAgntTech><TypeCanlAcces></TypeCanlAcces><IdntAgntAcces></IdntAgntAcces><RefrExtnAgnt></RefrExtnAgnt><CodeTypeIdntExtn>W</CodeTypeIdntExtn><IdntExtnConx>T0092139</IdntExtnConx><TypePrflAgnt>1</TypePrflAgnt></ProtocoleTech></fluxreroutage>";	}
 				break;
 			case Constantes.CAS_IOM : 
@@ -464,7 +481,7 @@ public class SC00Test extends CasEssaiBean {
 			return retour;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			throw new SeleniumException(Erreurs.E020, "Impossible de lire dans DonneesClientDossier");
+			throw new SeleniumException(Erreurs.E020, "Le fichier de DonneesClientDossier n'est pas disponible");
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new SeleniumException(Erreurs.E020, "Impossible de lire dans DonneesClientDossier");

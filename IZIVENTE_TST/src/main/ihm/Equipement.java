@@ -26,9 +26,9 @@ public class Equipement {
 		super();
 	}
 	
-	public Equipement(String idClient) {
+	public Equipement(String idClient, int distributeur) {
 		super();
 		idClientDistributeur = idClient;
-		compteDepot = new CompteDepot(idClient);
+		compteDepot = new CompteDepot(idClient, distributeur);
 	}
 }

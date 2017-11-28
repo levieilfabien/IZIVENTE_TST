@@ -24,6 +24,9 @@ public class CasEssaiIziventeBean extends CasEssaiBean {
 	 */
 	private String idClient = "";
 	
+	/**
+	 * Indique l'étape prochaine du scénario quand celui ci est en plusieurs étapes.
+	 */
 	private int flag = 0;
 	
 	/**
@@ -43,6 +46,9 @@ public class CasEssaiIziventeBean extends CasEssaiBean {
 	
 	private int distributeur = -1;
 
+	//Nouveautés pour le comparaison de liasse
+	private Boolean comparaisonLiasse = false;
+	
 	public int getDistributeur() {
 		return distributeur;
 	}
@@ -126,7 +132,14 @@ public class CasEssaiIziventeBean extends CasEssaiBean {
 	public void setFlag(int flag) {
 		this.flag = flag;
 	}
-	
+
+	public Boolean getComparaisonLiasse() {
+		return comparaisonLiasse;
+	}
+
+	public void setComparaisonLiasse(Boolean comparaisonLiasse) {
+		this.comparaisonLiasse = comparaisonLiasse;
+	}
 	
 }
 

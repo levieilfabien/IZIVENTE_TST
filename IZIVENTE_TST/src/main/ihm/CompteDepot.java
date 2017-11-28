@@ -42,11 +42,18 @@ public class CompteDepot {
 	 * Constructeur du compte de dépôt à partir du client.
 	 * @param idClient le client.
 	 */
-	public CompteDepot(String idClient) {
+	public CompteDepot(String idClient, int distributeur) {
 		// Comme cela n'a pas d'importance réelle, on choisit un BIC/IBAN CE.
-		numeroCompteIBAN = RIBOutils.genererIbanFR76("11315", "00001", idClient);
-		codeBIC = RIBOutils.genererBIC(Constantes.CAS_CE);
-		//codeBIC = "CEPAFRPP131";
+		if (distributeur == Constantes.CAS_BP) {
+			numeroCompteIBAN = RIBOutils.genererIbanFR76("10907", idClient);
+			codeBIC = RIBOutils.genererBIC("10907");
+			//codeBIC = "CEPAFRPP131";
+		} else {
+			numeroCompteIBAN = RIBOutils.genererIbanFR76("11315", idClient);
+			codeBIC = RIBOutils.genererBIC("11315");
+			//codeBIC = "CEPAFRPP131";
+		}
+
 	}
 
 	/**
