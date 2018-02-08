@@ -26,6 +26,7 @@ import main.bean.ModificateurBouchon;
 import main.constantes.Cibles;
 import main.constantes.Constantes;
 import main.ihm.Compte;
+import main.ihm.Creance;
 import main.ihm.Foyer;
 import main.ihm.IHMGeneration;
 import main.ihm.ListePersonnePhysique;
@@ -100,10 +101,10 @@ public class SC00Test extends CasEssaiBean {
 			filePersonnePhyCjt = new File(((cas == Constantes.CAS_CE || cas == Constantes.CAS_IOM)?Constantes.REPERTOIRE_CE_PERSONNE:Constantes.REPERTOIRE_BP_PERSONNE) + "\\" + foyer.personnePhyCjt.idClientDistributeur + ".xml");;
 		}
 		File fileCreance = null;
-		// Pas de créance pour BP
-//		if (cas == Constantes.CAS_CE || cas == Constantes.CAS_IOM) {
-//			fileCreance = new File(((cas == Constantes.CAS_CE || cas == Constantes.CAS_IOM)?Constantes.REPERTOIRE_CE_CREANCE:Constantes.REPERTOIRE_BP_CREANCE) + "\\" + idClient + ".xml");
-//		}
+		// Pas de créance pour BP [01/12/2017 : Finalement si pour restructuration]
+		//if (cas == Constantes.CAS_CE || cas == Constantes.CAS_IOM) {
+		fileCreance = new File(((cas == Constantes.CAS_CE || cas == Constantes.CAS_IOM)?Constantes.REPERTOIRE_CE_CREANCE:Constantes.REPERTOIRE_BP_CREANCE) + "\\" + idClient + ".xml");
+		//}
 		// Ecriture dans les bouchons
 		try {
 			// Si les fichiers existent déjà on les purge
@@ -119,9 +120,9 @@ public class SC00Test extends CasEssaiBean {
 			if (filePersonnePhy.exists()) {
 				filePersonnePhy.delete();
 			}
-//			if (fileCreance != null && fileCreance.exists()) {
-//				fileCreance.delete();
-//			}
+			if (fileCreance != null && fileCreance.exists()) {
+				fileCreance.delete();
+			}
 			if (filePersonnePhyCjt != null && filePersonnePhyCjt.exists()) {
 				filePersonnePhyCjt.delete();
 			}
@@ -135,10 +136,10 @@ public class SC00Test extends CasEssaiBean {
 			filePersonnePhy.setWritable(true);
 			filePersonnePhy.createNewFile();
 			// Cas particulier de la creance existante uniquement pour CE
-//			if (fileCreance != null) {
-//				fileCreance.setWritable(true);
-//				fileCreance.createNewFile();
-//			}
+			if (fileCreance != null) {
+				fileCreance.setWritable(true);
+				fileCreance.createNewFile();
+			}
 			// Car particulier du conjoint facultatif
 			if (filePersonnePhyCjt != null) {
 				filePersonnePhyCjt.setWritable(true);
@@ -159,13 +160,16 @@ public class SC00Test extends CasEssaiBean {
 			writer.close();
 			writer = new PrintWriter(filePersonnePhy, "UTF-8");
 			//writer.append(XMLOutils.toXml(new ListePersonnePhysique(new PersonnePhysiqueTiers(foyer, false))));
-			writer.append(new ListePersonnePhysique(new PersonnePhysiqueTiers(foyer, false)).toString());
+			ListePersonnePhysique listePersPhy = new ListePersonnePhysique(new PersonnePhysiqueTiers(foyer, false));
+			listePersPhy.distributeur = (cas == Constantes.CAS_BP || cas == Constantes.CAS_BRED)? Constantes.CAS_BP : Constantes.CAS_CE;
+			writer.append(listePersPhy.toString());
 			writer.close();
-//			if (fileCreance != null) {
-//				writer = new PrintWriter(fileCreance, "UTF-8");
-//				writer.append(XMLOutils.toXml(new Creance(idClient, cas)));
-//				writer.close();
-//			}
+			if (fileCreance != null) {
+				writer = new PrintWriter(fileCreance, "UTF-8");
+				//writer.append(XMLOutils.toXml(new Creance(idClient, cas)));
+				writer.append(new Creance(idClient, cas).toString());
+				writer.close();
+			}
 			if (filePersonnePhyCjt != null) {
 				writer = new PrintWriter(filePersonnePhyCjt, "UTF-8");
 				writer.append(XMLOutils.toXml(new ListePersonnePhysique(new PersonnePhysiqueTiers(foyer, true))));

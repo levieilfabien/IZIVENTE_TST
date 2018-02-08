@@ -3,10 +3,9 @@ package main.ihm;
 import outils.XMLOutils;
 import annotations.BaliseXml;
 
-@BaliseXml(prefixe="re", nom="ListCrdt", libelle="Creance", entete="<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Header/><soapenv:Body><_1:obtenirCreancesPersonnePhysiqueResponse xmlns:_1=\"http://www.banquepopulaire.fr/wsdl/vcc/creance-3\" xmlns:_2=\"http://www.bpce.fr/xsd/vcc/vcc-4\" xmlns:re=\"http://www.bpce.fr/xsd/vcc/creance-3/response\">", enqueue="</_1:obtenirCreancesPersonnePhysiqueResponse></soapenv:Body></soapenv:Envelope>")
+@BaliseXml(prefixe="re", nom="ListCrdt", libelle="Creance", entete="<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"><soapenv:Header/><soapenv:Body><_1:obtenirCreancesPersonnePhysiqueResponse xmlns:_1=\"http://www.banquepopulaire.fr/wsdl/vcc/creance-4\" xmlns:_2=\"http://www.bpce.fr/xsd/vcc/vcc-7\" xmlns:re=\"http://www.bpce.fr/xsd/vcc/creance-4/response\">", enqueue="</_1:obtenirCreancesPersonnePhysiqueResponse></soapenv:Body></soapenv:Envelope>")
 public class Creance {
 
-	
 	public String xsdCE = "caisse-epargne";
 	public String xsdBP = "banquepopulaire";
 	
@@ -35,6 +34,8 @@ public class Creance {
 		} else {
 			retour = retour.replace(xsdBP, xsdCE);
 		}
+		
+		retour = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>".concat(retour);
 		
 		return retour;
 	}

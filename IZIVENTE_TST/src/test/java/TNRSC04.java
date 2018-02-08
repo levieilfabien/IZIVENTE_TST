@@ -45,6 +45,7 @@ public class TNRSC04 extends TNRSC00 {
 		this.coutProjet = "22000";
 		this.montantCredit = "22000";
 		this.mensualite = "367";
+		this.dureeDiffere = "12";
 		
 		miseAEdit();
 		//miseEnForce();

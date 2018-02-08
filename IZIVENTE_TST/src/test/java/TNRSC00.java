@@ -392,9 +392,9 @@ public class TNRSC00 extends SC00Test {
 		// A ce moment il est possible que le client dispose déjà d'un dossier à l'état ABAN. Il faut alors procédé par "Nouveau dossier"
 		if (!CT02.getComparaisonLiasse()) {
 			if(CT02.getDistributeur() == Constantes.CAS_CE) {
-				outil.attendrePresenceTexte("Attention");
+				outil.attendrePresenceTexte("Attention", 30);
 			} else {
-				outil.attendrePresenceTexte("ATTENTION");
+				outil.attendrePresenceTexte("ATTENTION", 30);
 			}
 		}
 
@@ -518,7 +518,9 @@ public class TNRSC00 extends SC00Test {
 				}
 				
 				if (dureeDiffere != null){
-					outil.viderEtSaisir(dureeDiffere, Cibles.SAISIE_DUREE_DIFFERE_PARTIEL);
+					System.out.println("Présence de différé");
+					outil.attendreChargementElement(Cibles.SAISIE_DUREE_DIFFERE_PARTIEL_TOTAL, true, true);
+					outil.viderEtSaisir(dureeDiffere, Cibles.SAISIE_DUREE_DIFFERE_PARTIEL_TOTAL);
 				}
 			break;
 		}
@@ -616,7 +618,7 @@ public class TNRSC00 extends SC00Test {
 			//outil.attendre(1);
 			//outil.attendreChargementElement(Cibles.BOUTON_VALIDER_SIMULATION_PP, true, true);
 			outil.attendreElement(Cibles.BOUTON_VALIDER_SIMULATION_PP);
-			outil.cliquer(Cibles.BOUTON_VALIDER_SIMULATION_PP);
+			//outil.cliquer(Cibles.BOUTON_VALIDER_SIMULATION_PP);
 			outil.cliquerJusqua(Cibles.BOUTON_VALIDER_SIMULATION_PP, new CibleBean(Clefs.TEXTE_COMPLET, "Récapitulatif de la demande crédit"));
 			CT04.validerObjectif(outil.getDriver(), "VALIDATION", true);
 		} else {
@@ -719,7 +721,7 @@ public class TNRSC00 extends SC00Test {
 		//Step 4 : Remplir le questionnaire pour la demande de financement a 8 jours et la reception de sollicitations commerciales partenaires
 		outil.attendreChargementElement(Cibles.LIBELLE_CHOIX_NON_MAJ, true, true);
 		// On attend la présence des choix à NON pour les différentes options.
-		outil.attendreElement(Cibles.LIBELLE_CHOIX_NON_MAJ);
+		//outil.attendreElement(Cibles.LIBELLE_CHOIX_NON_MAJ);
 		// Une fois que c'est fait on va cliquer sur les différents checkbox
 		if (!outil.testerVisibiliteElementDiffere(Cibles.LIBELLE_CHOIX_NON_MAJ)) {
 			CT05.validerObjectif(outil.getDriver(), "OPTIONS", false);
@@ -815,8 +817,8 @@ public class TNRSC00 extends SC00Test {
 			CT06.validerObjectif(outil.getDriver(), "PREPARATION", true);
 		} else if (typeDossier == TypeProduit.IZICARTE) {
 			//Step 7 : Acces a l'IHM pour reprise du dossier
-			outil.attendreChargementElement(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
-			outil.cliquer(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
+			outil.attendreChargementElement(Cibles.POPUP_GENERIQUE);
+			outil.attendreEtCliquer(Cibles.BOUTON_POPUP_FACE_A_FACE_MAJ);
 			CT06.validerObjectif(outil.getDriver(), "MODE", true);
 			//Step 8 : Fin de l'edition
 			//outil.attendreChargementElement(Cibles.BOUTON_PASSAGE_OCTROI_CR, true, true);

@@ -10,7 +10,8 @@ public enum CodeContratTravail {
 	PERIODE_ESSAI(5, "6", "Période d'essai"),
 	SALARIE_CDD(6, "7", "Salarié en CDD"), 
 	NON_CONCERNE(7, "N", "Non concerné"), 
-	AUTRE(8, "Z", "Autres");
+	AUTRE(8, "Z", "Autres"),
+	VIDE(9, "", "Non renseigné");
 
 	/**
 	 * L'index unique pour la valeur dans l'énumération.

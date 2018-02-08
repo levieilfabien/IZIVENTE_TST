@@ -92,7 +92,7 @@ public class SC02Test extends SC00Test {
 			outil.viderEtSaisir("1500", Cibles.SAISIE_COUT_PROJET);
 			outil.viderEtSaisir("1500", Cibles.SAISIE_MONTANT_DEMANDE);
 			outil.viderEtSaisir("30", Cibles.SAISIE_DUREE_DEMANDE);
-			outil.viderEtSaisir("12", Cibles.SAISIE_DUREE_DIFFERE_PARTIEL);
+			outil.viderEtSaisir("12", Cibles.SAISIE_DUREE_DIFFERE_PARTIEL_TOTAL);
 			
 			outil.cliquer(Cibles.BOUTON_SUIVANT);
 			

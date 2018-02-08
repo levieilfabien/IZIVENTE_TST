@@ -22,6 +22,11 @@ public class Cibles {
 	public static final CibleBean BOUTON_POPUP_FACE_A_FACE = new CibleBean(Clefs.VALEUR, "Face à face");
 	
 	/**
+	 * Identification du bloc popup classique IZIVENTE (commun à plusieurs situations)
+	 */
+	public static final CibleBean POPUP_GENERIQUE = new CibleBean("popupGeneriqueContentTable");
+	
+	/**
 	 * Identification du bouton "Face à Face" dans la popup affichée lors de la redirection depuis l'IHM suite à une signature electronique.
 	 */
 	public static final CibleBean BOUTON_POPUP_FACE_A_FACE_MAJ = new CibleBean(Clefs.VALEUR, "Face à Face");
@@ -136,9 +141,9 @@ public class Cibles {
 	public static final CibleBean SELECTEUR_MONTANT_DUREE_DEMANDE = new CibleBean("form_demande:montant_dureeField:montant_duree");
 	
 	/**
-	 * Champs de saisie pour la durée du différé partiel.
+	 * Champs de saisie pour la durée du différé partiel ou total.
 	 */
-	public static final CibleBean SAISIE_DUREE_DIFFERE_PARTIEL = new CibleBean("form_demande:differe_amortissementField:moisAmor");
+	public static final CibleBean SAISIE_DUREE_DIFFERE_PARTIEL_TOTAL = new CibleBean("form_demande:differe_amortissementField:moisAmor");
 	
 	/**
 	 * Champs de saisie pour la durée souhaitée.
@@ -702,4 +707,5 @@ public class Cibles {
 	public static final CibleBean BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT_2 = new CibleBean(Clefs.NAME, "form_donnees_client:refreshClient1");
 	public static final CibleBean CHAMP_NOM_EMPLOYEUR = new CibleBean("form_donnees_client:nomEmployeur:nomEmployeur_Field");
 	//public static final CibleBean BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT = new CibleBean(Clefs.VALEUR, "Rafraîchir");form_donnees_client:refreshClient1
+	
 }

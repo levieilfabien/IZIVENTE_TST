@@ -41,9 +41,9 @@ public class ListePersonnePhysique {
 		String retour = XMLOutils.toXml(this);
 		
 		if (distributeur == CAS_BP || distributeur == CAS_BRED) {
-			retour = retour.replace(xsdCE, xsdBP);
+			retour = retour.replaceAll(xsdCE, xsdBP);
 		} else {
-			retour = retour.replace(xsdBP, xsdCE);
+			retour = retour.replaceAll(xsdBP, xsdCE);
 		}
 		
 		return retour;

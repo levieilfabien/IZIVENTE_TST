@@ -88,6 +88,8 @@ public class Foyer {
 			personnePhyCjt.signalement.codeSitFam = CodeSituationFamilale.MARIE_CE.getCode();
 		}
 		
+		// Modifier ici les données personnelles relatives au conjoint ? (adresse, salaire et employeur ?)
+		
 		this.distributeur = distributeur;
 		// On s'assure qu'il y a au moins une charge "loyer résidence principale".
 		charges.add(new Charge());
