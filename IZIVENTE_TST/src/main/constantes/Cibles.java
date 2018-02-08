@@ -708,4 +708,32 @@ public class Cibles {
 	public static final CibleBean CHAMP_NOM_EMPLOYEUR = new CibleBean("form_donnees_client:nomEmployeur:nomEmployeur_Field");
 	//public static final CibleBean BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT = new CibleBean(Clefs.VALEUR, "Rafraîchir");form_donnees_client:refreshClient1
 	
+	/**
+	 * Bouton situé dans le premier menu permettant de choisir l'option "Simulation restructuration".
+	 */
+	public static final CibleBean LIEN_SIMULATION_RST = new CibleBean(Clefs.TEXTE_COMPLET, "Simulation restructuration");
+	public static final CibleBean LIEN_MAJ_MYWAY = new CibleBean(Clefs.CLASSE, "boutonAction widthDefaultBouton");
+	
+	public static final CibleBean SAISIE_REVENUESREG_EM = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.revenusReguliers");
+	public static final CibleBean SAISIE_autresRevenusEM = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.autresRevenus");
+	public static final CibleBean SAISIE_REVENUESREG_CEM = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.conjointRevenusReguliers");
+	public static final CibleBean SAISIE_autresRevenusCEM = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.conjointautresRevenus");
+	public static final CibleBean SAISIE_RESID_PRINCIPALE = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.residencePrincipale");
+	public static final CibleBean SAISIE_HORS_RESID_PRINCIPALE = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.horsResidencePrincipale");
+	public static final CibleBean SAISIE_CREDITS_RENOUVELABLE = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.renouvelable");
+	public static final CibleBean SAISIE_CREDITS_AUTO = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.auto");
+	public static final CibleBean SAISIE_CREDITS_AUTRES = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.autresCredits");
+	public static final CibleBean SAISIE_AUTRES_CHARGES = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.autresCharges");
+	public static final CibleBean SAISIE_PENSION_ALIMENTAIRES = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.pensionAlimentaire");
+	public static final CibleBean SAISIE_CRD_CREDITS_IMMO = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.crdImmo");
+	public static final CibleBean SAISIE_CRD_CREDITS_CONSO_HORS_RENOUVELABLE = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.crdAmort");
+	public static final CibleBean SAISIE_MT_UTILISE_CR = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.montantCr");
+	public static final CibleBean SAISIE_SOLDE_DEBITEUR= new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.montantDecouvert");
+	public static final CibleBean SAISIE_MONTANT_RETARDS_IMPOT = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.retardsImpot");
+	public static final CibleBean SAISIE_MONTANT_RETARDS_LOYERS = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.retardsLoyers");
+	public static final CibleBean SAISIE_MONTANT_AUTRES_DETTES = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.autresDettes");
+	public static final CibleBean SAISIE_NB_IMPAYES_IMMO = new CibleBean(Clefs.NAME, "creditsImmoImpayees");
+	public static final CibleBean SAISIE_NB_IMPAYES_CONSO = new CibleBean(Clefs.NAME, "creditsConsoImpayees");
+	public static final CibleBean SAISIE_TRESORERIE = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.tresorerieSouhaitee");
+	
 }
