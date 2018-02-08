@@ -28,4 +28,12 @@ public class Catalogue {
 	public static final String CT06_TITRE 		= "CT06 - Finalisation de l instruction";
 	public static final String CT07_TITRE 		= "CT07 - Mise en force du dossier";
 	public static final String CT08_TITRE 		= "CT08 - Murissement du dossier";
+	
+	
+	
+	// Catalogue pour RST
+	public static final String RSTSC01_TITRE 		= "RSTSC01 - Avant vente simulation";
+	//rep à créer dans ALM
+	public static final String CHEMIN_TEST_LAB_RST = "POC Selenium\\RST ";
+	
 }
