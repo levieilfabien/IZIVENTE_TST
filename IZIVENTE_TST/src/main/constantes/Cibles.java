@@ -712,7 +712,7 @@ public class Cibles {
 	 * Bouton situé dans le premier menu permettant de choisir l'option "Simulation restructuration".
 	 */
 	public static final CibleBean LIEN_SIMULATION_RST = new CibleBean(Clefs.TEXTE_COMPLET, "Simulation restructuration");
-	public static final CibleBean LIEN_MAJ_MYWAY = new CibleBean(Clefs.CLASSE, "boutonAction widthDefaultBouton");
+	public static final CibleBean LIEN_MAJ_MYWAY = new CibleBean("iframe", Clefs.TEXTE_COMPLET, "Fermer");
 	
 	public static final CibleBean SAISIE_REVENUESREG_EM = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.revenusReguliers");
 	public static final CibleBean SAISIE_autresRevenusEM = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.autresRevenus");

@@ -48,16 +48,17 @@ public class RSTSC01 extends TNRSC00 {
 		
 		//A PARTIR D'ICI il faut se rendre dans restructuration en utilisant des ACTIONS
 		outil.action(Actions.CLIQUER, Cibles.LIEN_SIMULATION_RST);
-		
-	/*	if (outil.testerPresenceTexte("Attention", true)) {
-			System.out.println("La popup est présente");
-			// On tente de cliquer sur le bouton ferme
-			outil.attendreEtCliquer(Cibles.LIEN_MAJ_MYWAY);
-		}*/
-//		outil.attendreChargementElement(Cibles.LIEN_MAJ_MYWAY);
 		outil.action(Actions.CLIQUER, Cibles.LIEN_MAJ_MYWAY);
-	//Remplir le formulaire
-	
+		
+		//Remplir le formulaire
+		
+		// On ne remplis les revenu régulier que si le champ n'est pas vide
+		String revenuReglierEmprunteur = outil.obtenirValeur(Cibles.SAISIE_REVENUESREG_EM);
+		if ("".equals(revenuReglierEmprunteur)) {
+			outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_REVENUESREG_EM, "1000");
+		}
+		
+		
 		outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_REVENUESREG_EM, "0");
 		outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_autresRevenusEM, "0");
 		outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_REVENUESREG_CEM, "0");
