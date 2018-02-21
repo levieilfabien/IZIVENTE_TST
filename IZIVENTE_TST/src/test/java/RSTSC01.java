@@ -54,16 +54,15 @@ public class RSTSC01 extends TNRSC00 {
 		
 		// On ne remplis les revenu régulier que si le champ n'est pas vide
 		String revenuReglierEmprunteur = outil.obtenirValeur(Cibles.SAISIE_REVENUESREG_EM);
-		if ("".equals(revenuReglierEmprunteur)) {
+		if ("0.00".equals(revenuReglierEmprunteur)) {
 			outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_REVENUESREG_EM, "1000");
 		}
 		
-		
-		outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_REVENUESREG_EM, "0");
+		//-- outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_REVENUESREG_EM, "5000");
 		outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_autresRevenusEM, "0");
-		outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_REVENUESREG_CEM, "0");
+		//-- outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_REVENUESREG_CEM, "0");
 		outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_autresRevenusCEM, "0");
-		outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_RESID_PRINCIPALE, "0");
+		//-- outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_RESID_PRINCIPALE, "0");
 		outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_HORS_RESID_PRINCIPALE, "0");
 		outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_CREDITS_RENOUVELABLE, "0");
 		outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_CREDITS_AUTO, "0");
@@ -79,11 +78,16 @@ public class RSTSC01 extends TNRSC00 {
 		outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_MONTANT_AUTRES_DETTES, "0");
 		outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_NB_IMPAYES_IMMO, "0");
 		outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_NB_IMPAYES_CONSO, "0");
-		outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_TRESORERIE, "0");
+		outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_TRESORERIE, "20000");
+		//Valider le formulaire
+	    outil.action(Actions.CLIQUER, Cibles.BOUTON_SIMULATION);
+	   //Remplir la fenetre RDV
+	    outil.action(Actions.VIDER_ET_SAISIR, Cibles.SAISIE_RDV, "Notre RDV: 01/03/2018"); 
+	    outil.action(Actions.CLIQUER, Cibles.BOUTON_POURSUIVRE);
+		//REmplir la fenetre imprimer l'accord client
+	    outil.action(Actions.ATTENDRE_DISPONIBILITE_ELEMENT, Cibles.BOUTON_IMPRIMER_ACCORD_CLIENT);
+		outil.action(Actions.CLIQUER, Cibles.BOUTON_IMPRIMER_ACCORD_CLIENT);
 		
-		
-        //outil.action(Actions.CLIQUER, Cibles.VALIDER_FORMULAIRE_DEMO);
-        
 		// Finalisation normale du cas de test.
 		finaliserTest(outil, scenario1, scenario1.getNomCasEssai() + scenario1.getDateCreation().getTime());
 	}
