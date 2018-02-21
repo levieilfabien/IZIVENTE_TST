@@ -736,4 +736,18 @@ public class Cibles {
 	public static final CibleBean SAISIE_NB_IMPAYES_CONSO = new CibleBean(Clefs.NAME, "creditsConsoImpayees");
 	public static final CibleBean SAISIE_TRESORERIE = new CibleBean(Clefs.NAME, "formulaCtrl.formulaire.tresorerieSouhaitee");
 	
+	/**
+	 * Bouton Simulation permettant de valider (attention présence multiple possible).
+	 */
+	public static final CibleBean BOUTON_SIMULATION = new CibleBean(Clefs.VALEUR, "Simulation");
+	
+	/**
+	 * La fenetre RDV
+	 */
+	public static final CibleBean SAISIE_RDV = new CibleBean(Clefs.ID, "rendezvous");
+	public static final CibleBean BOUTON_POURSUIVRE = new CibleBean(Clefs.VALEUR, "Poursuivre");
+	/**
+	 * fenetre imprimer l'accord client
+	 */
+	public static final CibleBean BOUTON_IMPRIMER_ACCORD_CLIENT = new CibleBean("iframe", Clefs.TEXTE_COMPLET, "Imprimer l'accord client");
 }
