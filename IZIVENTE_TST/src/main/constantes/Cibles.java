@@ -701,6 +701,11 @@ public class Cibles {
 	public static final CibleBean ELEMENT_SPAN_IBAN = new CibleBean(Clefs.XPATH, ".//*[text()='BIC']/../../../../tbody/tr/td[3]");
 	
 	/**
+	 * Message affiché pour les types de crédit ne permettant pas de rôle pour un conjoint co emprunteur 
+	 */
+	public static final CibleBean MESSAGE_ROLE_CONJOINT_INTERDIT = new CibleBean(Clefs.TEXTE_PARTIEL, "Le crédit choisi ne permet pas de donner un rôle au conjoint.");
+	
+	/**
 	 * Bouton de rafraichissement des informations client
 	 */
 	public static final CibleBean BOUTON_RAFRAICHISSEMENT_INFOS_CLIENT = new CibleBean("form_donnees_client:refreshClient1");

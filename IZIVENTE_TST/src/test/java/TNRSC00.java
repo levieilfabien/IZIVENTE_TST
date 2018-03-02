@@ -571,7 +571,8 @@ public class TNRSC00 extends SC00Test {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////		
 		//Step 1 : Choisir les participants en fonction de la fiche de prêt et Valider. Aucun co-emprunteur dans ce scenario
 	    
-	    if (outil.testerPresenceTexte("Le crédit choisi ne permet pas de donner un rôle au conjoint.", true)) {
+	    //if (outil.testerPresenceTexte("Le crédit choisi ne permet pas de donner un rôle au conjoint.", true)) {
+	    if (outil.testerPresenceElement(Cibles.MESSAGE_ROLE_CONJOINT_INTERDIT)) {
 	    	conjointInterdit = true;
 	    }
 	    
@@ -1047,8 +1048,8 @@ public class TNRSC00 extends SC00Test {
 		// Si le type de dossier est tout sauf CREODIS on clique sur le bouton "Aucun CoEmprunteur"
 		//On passe automatiquement a l'etape de choix d'assurance pour le CREODIS
 		if (typeDossier != TypeProduit.CREODIS) {
-	    	//outil.attendreChargementElement(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
-	    	outil.attendreEtCliquer(Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
+	    	outil.action(Actions.ATTENDRE_DISPONIBILITE_ELEMENT, Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
+	    	outil.action(Actions.CLIQUER, Cibles.BOUTON_AUCUN_COEMPRUNTEUR);
 		}
 	}
 	
