@@ -72,7 +72,7 @@ public class SC00Test extends CasEssaiBean {
 	 * @return le chemin du repertoire.
 	 */
 	public String creerRepertoireTelechargement(CasEssaiIziventeBean casEssai, FirefoxProfile profile) {
-		File repertoireTelechargement = new File(".\\" + casEssai.getNomCasEssai());
+		File repertoireTelechargement = new File(Constantes.EMPLACEMENT_PREUVES + "\\" + casEssai.getNomCasEssai());
 		if (casEssai.getComparaisonLiasse()) {
 			repertoireTelechargement = new File(Constantes.EMPLACEMENT_LIASSE + "\\" + casEssai.getNomCasEssai());
 		}
